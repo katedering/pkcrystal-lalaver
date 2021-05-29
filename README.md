@@ -13,4 +13,4 @@ The best part is it's compatible with your current Polished Crystal saves!
 
 ## How to Play
 
-Simply pick one of the released ROMs and have fun!
+Simply pick one of the released ROMs (https://github.com/katedering/polished_custom/releases) and have fun!
