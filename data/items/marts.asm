@@ -77,15 +77,15 @@ VioletMart:
 
 AzaleaMart:
 	db 10 ; # items
+	db LURE_BALL
+	db FRIEND_BALL
+	db FAST_BALL
+	db MOON_BALL
+	db HEAVY_BALL
+	db LOVE_BALL
 	db CHARCOAL
-	db POKE_BALL
-	db NET_BALL
-	db POTION
 	db SUPER_POTION
-	db ESCAPE_ROPE
-	db REPEL
-	db ANTIDOTE
-	db PARALYZEHEAL
+	db FULL_HEAL
 	db FLOWER_MAIL
 	db -1
 
@@ -103,9 +103,11 @@ Goldenrod2FMart1:
 	db -1
 
 Goldenrod2FMart2:
-	db 10 ; # items
+	db 12 ; # items
 	db POKE_BALL
+	db PREMIER_BALL
 	db GREAT_BALL
+	db ULTRA_BALL
 	db LUXURY_BALL
 	db TIMER_BALL
 	db QUICK_BALL
@@ -117,9 +119,11 @@ Goldenrod2FMart2:
 	db -1
 
 Goldenrod2FMart2Eevee:
-	db 11 ; # items
+	db 13 ; # items
 	db POKE_BALL
+	db PREMIER_BALL
 	db GREAT_BALL
+	db ULTRA_BALL
 	db LUXURY_BALL
 	db TIMER_BALL
 	db QUICK_BALL
@@ -226,8 +230,9 @@ CianwoodMart:
 	db -1
 
 YellowForestMart:
-	db 4 ; # items
+	db 5 ; # items
 	db POKE_BALL
+	db PREMIER_BALL
 	db REPEL
 	db FRESH_WATER
 	db FULL_HEAL
@@ -271,14 +276,18 @@ BlackthornMart:
 	db -1
 
 IndigoPlateauMart:
-	db 7 ; # items
+	db 11 ; # items
 	db ULTRA_BALL
 	db MAX_REPEL
-	db HYPER_POTION
-	db MAX_POTION
+	db MAX_ELIXIR
+	db MAX_REVIVE
 	db FULL_RESTORE
-	db REVIVE
-	db FULL_HEAL
+	db RARE_CANDY
+	db PP_MAX
+	db SACRED_ASH
+	db ABILITYPATCH
+	db ABILITY_CAP
+	db EXP_SHARE
 	db -1
 
 ViridianMart:
@@ -377,17 +386,24 @@ Celadon2FMart1:
 	db -1
 
 Celadon2FMart2:
-	db 9 ; # items
+	db 15 ; # items
 	db POKE_BALL
 	db GREAT_BALL
 	db ULTRA_BALL
+	db HEAL_BALL
+	db LUXURY_BALL
 	db QUICK_BALL
 	db TIMER_BALL
+	db NEST_BALL
+	db NET_BALL
+	db DIVE_BALL
+	db REPEAT_BALL
+	db DUSK_BALL
 	db ESCAPE_ROPE
-	db REPEL
 	db SUPER_REPEL
 	db MAX_REPEL
 	db -1
+
 
 Celadon3FTMMart:
 	db 8 ; # items
@@ -402,13 +418,18 @@ Celadon3FTMMart:
 	db -1
 
 Celadon4FMart:
-	db 9 ; # items
+	db 14 ; # items
 	db POKE_DOLL
 	db FIRE_STONE
 	db WATER_STONE
 	db THUNDERSTONE
 	db LEAF_STONE
 	db ICE_STONE
+	db DAWN_STONE
+	db SUN_STONE
+	db DUSK_STONE
+	db MOON_STONE
+	db SHINY_STONE
 	db EXP_SHARE
 	db LOVELY_MAIL
 	db SURF_MAIL
@@ -428,10 +449,11 @@ SaffronMart:
 	db -1
 
 SilphCoMart:
-	db 5 ; # items
+	db 6 ; # items
 	db MAX_POTION
 	db MAX_REPEL
 	db DREAM_BALL
+	db CHERISH_BALL
 	db UP_GRADE
 	db DUBIOUS_DISC
 	db -1

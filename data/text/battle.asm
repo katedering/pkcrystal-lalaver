@@ -2024,3 +2024,40 @@ LawrenceFinalPkmnText:
 ReiFinalPkmnText:
 	text "I'm not done yet."
 	prompt
+
+KateFinalPkmnText:
+	text "Such power…"
+
+	para "You truly are a"
+	line "great trainer."
+	prompt
+	
+AshFinalPkmnText:
+	text "This is great!"
+	
+	para "You're really"
+	line "strong!"
+	prompt
+	
+TripFinalPkmnText:
+	text "…"
+	
+	para "……"
+	
+	para "………"
+	
+	para "………!"
+	
+	para "Impressive!"
+	prompt
+	
+ExpertsFinalPkmnText:
+	text "Trip: ………!"
+	
+	para "Kate: We'll get"
+	line "you yet!"
+	prompt
+	
+FedmaeFinalPkmnText:
+	text "…I see…"
+	prompt

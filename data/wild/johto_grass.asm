@@ -7,7 +7,7 @@
 	dbp 4, RATTATA
 	dbp 5, RATTATA
 	dbp 3, BELLSPROUT
-	dbp 6, RATTATA
+	dbp 6, RATTATA, ALOLAN_FORM
 	dbp 5, BELLSPROUT
 	dbp 6, BELLSPROUT
 	; day
@@ -15,7 +15,7 @@
 	dbp 4, RATTATA
 	dbp 5, RATTATA
 	dbp 3, BELLSPROUT
-	dbp 6, RATTATA
+	dbp 6, RATTATA, ALOLAN_FORM
 	dbp 5, BELLSPROUT
 	dbp 6, BELLSPROUT
 	; nite
@@ -52,8 +52,8 @@
 	dbp 5, GASTLY
 	dbp 3, BELLSPROUT
 	dbp 6, GASTLY
-	dbp 5, BELLSPROUT
-	dbp 6, BELLSPROUT
+	dbp 5, MISDREAVUS
+	dbp 4, HERACROSS
 	end_grass_wildmons
 
 	def_grass_wildmons TIN_TOWER_2F
@@ -344,14 +344,14 @@
 	dbp 16, KOFFING
 	dbp 15, ZUBAT
 	dbp 12, SLUGMA
-	dbp 15, SLUGMA
+	dbp 10, CYNDAQUIL
 	dbp 15, MAGBY
 	; day
 	dbp 14, KOFFING
 	dbp 14, RATTATA
 	dbp 16, KOFFING
 	dbp 15, ZUBAT
-	dbp 12, SLUGMA
+	dbp 10, CYNDAQUIL
 	dbp 15, SLUGMA
 	dbp 15, MAGBY
 	; nite
@@ -360,7 +360,7 @@
 	dbp 16, KOFFING
 	dbp 15, ZUBAT
 	dbp 12, SLUGMA
-	dbp 15, SLUGMA
+	dbp 10, CYNDAQUIL
 	dbp 15, MAGBY
 	end_grass_wildmons
 
@@ -373,7 +373,7 @@
 	dbp 15, PIDGEY
 	dbp 10, CATERPIE
 	dbp 12, WEEDLE
-	dbp 12, WEEDLE
+	dbp 12, MR__MIME
 	; day
 	dbp 12, NIDORAN_F
 	dbp 13, NIDORAN_M
@@ -381,7 +381,7 @@
 	dbp 15, PIDGEY
 	dbp 10, CATERPIE
 	dbp 12, WEEDLE
-	dbp 12, WEEDLE
+	dbp 12, MANKEY
 	; nite
 	dbp 12, PSYDUCK
 	dbp 13, HOOTHOOT
@@ -389,7 +389,7 @@
 	dbp 15, HOOTHOOT
 	dbp 10, VENONAT
 	dbp 12, VENONAT
-	dbp 12, VENONAT
+	dbp 12, HERACROSS
 	end_grass_wildmons
 
 	def_grass_wildmons RUINS_OF_ALPH_OUTSIDE
@@ -485,7 +485,7 @@
 	dbp 4, RATTATA
 	dbp 7, ZUBAT
 	dbp 6, ONIX
-	dbp 6, ONIX
+	dbp 6, TYROGUE
 	; day
 	dbp 6, GEODUDE
 	dbp 6, SANDSHREW
@@ -493,7 +493,7 @@
 	dbp 4, RATTATA
 	dbp 7, ZUBAT
 	dbp 6, ONIX
-	dbp 6, ONIX
+	dbp 6, CUBONE
 	; nite
 	dbp 6, GEODUDE
 	dbp 6, RATTATA
@@ -501,7 +501,7 @@
 	dbp 4, RATTATA
 	dbp 7, ZUBAT
 	dbp 6, ONIX
-	dbp 6, ONIX
+	dbp 6, GLIGAR
 	end_grass_wildmons
 
 	def_grass_wildmons UNION_CAVE_B1F_NORTH
@@ -512,7 +512,7 @@
 	dbp 8, ZUBAT
 	dbp 8, ONIX
 	dbp 6, RATTATA
-	dbp 8, RATTATA
+	dbp 10, TOTODILE
 	dbp 8, RATTATA
 	; day
 	dbp 8, GEODUDE
@@ -520,7 +520,7 @@
 	dbp 8, ZUBAT
 	dbp 8, ONIX
 	dbp 6, RATTATA
-	dbp 8, RATTATA
+	dbp 10, TOTODILE
 	dbp 8, RATTATA
 	; nite
 	dbp 8, GEODUDE
@@ -528,8 +528,8 @@
 	dbp 8, WOOPER
 	dbp 8, ONIX
 	dbp 6, RATTATA
-	dbp 8, RATTATA
-	dbp 8, RATTATA
+	dbp 8, KABUTO
+	dbp 8, OMANYTE
 	end_grass_wildmons
 
 	def_grass_wildmons UNION_CAVE_B1F_SOUTH
@@ -652,24 +652,24 @@
 	dbp 19, ZUBAT
 	dbp 21, SLOWPOKE
 	dbp 23, GOLBAT
-	dbp 23, SLOWPOKE
-	dbp 23, SLOWPOKE
+	dbp 23, SLOWBRO
+	dbp 23, SLOWPOKE, GALARIAN_FORM
 	; day
 	dbp 21, ZUBAT
 	dbp 23, ZUBAT
 	dbp 19, ZUBAT
 	dbp 21, SLOWPOKE
 	dbp 23, GOLBAT
-	dbp 23, SLOWPOKE
-	dbp 23, SLOWPOKE
+	dbp 23, SLOWBRO
+	dbp 23, SLOWPOKE, GALARIAN_FORM
 	; nite
 	dbp 21, ZUBAT
 	dbp 23, ZUBAT
 	dbp 19, ZUBAT
 	dbp 21, SLOWPOKE
 	dbp 23, GOLBAT
-	dbp 23, SLOWPOKE
-	dbp 23, SLOWPOKE
+	dbp 22, SLOWPOKE, GALARIAN_FORM
+	dbp 23, SLOWBRO, GALARIAN_FORM
 	end_grass_wildmons
 
 	def_grass_wildmons ILEX_FOREST
@@ -681,7 +681,7 @@
 	dbp 9, KAKUNA
 	dbp 9, PIDGEY
 	dbp 8, PARAS
-	dbp 8, PARAS
+	dbp 8, FARFETCH_D
 	; day
 	dbp 7, CATERPIE
 	dbp 7, WEEDLE
@@ -689,15 +689,15 @@
 	dbp 9, KAKUNA
 	dbp 8, PARAS
 	dbp 7, ODDISH
-	dbp 9, PIDGEY
+	dbp 9, FARFETCH_D
 	; nite
 	dbp 7, ODDISH
 	dbp 7, VENONAT
 	dbp 9, ODDISH
 	dbp 9, PSYDUCK
 	dbp 9, HOOTHOOT
-	dbp 8, PARAS
-	dbp 8, PARAS
+	dbp 10, CHIKORITA
+	dbp 8, SUDOWOODO
 	end_grass_wildmons
 
 	def_grass_wildmons MOUNT_MORTAR_1F_OUTSIDE
@@ -1303,7 +1303,7 @@
 	dbp 2, ZUBAT
 	dbp 2, GEODUDE
 	dbp 4, GEODUDE
-	dbp 2, ZUBAT
+	dbp 2, TEDDIURSA
 	dbp 4, ZUBAT
 	dbp 4, DUNSPARCE
 	; nite
@@ -1367,9 +1367,9 @@
 	dbp 2, RATTATA
 	dbp 3, HOOTHOOT
 	dbp 3, RATTATA
-	dbp 2, RATTATA
-	dbp 3, HOOTHOOT
-	dbp 3, HOOTHOOT
+	dbp 4, RATTATA
+	dbp 4, HOOTHOOT
+	dbp 5, RATTATA, ALOLAN_FORM
 	end_grass_wildmons
 
 	def_grass_wildmons ROUTE_30
@@ -1385,16 +1385,16 @@
 	; day
 	dbp 3, PIDGEY
 	dbp 3, CATERPIE
-	dbp 4, CATERPIE
-	dbp 4, PIDGEY
 	dbp 3, WEEDLE
-	dbp 4, SUNKERN
-	dbp 4, SUNKERN
+	dbp 4, PIDGEY
+	dbp 3, SUNKERN
+	dbp 4, LEDYBA
+	dbp 4, SPINARAK
 	; nite
 	dbp 3, SPINARAK
 	dbp 3, HOOTHOOT
 	dbp 4, POLIWAG
-	dbp 4, HOOTHOOT
+	dbp 4, PARAS
 	dbp 3, ZUBAT
 	dbp 4, HOOTHOOT
 	dbp 4, HOOTHOOT
@@ -1417,7 +1417,7 @@
 	dbp 5, PIDGEY
 	dbp 4, WEEDLE
 	dbp 5, SUNKERN
-	dbp 5, SUNKERN
+	dbp 5, EEVEE
 	; nite
 	dbp 4, SPINARAK
 	dbp 4, POLIWAG
@@ -1493,7 +1493,7 @@
 	dbp 10, ABRA
 	dbp 12, JIGGLYPUFF
 	dbp 10, DITTO
-	dbp 10, DITTO
+	dbp 1, TOGEPI
 	; day
 	dbp 10, SNUBBULL
 	dbp 11, RATTATA
@@ -1521,7 +1521,7 @@
 	dbp 13, NIDORAN_M
 	dbp 12, JIGGLYPUFF
 	dbp 10, DITTO
-	dbp 12, YANMA
+	dbp 12, CHANSEY
 	; day
 	dbp 12, SNUBBULL
 	dbp 14, PIDGEY
@@ -1549,23 +1549,23 @@
 	dbp 5, GROWLITHE
 	dbp 5, PIDGEY
 	dbp 6, PIDGEY
-	dbp 6, PIDGEY
+	dbp 6, SCYTHER
 	; day
 	dbp 4, PIDGEY
 	dbp 4, PIDGEY
 	dbp 5, BELLSPROUT
 	dbp 5, GROWLITHE
-	dbp 5, PIDGEY
+	dbp 5, VULPIX
 	dbp 6, PIDGEY
-	dbp 6, PIDGEY
+	dbp 6, PICHU
 	; nite
 	dbp 4, SPINARAK
 	dbp 4, HOOTHOOT
 	dbp 5, BELLSPROUT
-	dbp 5, VULPIX
+	dbp 5, HOUNDOUR
 	dbp 5, HOOTHOOT
 	dbp 5, GASTLY
-	dbp 5, GASTLY
+	dbp 5, PINSIR
 	end_grass_wildmons
 
 	def_grass_wildmons ROUTE_37
@@ -1605,7 +1605,7 @@
 	dbp 16, PIDGEOTTO
 	dbp 13, TAUROS
 	dbp 13, MILTANK
-	dbp 13, MILTANK
+	dbp 10, PONYTA, GALARIAN_FORM
 	; day
 	dbp 16, RATTATA
 	dbp 16, RATICATE
@@ -1613,13 +1613,13 @@
 	dbp 16, PIDGEOTTO
 	dbp 13, TAUROS
 	dbp 13, MILTANK
-	dbp 13, MILTANK
+	dbp 10, PONYTA
 	; nite
 	dbp 16, MEOWTH
 	dbp 16, RATICATE
 	dbp 16, MAGNEMITE
 	dbp 16, NOCTOWL
-	dbp 16, MEOWTH
+	dbp 16, MEOWTH, ALOLAN_FORM
 	dbp 16, MURKROW
 	dbp 16, MURKROW
 	end_grass_wildmons
@@ -1715,7 +1715,7 @@
 	dbp 29, TANGELA
 	dbp 30, BELLSPROUT
 	dbp 32, WEEPINBELL
-	dbp 32, FURRET
+	dbp 34, FURRET
 	dbp 34, FURRET
 	dbp 34, FURRET
 	; day
@@ -1723,14 +1723,14 @@
 	dbp 29, TANGELA
 	dbp 30, BELLSPROUT
 	dbp 32, WEEPINBELL
-	dbp 32, FURRET
+	dbp 34, FURRET
 	dbp 34, FURRET
 	dbp 34, FURRET
 	; nite
 	dbp 31, TANGELA
 	dbp 29, POLIWAG
-	dbp 30, BELLSPROUT
-	dbp 32, WEEPINBELL
+	dbp 30, ODDISH
+	dbp 32, GLOOM
 	dbp 32, POLIWHIRL
 	dbp 34, GLIGAR
 	dbp 34, GLIGAR
@@ -1773,7 +1773,7 @@
 	dbp 2, PHANPY
 	dbp 2, RATTATA
 	dbp 3, RATTATA
-	dbp 3, RATTATA
+	dbp 3, LARVITAR
 	; day
 	dbp 2, GEODUDE
 	dbp 2, PIDGEY
@@ -1781,15 +1781,15 @@
 	dbp 2, JIGGLYPUFF
 	dbp 2, RATTATA
 	dbp 3, RATTATA
-	dbp 3, RATTATA
+	dbp 3, LARVITAR
 	; nite
 	dbp 2, GEODUDE
 	dbp 2, RATTATA
 	dbp 3, GEODUDE
+	dbp 2, CLEFAIRY
 	dbp 2, RATTATA
-	dbp 2, RATTATA
-	dbp 3, RATTATA
-	dbp 3, RATTATA
+	dbp 3, GLIGAR
+	dbp 3, LARVITAR
 	end_grass_wildmons
 
 	def_grass_wildmons ROUTE_47
@@ -1901,7 +1901,7 @@
 	dbp 74, POLIWHIRL
 	dbp 73, HOUNDOOM
 	dbp 75, SNEASEL
-	dbp 75, SNEASEL
+	dbp 75, AERODACTYL
 	end_grass_wildmons
 
 	def_grass_wildmons YELLOW_FOREST
@@ -1929,7 +1929,7 @@
 	dbp 23, SPINARAK
 	dbp 24, PSYDUCK
 	dbp 25, NOCTOWL
-	dbp 25, NOCTOWL
+	dbp 15, HERACROSS
 	end_grass_wildmons
 
 	def_grass_wildmons QUIET_CAVE_1F

@@ -400,7 +400,7 @@
 	dbp 55, KAKUNA
 	dbp 55, METAPOD
 	dbp 56, METAPOD
-	dbp 59, PIKACHU
+	dbp 10, BULBASAUR
 	dbp 60, PIKACHU
 	; day
 	dbp 57, BUTTERFREE
@@ -408,16 +408,16 @@
 	dbp 55, METAPOD
 	dbp 55, KAKUNA
 	dbp 56, KAKUNA
-	dbp 59, PIKACHU
-	dbp 60, PIKACHU
+	dbp 10, BULBASAUR
+	dbp 60, LEAFEON
 	; nite
 	dbp 57, NOCTOWL
 	dbp 57, ARIADOS
 	dbp 55, NOCTOWL
 	dbp 55, NOCTOWL
 	dbp 56, ARIADOS
-	dbp 59, NOCTOWL
-	dbp 60, NOCTOWL
+	dbp 10, BULBASAUR
+	dbp 60, YANMEGA
 	end_grass_wildmons
 
 	def_grass_wildmons ROUTE_3
@@ -540,7 +540,7 @@
 	dbp 51, GRANBULL
 	dbp 54, VULPIX
 	dbp 54, JIGGLYPUFF
-	dbp 52, RATICATE
+	dbp 50, PIDGEOTTO
 	dbp 51, WIGGLYTUFF
 	; day
 	dbp 49, RATICATE
@@ -548,7 +548,7 @@
 	dbp 51, GRANBULL
 	dbp 54, VULPIX
 	dbp 54, JIGGLYPUFF
-	dbp 52, RATICATE
+	dbp 25, PORYGON
 	dbp 51, WIGGLYTUFF
 	; nite
 	dbp 49, PERSIAN
@@ -568,7 +568,7 @@
 	dbp 53, VULPIX
 	dbp 53, GROWLITHE
 	dbp 53, JIGGLYPUFF
-	dbp 50, KADABRA
+	dbp 50, ESPEON
 	dbp 50, KADABRA
 	; day
 	dbp 48, PIDGEOTTO
@@ -576,7 +576,7 @@
 	dbp 53, VULPIX
 	dbp 53, GROWLITHE
 	dbp 53, JIGGLYPUFF
-	dbp 50, KADABRA
+	dbp 10, EEVEE
 	dbp 50, KADABRA
 	; nite
 	dbp 48, PERSIAN
@@ -584,7 +584,7 @@
 	dbp 53, KADABRA
 	dbp 53, HAUNTER
 	dbp 53, VULPIX
-	dbp 50, KADABRA
+	dbp 10, EEVEE
 	dbp 50, KADABRA
 	end_grass_wildmons
 
@@ -624,7 +624,7 @@
 	dbp 47, RATICATE
 	dbp 48, MAGNETON
 	dbp 49, MAROWAK
-	dbp 50, ELECTABUZZ
+	dbp 50, JOLTEON
 	dbp 52, ELECTABUZZ
 	; day
 	dbp 47, PIDGEOTTO
@@ -632,7 +632,7 @@
 	dbp 47, RATICATE
 	dbp 48, MAGNETON
 	dbp 49, MAROWAK
-	dbp 50, ELECTABUZZ
+	dbp 50, JOLTEON
 	dbp 52, ELECTABUZZ
 	; nite
 	dbp 47, VENOMOTH
@@ -640,7 +640,7 @@
 	dbp 47, RATICATE
 	dbp 48, MAGNETON
 	dbp 49, GOLBAT
-	dbp 50, ELECTABUZZ
+	dbp 50, JOLTEON
 	dbp 52, ELECTABUZZ
 	end_grass_wildmons
 
@@ -764,7 +764,7 @@
 	dbp 54, PIDGEOTTO
 	dbp 54, WEEPINBELL
 	dbp 57, WEEPINBELL
-	dbp 55, SUNFLORA
+	dbp 10, EEVEE
 	dbp 57, SUNFLORA
 	; day
 	dbp 52, NIDORINO
@@ -772,7 +772,7 @@
 	dbp 54, PIDGEOTTO
 	dbp 54, WEEPINBELL
 	dbp 57, WEEPINBELL
-	dbp 55, SUNFLORA
+	dbp 10, EEVEE
 	dbp 57, SUNFLORA
 	; nite
 	dbp 52, VENOMOTH
@@ -780,7 +780,7 @@
 	dbp 54, QUAGSIRE
 	dbp 54, GLOOM
 	dbp 57, VENOMOTH
-	dbp 55, QUAGSIRE
+	dbp 57, UMBREON
 	dbp 57, QUAGSIRE
 	end_grass_wildmons
 
@@ -792,7 +792,7 @@
 	dbp 54, SLUGMA
 	dbp 52, PIDGEOTTO
 	dbp 53, MAGCARGO
-	dbp 54, MUK
+	dbp 10, CHARMANDER
 	dbp 55, MUK
 	; day
 	dbp 53, GRIMER
@@ -800,7 +800,7 @@
 	dbp 54, SLUGMA
 	dbp 52, PIDGEOTTO
 	dbp 53, MAGCARGO
-	dbp 54, MUK
+	dbp 10, CHARMANDER
 	dbp 55, MUK
 	; nite
 	dbp 53, GRIMER
@@ -808,7 +808,7 @@
 	dbp 54, GRIMER
 	dbp 52, MURKROW
 	dbp 53, MURKROW
-	dbp 54, MUK
+	dbp 10, CHARMANDER
 	dbp 55, MUK
 	end_grass_wildmons
 
@@ -1136,7 +1136,7 @@
 	dbp 51, PIDGEOTTO
 	dbp 50, WEEPINBELL
 	dbp 49, PIDGEOTTO
-	dbp 53, KINGLER
+	dbp 53, SYLVEON
 	dbp 52, KINGLER
 	; nite
 	dbp 48, VENOMOTH
@@ -1210,9 +1210,9 @@
 	dbp 69, PARASECT
 	dbp 69, MAGNEZONE
 	dbp 70, MACHAMP
-	dbp 71, GOLEM
+	dbp 71, GOLEM, ALOLAN_FORM
 	dbp 72, ALAKAZAM
-	dbp 71, RAICHU
+	dbp 71, RAICHU, ALOLAN_FORM
 	dbp 74, DITTO
 	; day
 	dbp 69, PARASECT
@@ -1322,7 +1322,7 @@
 	dbp 55, DODUO
 	dbp 59, DODRIO
 	dbp 55, EXEGGCUTE
-	dbp 59, EXEGGUTOR
+	dbp 59, EXEGGUTOR, ALOLAN_FORM
 	dbp 58, TANGELA
 	dbp 60, SCYTHER
 	dbp 50, SCYTHER
@@ -1436,7 +1436,7 @@
 	dbp 57, PSYDUCK
 	dbp 58, SANDSHREW, ALOLAN_FORM
 	dbp 60, GOLDUCK
-	dbp 61, GOLDUCK
+	dbp 10, SQUIRTLE
 	dbp 62, SANDSLASH, ALOLAN_FORM
 	; day
 	dbp 56, ZUBAT
@@ -1444,7 +1444,7 @@
 	dbp 57, PSYDUCK
 	dbp 58, SANDSHREW, ALOLAN_FORM
 	dbp 60, GOLDUCK
-	dbp 61, GOLDUCK
+	dbp 10, SQUIRTLE
 	dbp 62, SANDSLASH, ALOLAN_FORM
 	; nite
 	dbp 56, ZUBAT
@@ -1452,7 +1452,7 @@
 	dbp 57, PSYDUCK
 	dbp 58, SANDSHREW, ALOLAN_FORM
 	dbp 60, GOLDUCK
-	dbp 61, GOLDUCK
+	dbp 10, SQUIRTLE
 	dbp 62, SANDSLASH, ALOLAN_FORM
 	end_grass_wildmons
 
@@ -1548,8 +1548,8 @@
 	dbp 61, GOLDUCK
 	dbp 62, JYNX
 	dbp 64, PSYDUCK
-	dbp 65, SEEL
-	dbp 66, DEWGONG
+	dbp 65, VAPOREON
+	dbp 66, GLACEON
 	; day
 	dbp 60, GOLBAT
 	dbp 63, DEWGONG
@@ -1576,7 +1576,7 @@
 	dbp 57, MUK
 	dbp 59, ARCANINE
 	dbp 59, RAPIDASH
-	dbp 60, RAPIDASH
+	dbp 60, FLAREON
 	dbp 60, RAPIDASH
 	; day
 	dbp 58, RATICATE
@@ -1584,7 +1584,7 @@
 	dbp 57, MUK
 	dbp 59, ARCANINE
 	dbp 59, RAPIDASH
-	dbp 60, RAPIDASH
+	dbp 60, FLAREON
 	dbp 60, RAPIDASH
 	; nite
 	dbp 58, HAUNTER
@@ -1592,7 +1592,7 @@
 	dbp 57, MUK
 	dbp 59, HOUNDOOM
 	dbp 59, RAPIDASH
-	dbp 60, RAPIDASH
+	dbp 60, FLAREON
 	dbp 60, RAPIDASH
 	end_grass_wildmons
 
@@ -1632,7 +1632,7 @@
 	dbp 57, SLUGMA
 	dbp 59, MAGCARGO
 	dbp 60, DIGLETT, ALOLAN_FORM
-	dbp 61, MAGMAR
+	dbp 61, WEEZING, GALARIAN_FORM
 	dbp 62, MAGMAR
 	; day
 	dbp 56, KOFFING
@@ -1640,7 +1640,7 @@
 	dbp 57, SLUGMA
 	dbp 59, MAGCARGO
 	dbp 60, DIGLETT, ALOLAN_FORM
-	dbp 61, MAGMAR
+	dbp 61, WEEZING, GALARIAN_FORM
 	dbp 62, MAGMAR
 	; nite
 	dbp 56, KOFFING

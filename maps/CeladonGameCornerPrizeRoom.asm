@@ -1,9 +1,9 @@
 CELADONGAMECORNERPRIZEROOM_TM32_COINS EQU 3500
 CELADONGAMECORNERPRIZEROOM_TM06_COINS EQU 5500
 CELADONGAMECORNERPRIZEROOM_TM68_COINS EQU 7500
-CELADONGAMECORNERPRIZEROOM_MR__MIME_COINS EQU 3333
-CELADONGAMECORNERPRIZEROOM_EEVEE_COINS    EQU 6666
-CELADONGAMECORNERPRIZEROOM_PORYGON_COINS  EQU 9999
+CELADONGAMECORNERPRIZEROOM_ARTICUNO_COINS EQU 9999
+CELADONGAMECORNERPRIZEROOM_ZAPDOS_COINS    EQU 9999
+CELADONGAMECORNERPRIZEROOM_MOLTRES_COINS  EQU 9999
 
 CeladonGameCornerPrizeRoom_MapScriptHeader:
 	def_scene_scripts
@@ -131,60 +131,60 @@ CeladonGameCornerPokemonVendor:
 	loadmenu .MenuDataHeader
 	verticalmenu
 	closewindow
-	ifequal $1, .mr__mime
-	ifequal $2, .eevee
-	ifequal $3, .porygon
+	ifequal $1, .articuno
+	ifequal $2, .zapdos
+	ifequal $3, .moltres
 	jumpopenedtext CeladonPrizeRoom_ComeAgainText
 
-.mr__mime
-	checkcoins CELADONGAMECORNERPRIZEROOM_MR__MIME_COINS
+.articuno
+	checkcoins CELADONGAMECORNERPRIZEROOM_ARTICUNO_COINS
 	ifequal $2, CeladonPrizeRoom_notenoughcoins
-	getmonname MR__MIME, $0
+	getmonname ARTICUNO, $0
 	scall CeladonPrizeRoom_askbuy
 	iffalse_jumpopenedtext CeladonPrizeRoom_ComeAgainText
 	waitsfx
 	playsound SFX_TRANSACTION
 	writetext CeladonPrizeRoom_HereYouGoText
 	waitbutton
-	givepoke MR__MIME, 10
+	givepoke ARTICUNO, GALARIAN_FORM, 50
 	iffalse_jumpopenedtext CeladonPrizeRoom_NotEnoughRoomText
-	setval MR__MIME
+	setval ARTICUNO
 	special Special_GameCornerPrizeMonCheckDex
-	takecoins CELADONGAMECORNERPRIZEROOM_MR__MIME_COINS
+	takecoins CELADONGAMECORNERPRIZEROOM_ARTICUNO_COINS
 	sjump .loop
 
-.eevee
-	checkcoins CELADONGAMECORNERPRIZEROOM_EEVEE_COINS
+.zapdos
+	checkcoins CELADONGAMECORNERPRIZEROOM_ZAPDOS_COINS
 	ifequal $2, CeladonPrizeRoom_notenoughcoins
-	getmonname EEVEE, $0
+	getmonname ZAPDOS, $0
 	scall CeladonPrizeRoom_askbuy
 	iffalse_jumpopenedtext CeladonPrizeRoom_ComeAgainText
 	waitsfx
 	playsound SFX_TRANSACTION
 	writetext CeladonPrizeRoom_HereYouGoText
 	waitbutton
-	givepoke EEVEE, 20
+	givepoke ZAPDOS, GALARIAN_FORM, 50
 	iffalse_jumpopenedtext CeladonPrizeRoom_NotEnoughRoomText
-	setval EEVEE
+	setval ZAPDOS
 	special Special_GameCornerPrizeMonCheckDex
-	takecoins CELADONGAMECORNERPRIZEROOM_EEVEE_COINS
+	takecoins CELADONGAMECORNERPRIZEROOM_ZAPDOS_COINS
 	sjump .loop
 
-.porygon
-	checkcoins CELADONGAMECORNERPRIZEROOM_PORYGON_COINS
+.moltres
+	checkcoins CELADONGAMECORNERPRIZEROOM_MOLTRES_COINS
 	ifequal $2, CeladonPrizeRoom_notenoughcoins
-	getmonname PORYGON, $0
+	getmonname MOLTRES, $0
 	scall CeladonPrizeRoom_askbuy
 	iffalse_jumpopenedtext CeladonPrizeRoom_ComeAgainText
 	waitsfx
 	playsound SFX_TRANSACTION
 	writetext CeladonPrizeRoom_HereYouGoText
 	waitbutton
-	givepoke PORYGON, 30
+	givepoke MOLTRES, GALARIAN_FORM, 50
 	iffalse_jumpopenedtext CeladonPrizeRoom_NotEnoughRoomText
-	setval PORYGON
+	setval MOLTRES
 	special Special_GameCornerPrizeMonCheckDex
-	takecoins CELADONGAMECORNERPRIZEROOM_PORYGON_COINS
+	takecoins CELADONGAMECORNERPRIZEROOM_MOLTRES_COINS
 	sjump .loop
 
 .MenuDataHeader:
@@ -197,15 +197,15 @@ CeladonGameCornerPokemonVendor:
 .MenuData2:
 	db $80 ; flags
 	db 4 ; items
-	db "Mr.Mime    {d:CELADONGAMECORNERPRIZEROOM_MR__MIME_COINS}@"
-	db "Eevee      {d:CELADONGAMECORNERPRIZEROOM_EEVEE_COINS}@"
-	db "Porygon    {d:CELADONGAMECORNERPRIZEROOM_PORYGON_COINS}@"
+	db "Articuno?  {d:CELADONGAMECORNERPRIZEROOM_ARTICUNO_COINS}@"
+	db "Zapdos?    {d:CELADONGAMECORNERPRIZEROOM_ZAPDOS_COINS}@"
+	db "Moltres?   {d:CELADONGAMECORNERPRIZEROOM_MOLTRES_COINS}@"
 	db "Cancel@"
 
 CeladonGameCornerPrizeRoomGentlemanText:
-	text "I wanted Porygon,"
-	line "but I was short by"
-	cont "100 coins…"
+	text "This place gives"
+	line "out Legendary Bird"
+	cont "#mon...?"
 	done
 
 CeladonGameCornerPrizeRoomPharmacistText:

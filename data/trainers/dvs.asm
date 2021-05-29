@@ -148,4 +148,9 @@ TrainerClassDVsAndPersonality:
 	db 192, $EE, $EE, $EE, ABILITY_1 | QUIRKY, MALE   ; imakuni
 	db 252, PERFECT_DVS,   ABILITY_1 | QUIRKY, MALE   ; lawrence
 	db 252, $EE, $EE, $EE, ABILITY_1 | QUIRKY, FEMALE ; rei
+	db 252, PERFECT_DVS,   ABILITY_2 | TIMID, FEMALE  ; kate
+	db 252, PERFECT_DVS,   ABILITY_1 | BRAVE, MALE    ; ash
+	db 252, PERFECT_DVS,   ABILITY_2 | ADAMANT, MALE  ; trip
+	db 252, PERFECT_DVS,   ABILITY_2 | ADAMANT, MALE  ; experts
+	db 252, PERFECT_DVS,   ABILITY_2 | MODEST, MALE   ; fedmae
 	assert_table_length NUM_TRAINER_CLASSES

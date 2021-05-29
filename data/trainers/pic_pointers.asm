@@ -146,6 +146,11 @@ TrainerPicPointers::
 	dba ImakuniPic
 	dba LawrencePic
 	dba ReiPic
+	dba KatePic
+	dba AshPic
+	dba TripPic
+	dba ExpertsPic
+	dba FedmaePic
 	assert_table_length NUM_TRAINER_CLASSES
 	dba OmastarFossilPic
 	dba KabutopsFossilPic

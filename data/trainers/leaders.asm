@@ -13,6 +13,11 @@ BossTrainers:
 	db KOGA
 	db BRUNO
 	db KAREN
+	db KATE
+	db ASH
+	db TRIP
+	db EXPERTS
+	db FEDMAE
 JohtoGymLeaders:
 	db FALKNER
 	db WHITNEY

@@ -146,4 +146,9 @@ TrainerClassNames::
 	li "Student"          ; IMAKUNI
 	li "Collector"        ; LAWRENCE
 	li "Shrine"           ; REI
+	li "<PK><MN> Expert"  ; KATE
+	li "<PK><MN> Trainer" ; ASH
+	li "<PK><MN> Master"  ; TRIP
+	li "Experts"          ; EXPERTS
+	li "Archmage"         ; FEDMAE
 	assert_list_length NUM_TRAINER_CLASSES + 1

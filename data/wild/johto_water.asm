@@ -158,7 +158,7 @@
 	db 4 percent ; encounter rate
 	dbp 15, TENTACOOL
 	dbp 20, QUAGSIRE
-	dbp 20, TENTACRUEL
+	dbp 20, QWILFISH
 	end_water_wildmons
 
 	def_water_wildmons ROUTE_34

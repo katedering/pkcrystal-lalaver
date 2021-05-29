@@ -39,6 +39,8 @@ FinalText_TeamRocket:
 	dw Ariana2FinalPkmnText
 	dw Giovanni1FinalPkmnText
 	dw Giovanni2FinalPkmnText
+	
+
 
 FinalText_SinglePhrases:
 	dw CarrieFinalPkmnText
@@ -102,3 +104,8 @@ FinalText_SinglePhrases:
 	dw ImakuniFinalPkmnText
 	dw LawrenceFinalPkmnText
 	dw ReiFinalPkmnText
+	dw KateFinalPkmnText
+	dw AshFinalPkmnText
+	dw TripFinalPkmnText
+	dw ExpertsFinalPkmnText
+	dw FedmaeFinalPkmnText

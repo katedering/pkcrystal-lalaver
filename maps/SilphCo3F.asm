@@ -44,6 +44,12 @@ SilphCo3FSilphEmployeeScript:
 	cont "# Ball."
 
 	para "Don't waste it!"
+
+	para "If you do end"
+	line "up wanting more,"
+	cont "the guy over"
+	cont "there sells them"
+	cont "for ¥50000 each."
 	done
 
 .Text1:

@@ -1087,6 +1087,14 @@ MeteoritePic:             INCBIN "gfx/trainers/meteorite.2bpp.lz"
 SilhouettePic:            INCBIN "gfx/trainers/silhouette.2bpp.lz"
 
 
+SECTION "Trainer Pics 10", ROMX
+
+KatePic:                  INCBIN "gfx/trainers/kate.2bpp.lz"
+AshPic:                   INCBIN "gfx/trainers/ash.2bpp.lz"
+TripPic:                  INCBIN "gfx/trainers/trip.2bpp.lz"
+ExpertsPic:               INCBIN "gfx/trainers/experts.2bpp.lz"
+FedmaePic:                INCBIN "gfx/trainers/fedmae.2bpp.lz"
+
 SECTION "Painting Pics", ROMX
 
 HoOhPaintingPic:          INCBIN "gfx/paintings/ho_oh_painting.2bpp.lz"

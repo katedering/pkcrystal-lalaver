@@ -148,7 +148,7 @@ EngineFlags:
 	engine_flag wDailyFlags4, 4 ; changed trendy phrase
 	engine_flag wDailyFlags4, 5 ; all hidden grottoes
 	engine_flag wDailyFlags4, 6 ; daily unused
-	engine_flag wDailyFlags4, 7 ; daily unused
+	engine_flag wDailyFlags4, 7 ; reset elite faux upon loading map
 
 	engine_flag wWeeklyFlags, 0 ; mt moon square clefairy
 	engine_flag wWeeklyFlags, 1 ; union cave lapras

@@ -964,7 +964,7 @@ KRIS EQU __trainer_class__
 	const LOIS
 	const FRAN
 	const LOLA
-	const KATE
+	const KIMI
 	const IRENE
 	const KELLY
 	const JOYCE
@@ -1095,6 +1095,16 @@ KRIS EQU __trainer_class__
 	trainerclass LAWRENCE ; 90
 
 	trainerclass REI ; 91
+
+	trainerclass KATE
+	
+	trainerclass ASH
+	
+	trainerclass TRIP
+	
+	trainerclass EXPERTS
+	
+	trainerclass FEDMAE
 
 NUM_TRAINER_CLASSES EQU __trainer_class__ - 1
 
