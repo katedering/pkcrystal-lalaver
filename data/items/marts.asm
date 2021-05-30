@@ -247,7 +247,7 @@ MahoganyMart1:
 	db -1
 
 MahoganyMart2:
-	db 10 ; # items
+	db 11 ; # items
 	db RAGECANDYBAR
 	db AIR_BALLOON
 	db QUICK_CLAW
@@ -258,6 +258,7 @@ MahoganyMart2:
 	db SUPER_REPEL
 	db REVIVE
 	db FLOWER_MAIL
+	db ODD_SOUVENIR
 	db -1
 
 BlackthornMart:
@@ -418,8 +419,9 @@ Celadon3FTMMart:
 	db -1
 
 Celadon4FMart:
-	db 14 ; # items
+	db 15 ; # items
 	db POKE_DOLL
+	db ODD_SOUVENIR
 	db FIRE_STONE
 	db WATER_STONE
 	db THUNDERSTONE
