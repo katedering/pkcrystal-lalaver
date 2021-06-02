@@ -1,0 +1,59 @@
+Custom Change Log for Polished Crystal
+
+> Changed coin buying from 50/500 to 100/1000 (essentially halving the price of coins).
+> Changed some text in Azalea Town mart (to reflect it now selling Apricorn Balls).
+> Changed Azalea Mart - now sells all Apricorn Balls for 300 Poké each.
+> Changed prices on some items:
+=== (Apricorn and Devon Corp. balls to 300/500 each respectively - except Heal Ball)
+=== Cherish Ball price to 50000 for repurchasing purposes
+=== Premier Ball to 200 also for direct purchase purpose
+=== Ability Patch/Capsule to 10000/5000 respectively
+=== Silver and Gold Leaf to become money-grinding items (now sell for 10,000 each)
+> Changed some text in Celadon Dept. Store to reflect shop change
+> Changed some shops:
+=== Azalea now stocks Apricorn Balls
+=== Goldenrod F2 now stocks Premier and Ultra Balls
+=== Yellow Forest guy now also sells Premier Balls
+=== Indigo Plateau now sells Max Elixir, Max Revive, Rare Candy, PP Max, Sacred Ash, EXP Share, and Ability Capsules/Patches
+=== Celadon F2 now stocks all Devon Corp. Balls
+=== Celadon F4 now stocks ALL evolution stones and the Odd Souvenir (Souvenir also for sale in Mahogany!)
+=== Silph Co. Mart now also sells Cherish Balls.
+> Changed Wild Pokemon encounter table for Johto / Kanto grass, and Johto Surf
+=== Alolan Rattata to Sprout Tower 2F (morning/day)
+=== Misdreavus/Heracross to Sprout Tower 3F (night)
+=== Cyndaquil to Burned Tower B1F (all times)
+=== Mr. Mime/Mankey/Heracross to National Park (morning/day/night respectively)
+=== Tyrogue/Cubone/Gligar to Union Cave 1F (morning/day/night respectively)
+=== Totodile (morn/day) and Kabuto/Omanyte (n) to Union Cave B1F North
+=== K-Slowbro, G-Slowpoke and G-Slowbro to Slowpoke Well B2F
+=== Farfetch'd (morn/day) and Chikorita/Sudowoodo (n) to Ilex Forest
+=== Teddiursa to Dark Cave Violet Entrance (day only)
+=== raised level of some Rattata/Hoothoot and added Alolan Rattata to Route 29 Night
+=== Added Weedle/Ledyba/Spinarak to Route 30 day and Paras to R.30 night
+=== Added Eevee (day only) to Route 31
+=== Added Togepi (lv1, morning only) to Route 34
+=== Added Chansey (morning only) to Route 35
+=== Added Scyther (morning), Vulpix/Pichu (day), and Houndour/Pinsir (night) to Route 36
+=== Added G-Ponyta, K-Ponyta, and A-Meowth (morning/day/night respectively) to Route 38
+=== Changed Bellsprout/Weepinbell to Oddish/Gloom for Route 44 night
+=== Added Larvitar (all times) and Clefairy/Gligar (night) to Route 46
+=== Added Aerodactyl to Silver Forest Entrance
+=== Added Heracross to Yellow Forest
+=== Added Bulbasaur (all times), Leafeon (day), and Yanmega (night) to Viridian Forest
+=== Added Porygon (day only) to Route 7 and changed a Raticate slot to Pidgeotto for some reason... not sure x.x
+=== Added Espeon (morning) and Eevee (day/night) to Route 8
+=== Added Jolteon to Route 10 North
+=== Added Eevee (morning/day) and Umbreon (night) to Route 15
+=== Added Charmander to Route 16 NW
+=== Added Sylveon to Cerulean Cape
+=== Added A-Golem and A-Raichu to Cerulean Cave B1F
+=== Added A-Exeggutor to Safari Zone Hub
+=== Added Squirtle to Seafoam Islands 1F
+=== Added Vaporeon and Glaceon to Seafoam Islands B4F morning
+=== Added Flareon to Pokemon Mansion 1F
+=== Added G-Weezing to Cinnabar Volcano 1F
+=== Added Qwilfish to Route 32 water
+> Added G-Birds to Celadon coin shop 9999ea
+> Added the "Elite Faux" trainers outside of Indigo Plateau Gate.
+=== Rematch them all daily!
+=== Good luck.
