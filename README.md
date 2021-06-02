@@ -15,4 +15,4 @@ The best part is it's compatible with your current Polished Crystal saves!
 
 Simply pick one of the released ROMs (https://github.com/katedering/polished_custom/releases) and have fun!
 
-For full changelog read "changes in Polished Custom.txt"!
+For full changelog read "https://github.com/katedering/polished_custom/blob/master/changes%20in%20Polished%20Custom.txt"!
