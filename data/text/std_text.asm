@@ -363,18 +363,18 @@ CoinVendor_IntroText:
 	line "game coins?"
 
 	para "It costs ¥1000 for"
-	line "50 coins. Do you"
+	line "100 coins. Do you"
 	cont "want some?"
 	done
 
 CoinVendor_Buy50CoinsText:
 	text "Thank you!"
-	line "Here are 50 coins."
+	line "Here are 100 coins."
 	done
 
 CoinVendor_Buy500CoinsText:
 	text "Thank you! Here"
-	line "are 500 coins."
+	line "are 1000 coins."
 	done
 
 CoinVendor_NotEnoughMoneyText:

@@ -1546,16 +1546,16 @@ CoinVendor_IntroScript:
 	loadmenu .MenuDataHeader
 	verticalmenu
 	closewindow
-	ifequal $1, .Buy50
-	ifequal $2, .Buy500
+	ifequal $1, .Buy100
+	ifequal $2, .Buy1000
 	sjump .Cancel
 
-.Buy50:
-	checkcoins 49950
+.Buy100:
+	checkcoins 49900
 	ifequal $0, .CoinCaseFull
 	checkmoney $0, 1000
 	ifequal $2, .NotEnoughMoney
-	givecoins 50
+	givecoins 100
 	takemoney $0, 1000
 	waitsfx
 	playsound SFX_TRANSACTION
@@ -1563,12 +1563,12 @@ CoinVendor_IntroScript:
 	waitbutton
 	sjump .loop
 
-.Buy500:
-	checkcoins 49500
+.Buy1000:
+	checkcoins 49000
 	ifequal $0, .CoinCaseFull
 	checkmoney $0, 10000
 	ifequal $2, .NotEnoughMoney
-	givecoins 500
+	givecoins 1000
 	takemoney $0, 10000
 	waitsfx
 	playsound SFX_TRANSACTION
@@ -1598,8 +1598,8 @@ CoinVendor_IntroScript:
 .MenuData2:
 	db $80 ; flags
 	db 3 ; items
-	db " 50 :  ¥1000@"
-	db "500 : ¥10000@"
+	db " 100:  ¥1000@"
+	db "1000: ¥10000@"
 	db "Cancel@"
 
 HappinessCheckScript:
