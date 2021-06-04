@@ -63,3 +63,4 @@ Custom Change Log for Polished Crystal
 > Added the "Elite Faux" trainers outside of Indigo Plateau Gate.
 === Rematch them all daily!
 === Good luck.
+Bonus! Added a 'debug battle' at the start of the game - excellent for testing things, not so great for leveling up in endgame.
