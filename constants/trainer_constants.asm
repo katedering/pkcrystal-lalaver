@@ -1102,9 +1102,9 @@ KRIS EQU __trainer_class__
 	
 	trainerclass TRIP
 	
-	trainerclass EXPERTS
-	
 	trainerclass FEDMAE
+	
+	trainerclass CUTE
 
 NUM_TRAINER_CLASSES EQU __trainer_class__ - 1
 

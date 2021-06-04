@@ -44,8 +44,8 @@ BattleMusic_Trainers:
 	dbw KATE,             MUSIC_GYM_LEADER_BATTLE_PRISM
 	dbw ASH,              MUSIC_PALETTE_BATTLE_PRISM
 	dbw TRIP,             MUSIC_UNDERTALE_MEGALOVANIA
-	dbw EXPERTS,          MUSIC_UNDERTALE_MEGALOVANIA
 	dbw FEDMAE,           MUSIC_FRONTIER_BRAIN_BATTLE_RSE
+	dbw CUTE,             MUSIC_TRAINER_BATTLE_SM
 	db -1
 
 BattleMusic_Legendaries:

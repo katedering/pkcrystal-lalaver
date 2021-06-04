@@ -151,6 +151,6 @@ TrainerGroups:
 	dba KateGroup
 	dba AshGroup
 	dba TripGroup
-	dba ExpertsGroup
 	dba FedmaeGroup
+	dba CuteGroup
 	assert_table_length NUM_TRAINER_CLASSES

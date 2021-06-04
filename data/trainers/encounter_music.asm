@@ -151,6 +151,6 @@ TrainerEncounterMusic:
 ;	db MUSIC_LASS_ENCOUNTER ; kate
 ;	db MUSIC_YOUNGSTER_ENCOUNTER ; ash
 ;	db MUSIC_HIKER_ENCOUNTER ; trip
-;   db MUSIC_HIKER_ENCOUNTER ; trip&kate
 ;	db MUSIC_POKEMANIAC_ENCOUNTER ; fedmae
+;   db MUSIC_LASS_ENCOUNTER ; cute
 ;	assert_table_length NUM_TRAINER_CLASSES + 1

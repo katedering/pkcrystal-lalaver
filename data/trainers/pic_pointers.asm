@@ -149,8 +149,8 @@ TrainerPicPointers::
 	dba KatePic
 	dba AshPic
 	dba TripPic
-	dba ExpertsPic
 	dba FedmaePic
+	dba CutePic
 	assert_table_length NUM_TRAINER_CLASSES
 	dba OmastarFossilPic
 	dba KabutopsFossilPic

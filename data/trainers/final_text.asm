@@ -107,5 +107,5 @@ FinalText_SinglePhrases:
 	dw KateFinalPkmnText
 	dw AshFinalPkmnText
 	dw TripFinalPkmnText
-	dw ExpertsFinalPkmnText
 	dw FedmaeFinalPkmnText
+	dw CuteFinalPkmnText

@@ -31,16 +31,17 @@ Custom Change Log for Polished Crystal
 === raised level of some Rattata/Hoothoot and added Alolan Rattata to Route 29 Night
 === Added Weedle/Ledyba/Spinarak to Route 30 day and Paras to R.30 night
 === Added Eevee (day only) to Route 31
-=== Added Togepi (lv1, morning only) to Route 34
+=== Added Togepi (morning only) to Route 34
 === Added Chansey (morning only) to Route 35
 === Added Scyther (morning), Vulpix/Pichu (day), and Houndour/Pinsir (night) to Route 36
 === Added G-Ponyta, K-Ponyta, and A-Meowth (morning/day/night respectively) to Route 38
 === Changed Bellsprout/Weepinbell to Oddish/Gloom for Route 44 night
-=== Added Larvitar (all times) and Clefairy/Gligar (night) to Route 46
+=== Added Larvitar (all times), Skarmory (day), and Clefairy/Gligar (night) to Route 46
 === Added Aerodactyl to Silver Forest Entrance
 === Added Heracross to Yellow Forest
+=== Increased levels of all wild encounters in Quiet Cave to make it better for training at the point in the game where you have access to it
 === Added Bulbasaur (all times), Leafeon (day), and Yanmega (night) to Viridian Forest
-=== Added Porygon (day only) to Route 7 and changed a Raticate slot to Pidgeotto for some reason... not sure x.x
+=== Added Porygon (day only) to Route 7 and changed a Raticate slot to Pidgeotto for some reason
 === Added Espeon (morning) and Eevee (day/night) to Route 8
 === Added Jolteon to Route 10 North
 === Added Eevee (morning/day) and Umbreon (night) to Route 15
@@ -54,6 +55,11 @@ Custom Change Log for Polished Crystal
 === Added G-Weezing to Cinnabar Volcano 1F
 === Added Qwilfish to Route 32 water
 > Added G-Birds to Celadon coin shop 9999ea
+> Buffed some moves and Meganium
+=== Meganium now has 113 Sp.Atk and 535 BST
+=== It also can now learn Dragon Pulse because why not.
+=== Buffed accuracy of Rock Throw, Rock Slide, Hyper Fang, Super Fang, Sacred Fire, and Play Rough to 100%
+=== Buffed status chance of the elemental punches to 15%, Flamethrower/Thunderbolt/Ice Beam to 20%, and Fire Blast/Thunder/Blizzard to 30%
 > Added the "Elite Faux" trainers outside of Indigo Plateau Gate.
 === Rematch them all daily!
 === Good luck.

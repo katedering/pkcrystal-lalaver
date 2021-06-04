@@ -2051,13 +2051,13 @@ TripFinalPkmnText:
 	para "Impressive!"
 	prompt
 	
-ExpertsFinalPkmnText:
-	text "Trip: ………!"
-	
-	para "Kate: We'll get"
-	line "you yet!"
-	prompt
-	
 FedmaeFinalPkmnText:
 	text "…I see…"
+	prompt
+	
+CuteFinalPkmnText:
+	text "Almost done!"
+	
+	para "Are you enjoying"
+	line "the battle?"
 	prompt

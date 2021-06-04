@@ -151,6 +151,6 @@ TrainerClassDVsAndPersonality:
 	db 252, PERFECT_DVS,   ABILITY_2 | TIMID, FEMALE  ; kate
 	db 252, PERFECT_DVS,   ABILITY_1 | BRAVE, MALE    ; ash
 	db 252, PERFECT_DVS,   ABILITY_2 | ADAMANT, MALE  ; trip
-	db 252, PERFECT_DVS,   ABILITY_2 | ADAMANT, MALE  ; experts
 	db 252, PERFECT_DVS,   ABILITY_2 | MODEST, MALE   ; fedmae
+	db 252, $11, $11, $11, ABILITY_1 | QUIRKY, FEMALE ; cute
 	assert_table_length NUM_TRAINER_CLASSES

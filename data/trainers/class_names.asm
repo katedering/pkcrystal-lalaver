@@ -149,6 +149,6 @@ TrainerClassNames::
 	li "<PK><MN> Expert"  ; KATE
 	li "<PK><MN> Trainer" ; ASH
 	li "<PK><MN> Master"  ; TRIP
-	li "Experts"          ; EXPERTS
 	li "Archmage"         ; FEDMAE
+	li "Debug"            ; CUTE
 	assert_list_length NUM_TRAINER_CLASSES + 1

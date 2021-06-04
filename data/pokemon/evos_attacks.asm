@@ -4945,12 +4945,12 @@ HoundourEvosAttacks:
 	db 25, SUPER_FANG ; Beat Up → HGSS tutor move
 	db 28, FIRE_SPIN ; Fire Fang → egg move
 	db 32, FEINT_ATTACK
-	db 37, DESTINY_BOND ; Embargo → egg move
+	db 37, DARK_PULSE ; Embargo → egg move
 	db 40, WILL_O_WISP ; Foul Play → egg move
 	db 44, FLAMETHROWER
 	db 49, CRUNCH
 	db 52, NASTY_PLOT
-	db 56, DARK_PULSE ; Inferno → TM move
+	db 56, DESTINY_BOND ; Inferno → TM move
 	db 0 ; no more level-up moves
 
 HoundoomEvosAttacks:
@@ -4965,12 +4965,12 @@ HoundoomEvosAttacks:
 	db 26, SUPER_FANG ; Beat Up → HGSS tutor move
 	db 30, FIRE_SPIN ; Fire Fang → egg move
 	db 35, FEINT_ATTACK
-	db 41, DESTINY_BOND ; Embargo → egg move
+	db 41, DARK_PULSE ; Embargo → egg move
 	db 45, WILL_O_WISP ; Foul Play → egg move
 	db 50, FLAMETHROWER
 	db 56, CRUNCH
 	db 60, NASTY_PLOT
-	db 65, DARK_PULSE ; Inferno → TM move
+	db 65, DESTINY_BOND ; Inferno → TM move
 	db 0 ; no more level-up moves
 
 KingdraEvosAttacks:

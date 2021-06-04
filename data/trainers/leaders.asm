@@ -16,7 +16,6 @@ BossTrainers:
 	db KATE
 	db ASH
 	db TRIP
-	db EXPERTS
 	db FEDMAE
 JohtoGymLeaders:
 	db FALKNER
