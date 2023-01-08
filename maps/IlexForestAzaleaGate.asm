@@ -22,12 +22,12 @@ ProfOaksAide1Script:
 	faceplayer
 	opentext
 	checkevent EVENT_GOT_NEST_BALLS_FROM_PROF_OAKS_AIDE
-	iftrue .Explain
+	iftruefwd .Explain
 	writetext ProfOaksAide1HiText
 	waitbutton
-	countseencaught
-	readvar VAR_DEXCAUGHT
-	ifgreater 14, .HereYouGo
+	setval16 15
+	special CountCaught
+	iftruefwd .HereYouGo
 .UhOh
 	jumpopenedtext ProfOaksAide1UhOhText
 
@@ -36,8 +36,9 @@ ProfOaksAide1Script:
 	waitbutton
 	giveitem NEST_BALL, 5
 	waitsfx
-	iffalse .NoRoom
+	iffalsefwd .NoRoom
 	writetext ProfOaksAide1NestBallText
+	special ShowItemIcon
 	playsound SFX_ITEM
 	waitsfx
 	itemnotify
@@ -85,7 +86,7 @@ ProfOaksAide1UhOhText:
 	line "Uh-oh! You've only"
 
 	para "caught "
-	text_decimal wTempPokedexCaughtCount, 1, 3
+	text_decimal wTempDexOwn, 2, 3
 	text " kinds"
 	line "of #mon."
 
@@ -99,7 +100,7 @@ ProfOaksAide1HereYouGoText:
 	line "Great job! You've"
 
 	para "caught "
-	text_decimal wTempPokedexCaughtCount, 1, 3
+	text_decimal wTempDexOwn, 2, 3
 	text " kinds"
 	line "of #mon."
 
@@ -114,7 +115,7 @@ ProfOaksAide1NoRoomText:
 	done
 
 ProfOaksAide1NestBallText:
-	text "<PLAYER> received"
+	text "<PLAYER> gained"
 	line "5 Nest Balls."
 	done
 

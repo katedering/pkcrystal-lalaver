@@ -10,6 +10,7 @@ Route22_MapScriptHeader:
 
 	def_bg_events
 	bg_event  6,  6, BGEVENT_JUMPTEXT, VictoryRoadEntranceSignText
+	bg_event  5,  9, BGEVENT_JUMPTEXT, Route22AdvancedTipsSignText
 
 	def_object_events
 	object_event 14, 11, SPRITE_KUKUI, SPRITEMOVEDATA_SPINRANDOM_SLOW, 0, 0, -1, -1, 0, OBJECTTYPE_SCRIPT, 0, KukuiScript, -1
@@ -24,9 +25,9 @@ KukuiScript:
 	faceplayer
 	opentext
 	checkevent EVENT_INTRODUCED_KUKUI
-	iftrue .Introduced
+	iftruefwd .Introduced
 	writetext .IntroText
-	sjump .Question
+	sjumpfwd .Question
 .Introduced
 	writetext .RematchText
 .Question
@@ -35,18 +36,18 @@ KukuiScript:
 	writetext .SeenText
 	waitbutton
 	closetext
+	setevent EVENT_INTRODUCED_KUKUI
 	winlosstext .BeatenText, 0
 	setlasttalked ROUTE22_KUKUI
 	checkevent EVENT_BEAT_ELITE_FOUR_AGAIN
-	iftrue .Rematch
+	iftruefwd .Rematch
 	loadtrainer KUKUI, 1
-	sjump .StartBattle
+	sjumpfwd .StartBattle
 .Rematch
 	loadtrainer KUKUI, 2
 .StartBattle
 	startbattle
 	reloadmapafterbattle
-	setevent EVENT_INTRODUCED_KUKUI
 	setevent EVENT_BEAT_KUKUI
 	jumpthistext
 
@@ -152,4 +153,18 @@ VictoryRoadEntranceSignText:
 
 	para "#mon League"
 	line "Reception Gate"
+	done
+
+Route22AdvancedTipsSignText:
+	text "Advanced Tips!"
+
+	para "Starting a New"
+	line "Game+ will keep"
+
+	para "your previous"
+	line "game's money,"
+	cont "Battle Points, and"
+
+	para "any #mon stored"
+	line "in the PC!"
 	done

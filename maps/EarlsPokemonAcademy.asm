@@ -10,8 +10,8 @@ EarlsPokemonAcademy_MapScriptHeader:
 	def_coord_events
 
 	def_bg_events
-	bg_event  0,  1, BGEVENT_READ, PokemonJournalWillScript
-	bg_event  1,  1, BGEVENT_READ, PokemonJournalWillScript
+	bg_event  0,  1, BGEVENT_READ, PokemonJournalWalkerScript
+	bg_event  1,  1, BGEVENT_READ, PokemonJournalWalkerScript
 	bg_event  3,  0, BGEVENT_READ, AcademyBlackboard
 	bg_event  4,  0, BGEVENT_READ, AcademyBlackboard
 
@@ -33,7 +33,7 @@ AcademyEarl:
 	opentext
 	writetext AcademyEarlIntroText
 	yesorno
-	iffalse .Part1
+	iffalsefwd .Part1
 	writetext AcademyEarlTeachHowToWinText
 	yesorno
 	iffalse_jumpopenedtext AcademyEarlNoMoreToTeachText
@@ -60,11 +60,11 @@ AcademyBlackboard:
 	loadmenu .MenuHeader
 	_2dmenu
 	closewindow
-	ifequal $1, .Poison
-	ifequal $2, .Paralysis
-	ifequal $3, .Sleep
-	ifequal $4, .Burn
-	ifequal $5, .Freeze
+	ifequalfwd $1, .Poison
+	ifequalfwd $2, .Paralysis
+	ifequalfwd $3, .Sleep
+	ifequalfwd $4, .Burn
+	ifequalfwd $5, .Freeze
 	endtext
 
 .Poison:
@@ -93,9 +93,8 @@ AcademyBlackboard:
 	sjump .Loop
 
 .MenuHeader:
-	db $40 ; flags
-	db 00, 00 ; start coords
-	db 08, 11 ; end coords
+	db MENU_BACKUP_TILES
+	menu_coords 0, 0, 11, 8
 	dw .Data
 	db 1 ; default option
 
@@ -118,39 +117,33 @@ AcademyNotebook:
 	opentext
 	writetext AcademyNotebookText
 	yesorno
-	iffalse .Done
+	iffalsefwd .Done
 	writetext AcademyNotebookText1
 	yesorno
-	iffalse .Done
+	iffalsefwd .Done
 	writetext AcademyNotebookText2
 	yesorno
-	iffalse .Done
+	iffalsefwd .Done
 	writetext AcademyNotebookText3
 	waitbutton
 .Done:
 	endtext
 
-PokemonJournalWillScript:
-	setflag ENGINE_READ_WILL_JOURNAL
+PokemonJournalWalkerScript:
+	setflag ENGINE_READ_WALKER_JOURNAL
 	jumpthistext
 
 	text "#mon Journal"
 
 	para "Special Feature:"
-	line "Elite Four Will!"
+	line "Ex-Leader Walker!"
 
-	para "Will does not talk"
-	line "about his past"
+	para "Falkner's father"
+	line "Walker is rumored"
 
-	para "before joining the"
-	line "Elite Four."
-
-	para "Some say he worked"
-	line "for Team Rocket."
-
-	para "#mon Journal"
-	line "refuses to specu-"
-	cont "late."
+	para "to be wandering"
+	line "around Johto as"
+	cont "a vagabond."
 	done
 
 AcademyEarlSpinMovement:

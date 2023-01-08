@@ -1,6 +1,3 @@
-INCLUDE "constants.asm"
-
-
 SECTION "Events", ROMX
 
 OverworldLoop::
@@ -308,7 +305,7 @@ CheckTileEvent:
 	ret
 
 .warp_tile
-	ld a, [wPlayerStandingTile]
+	ld a, [wPlayerTile]
 	cp COLL_HOLE
 	jr nz, .not_pit
 	ld a, PLAYEREVENT_FALL
@@ -382,11 +379,11 @@ RunSceneScript:
 	bit 3, [hl]
 	jr z, .nope
 
-	ld hl, wPriorityScriptAddr
+	ld hl, wDeferredScriptAddr
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
-	ld a, [wPriorityScriptBank]
+	ld a, [wDeferredScriptBank]
 	call CallScript
 	scf
 	ret
@@ -490,10 +487,10 @@ TryObjectEvent:
 	ldh [hLastTalked], a
 
 	call GetMapObject
-	ld hl, MAPOBJECT_COLOR
+	ld hl, MAPOBJECT_TYPE
 	add hl, bc
 	ld a, [hl]
-	and %00001111
+	and MAPOBJECT_TYPE_MASK
 
 	cp NUM_OBJECT_TYPES
 	ret nc
@@ -520,7 +517,7 @@ ObjectEventTypeArray:
 	jmp CallScript
 
 .itemball:
-	ld hl, MAPOBJECT_RANGE
+	ld hl, MAPOBJECT_SIGHT_RANGE
 	add hl, bc
 	ld a, [hli]
 	push af
@@ -539,10 +536,14 @@ ObjectEventTypeArray:
 	ret
 
 .pokemon:
-	ld hl, MAPOBJECT_RANGE
+	ld hl, MAPOBJECT_RADIUS
 	add hl, bc
-	ld a, [hli]
-	ldh [hScriptVar], a
+	ld a, [hl]
+	ld bc, MAPOBJECT_SIGHT_RANGE - MAPOBJECT_RADIUS
+	add hl, bc
+	ld b, [hl]
+	ld c, a
+	inc hl
 	ld de, wTempScriptBuffer
 	ld a, showcrytext_command
 	ld [de], a
@@ -552,7 +553,10 @@ rept 2
 	ld [de], a
 	inc de
 endr
-	xor a
+	ld a, c
+	ld [de], a
+	inc de
+	ld a, b
 	ld [de], a
 	inc de
 	ld a, end_command
@@ -560,7 +564,7 @@ endr
 	jr .callTemporaryScriptBuffer
 
 .command:
-	ld hl, MAPOBJECT_RANGE
+	ld hl, MAPOBJECT_SIGHT_RANGE
 	add hl, bc
 	ld de, wTempScriptBuffer
 rept 3
@@ -640,8 +644,6 @@ BGEventJumptable:
 	ld d, a
 	ld b, CHECK_FLAG
 	call EventFlagAction
-	ld a, c
-	and a
 	jr nz, .dontread
 	call PlayTalkObject
 	ld hl, wHiddenItemEvent
@@ -712,8 +714,6 @@ CheckBGEventFlag:
 	ld d, h
 	ld b, CHECK_FLAG
 	call EventFlagAction
-	ld a, c
-	and a
 	pop hl
 	ret
 
@@ -782,22 +782,25 @@ CheckMenuOW:
 	xor a
 	ldh [hMenuReturn], a
 	ldh [hMenuReturn + 1], a
-	ldh a, [hJoyPressed]
 
+	ld a, [wPanningAroundTinyMap]
+	and a
+	jr nz, .PanningAroundSnowtopMountain
+
+	ldh a, [hJoyPressed]
 	bit SELECT_F, a
 	jr nz, .Select
-
 	bit START_F, a
-	jr z, .NoMenu
+	jr nz, .Start
 
+	xor a
+	ret
+
+.Start:
 	ld a, BANK(StartMenuScript)
 	ld hl, StartMenuScript
 	call CallScript
 	scf
-	ret
-
-.NoMenu:
-	xor a
 	ret
 
 .Select:
@@ -807,19 +810,29 @@ CheckMenuOW:
 	scf
 	ret
 
+.PanningAroundSnowtopMountain:
+	ldh a, [hJoyPressed]
+	and B_BUTTON
+	ret z
+	ld a, BANK(SnowtopMountainOutsideStopPanningScript)
+	ld hl, SnowtopMountainOutsideStopPanningScript
+	call CallScript
+	scf
+	ret
+
 StartMenuScript:
 	callasm StartMenu
-	sjump StartMenuCallback
+	sjumpfwd StartMenuCallback
 
 SelectMenuScript:
 	callasm SelectMenu
-	sjump SelectMenuCallback
+	sjumpfwd SelectMenuCallback
 
 StartMenuCallback:
 SelectMenuCallback:
 	readmem hMenuReturn
-	ifequal HMENURETURN_SCRIPT, .Script
-	ifequal HMENURETURN_ASM, .Asm
+	ifequalfwd HMENURETURN_SCRIPT, .Script
+	ifequalfwd HMENURETURN_ASM, .Asm
 	end
 
 .Script:
@@ -832,6 +845,11 @@ SelectMenuCallback:
 CountStep:
 	; Don't count steps in link communication rooms.
 	ld a, [wLinkMode]
+	and a
+	jr nz, .done
+
+	; Don't count steps while panning in Snowtop Mountain
+	ld a, [wPanningAroundTinyMap]
 	and a
 	jr nz, .done
 
@@ -1098,7 +1116,7 @@ RandomEncounter::
 ; Random encounter
 	call CheckWildEncounterCooldown
 	jr c, .nope
-	call CanUseSweetScent
+	call CanUseSweetHoney
 	jr nc, .nope
 	ld hl, wStatusFlags2
 	bit STATUSFLAGS2_SAFARI_GAME_F, [hl]
@@ -1108,6 +1126,25 @@ RandomEncounter::
 	farcall TryWildEncounter
 	jr nz, .nope
 .ok
+	ld a, [wTempWildMonSpecies]
+	cp SUICUNE
+	jr nz, .notroamingsuicune
+	ld a, BANK(RoamingSuicuneBattleScript)
+	ld hl, RoamingSuicuneBattleScript
+	jr .done
+.notroamingsuicune
+	cp RAIKOU
+	jr nz, .notroamingraikou
+	ld a, BANK(RoamingRaikouBattleScript)
+	ld hl, RoamingRaikouBattleScript
+	jr .done
+.notroamingraikou
+	cp ENTEI
+	jr nz, .notroaming
+	ld a, BANK(RoamingEnteiBattleScript)
+	ld hl, RoamingEnteiBattleScript
+	jr .done
+.notroaming
 	ld a, BANK(WildBattleScript)
 	ld hl, WildBattleScript
 .done
@@ -1140,7 +1177,37 @@ WildBattleScript:
 	reloadmapafterbattle
 	end
 
-CanUseSweetScent::
+RoamingSuicuneBattleScript:
+	randomwildmon
+	startbattle
+	reloadmapafterbattle
+	special CheckBattleCaughtResult
+	iffalsefwd .nocatch
+	setflag ENGINE_PLAYER_CAUGHT_SUICUNE
+.nocatch
+	end
+
+RoamingRaikouBattleScript:
+	randomwildmon
+	startbattle
+	reloadmapafterbattle
+	special CheckBattleCaughtResult
+	iffalsefwd .nocatch
+	setflag ENGINE_PLAYER_CAUGHT_RAIKOU
+.nocatch
+	end
+
+RoamingEnteiBattleScript:
+	randomwildmon
+	startbattle
+	reloadmapafterbattle
+	special CheckBattleCaughtResult
+	iffalsefwd .nocatch
+	setflag ENGINE_PLAYER_CAUGHT_ENTEI
+.nocatch
+	end
+
+CanUseSweetHoney::
 	ld hl, wStatusFlags
 	bit STATUSFLAGS_NO_WILD_ENCOUNTERS_F, [hl]
 	jr nz, .no
@@ -1153,7 +1220,7 @@ CanUseSweetScent::
 	jr nc, .no
 
 .ice_check
-	ld a, [wPlayerStandingTile]
+	ld a, [wPlayerTile]
 	cp COLL_ICE
 	jr z, .no
 	scf
@@ -1162,6 +1229,37 @@ CanUseSweetScent::
 .no
 	and a
 	ret
+
+GetContestLocations:
+; Writes to wDexAreaMons. Assumes we're in the correct WRAM bank for this.
+; Parameters: e = type, d = region, c = species, b = form.
+	; Only Johto has Contests.
+	inc d
+	dec d
+	scf
+	ret nz
+
+	ld hl, ContestMons + 1
+	ld e, (ContestMonsEnd - ContestMons) / 5
+.loop
+	ld a, [hli]
+	cp c
+	ld a, [hli]
+	inc hl ; skip level min
+	inc hl ; skip level max
+	inc hl ; skip (next mon's) encounter rate
+	jr nz, .next
+	call DexCompareWildForm
+	jr z, .found_mon
+.next
+	dec e
+	jr nz, .loop
+	scf
+	ret
+.found_mon
+	lb de, GROUP_NATIONAL_PARK, MAP_NATIONAL_PARK
+	xor a ; ld a, JOHTO_REGION
+	farjp Pokedex_SetWildLandmark
 
 _TryWildEncounter_BugContest:
 	call TryWildEncounter_BugContest
@@ -1173,7 +1271,7 @@ _TryWildEncounter_BugContest:
 	jr nc, .loop
 	srl a
 	ld hl, ContestMons
-	ld de, 4
+	ld de, 5
 .CheckMon:
 	sub [hl]
 	jr c, .GotMon
@@ -1184,6 +1282,10 @@ _TryWildEncounter_BugContest:
 ; Species
 	ld a, [hli]
 	ld [wTempWildMonSpecies], a
+; Form
+	ld a, [hli]
+	ld [wCurForm], a
+	ld [wWildMonForm], a
 ; Min level
 	ld a, [hli]
 	ld d, a
@@ -1209,7 +1311,7 @@ _TryWildEncounter_BugContest:
 	farjp CheckRepelEffect
 
 TryWildEncounter_BugContest:
-	ld a, [wPlayerStandingTile]
+	ld a, [wPlayerTile]
 	cp COLL_LONG_GRASS
 	ld b, 40 percent
 	jr z, .ok
@@ -1292,5 +1394,6 @@ DoBikeStep::
 	xor a
 	ret
 
+INCLUDE "engine/overworld/landmarks.asm"
 INCLUDE "engine/overworld/stone_table.asm"
 INCLUDE "engine/overworld/scripting.asm"

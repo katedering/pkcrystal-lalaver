@@ -36,11 +36,11 @@ FastShip1F_MapScriptHeader:
 	const FASTSHIP1F_GENTLEMAN
 
 FastShip1FTrigger1:
-	prioritysjump FastShip1FPriorityJump2
+	sdefer FastShip1FEnterFastShipScript
 FastShip1FTrigger0:
 	end
 
-FastShip1FPriorityJump2:
+FastShip1FEnterFastShipScript:
 	applymovement FASTSHIP1F_SAILOR1, FastShip1F_SailorStepAsideMovement
 	applymovement PLAYER, FastShip1F_PlayerEntersShipMovement
 	applymovement FASTSHIP1F_SAILOR1, FastShip1F_SailorBlocksDoorMovement
@@ -50,7 +50,7 @@ FastShip1FPriorityJump2:
 	blackoutmod FAST_SHIP_CABINS_SW_SSW_NW
 	clearevent EVENT_FAST_SHIP_HAS_ARRIVED
 	checkevent EVENT_FAST_SHIP_FIRST_TIME
-	iftrue .SkipGrandpa
+	iftruefwd .SkipGrandpa
 	setscene $2
 	end
 
@@ -62,7 +62,7 @@ FastShip1FSailor1Script:
 	faceplayer
 	opentext
 	checkevent EVENT_FAST_SHIP_HAS_ARRIVED
-	iftrue .Arrived
+	iftruefwd .Arrived
 	checkevent EVENT_FAST_SHIP_DESTINATION_OLIVINE
 	iftrue_jumpopenedtext FastShip1FSailor1Text_ToOlivine
 	jumpthisopenedtext
@@ -78,7 +78,7 @@ FastShip1FSailor1Script:
 
 .Arrived:
 	checkevent EVENT_FAST_SHIP_DESTINATION_OLIVINE
-	iftrue ._Olivine
+	iftruefwd ._Olivine
 	writetext FastShip1FSailor1Text_InVermilion
 	waitbutton
 	closetext
@@ -101,12 +101,12 @@ FastShip1FSailor1Script:
 	waitsfx
 	setevent EVENT_OLIVINE_PORT_SAILOR_AT_GANGWAY
 	setmapscene OLIVINE_PORT, $1
-	warp OLIVINE_PORT, 7, 23
+	warp OLIVINE_PORT, 7, 15
 	end
 
 .LetThePlayerOut:
 	readvar VAR_FACING
-	ifequal RIGHT, .YouAreFacingRight
+	ifequalfwd RIGHT, .YouAreFacingRight
 	applymovement FASTSHIP1F_SAILOR1, FastShip1F_SailorStepAsideMovement
 	applymovement PLAYER, FastShip1F_PlayerLeavesShipMovement
 	end

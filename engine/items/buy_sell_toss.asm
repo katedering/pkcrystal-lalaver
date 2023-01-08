@@ -73,6 +73,33 @@ CalculateMaximumBTQuantity:
 	ld [wItemQuantityBuffer], a
 	ret
 
+SelectWingQuantity:
+	ld hl, .MenuHeader
+	call LoadMenuHeader
+	ld a, 1
+	ld [wItemQuantityChangeBuffer], a
+.loop
+	lb bc, PRINTNUM_LEADINGZEROS | 1, 3
+	call BuySellToss_UpdateQuantityDisplay ; update display
+	call BuySellToss_InterpretJoypad       ; joy action
+	jr nc, .loop
+	cp -1
+	jr nz, .nope ; pressed B
+	call ExitMenu
+	scf
+	ret
+
+.nope
+	call ExitMenu
+	and a
+	ret
+
+.MenuHeader:
+	db MENU_BACKUP_TILES
+	menu_coords 14, 11, 19, 13
+	dw DoNothing
+	db 0
+
 SelectQuantityToToss:
 	ld hl, TossItem_MenuDataHeader
 	call LoadMenuHeader
@@ -114,6 +141,7 @@ Toss_Sell_Loop:
 	ld a, 1
 	ld [wItemQuantityChangeBuffer], a
 .loop
+	lb bc, PRINTNUM_LEADINGZEROS | 1, 2
 	call BuySellToss_UpdateQuantityDisplay ; update display
 	call BuySellToss_InterpretJoypad       ; joy action
 	jr nc, .loop
@@ -167,9 +195,11 @@ BuySellToss_InterpretJoypad:
 .up
 	ld hl, wItemQuantityChangeBuffer
 	inc [hl]
+	jr z, .load_1
 	ld a, [wItemQuantityBuffer]
 	cp [hl]
 	jr nc, .finish_up
+.load_1
 	ld [hl], 1
 
 .finish_up
@@ -178,14 +208,12 @@ BuySellToss_InterpretJoypad:
 
 .left
 	ld a, [wItemQuantityChangeBuffer]
-	sub 10
-	jr c, .load_1
-	jr nz, .finish_left
-
-.load_1
-	ld a, 1
-
-.finish_left
+	; Subtracting by 11, then incrementing, simplifies checks.
+	sub 11
+	jr nc, .no_underflow
+	ld a, 0
+.no_underflow
+	inc a
 	ld [wItemQuantityChangeBuffer], a
 	and a
 	ret
@@ -193,6 +221,9 @@ BuySellToss_InterpretJoypad:
 .right
 	ld a, [wItemQuantityChangeBuffer]
 	add 10
+	jr nc, .no_overflow
+	ld a, 255
+.no_overflow
 	ld b, a
 	ld a, [wItemQuantityBuffer]
 	cp b
@@ -206,6 +237,7 @@ BuySellToss_InterpretJoypad:
 	ret
 
 BuySellToss_UpdateQuantityDisplay:
+	push bc
 	call MenuBox
 	call MenuBoxCoord2Tile
 	ld de, SCREEN_WIDTH + 1
@@ -213,7 +245,7 @@ BuySellToss_UpdateQuantityDisplay:
 	ld a, "×"
 	ld [hli], a
 	ld de, wItemQuantityChangeBuffer
-	lb bc, PRINTNUM_LEADINGZEROS | 1, 2
+	pop bc
 	call PrintNum
 	dec hl
 	ld a, [wMenuDataPointer]
@@ -291,29 +323,25 @@ DisplayPurchasePriceCommon:
 	ret
 
 TossItem_MenuDataHeader:
-	db $40 ; flags
-	db 09, 15 ; start coords
-	db 11, 19 ; end coords
+	db MENU_BACKUP_TILES
+	menu_coords 15, 9, 19, 11
 	dw DoNothing
 	db 0 ; default option
 
 BuyItem_MenuDataHeader:
-	db $40 ; flags
-	db 15, 07 ; start coords
-	db 17, 19 ; end coords
+	db MENU_BACKUP_TILES
+	menu_coords 7, 15, 19, 17
 	dw DisplayPurchasePrice
 	db -1 ; default option
 
 SellItem_MenuDataHeader:
-	db $40 ; flags
-	db 15, 07 ; start coords
-	db 17, 19 ; end coords
+	db MENU_BACKUP_TILES
+	menu_coords 7, 15, 19, 17
 	dw DisplaySellingPrice
 	db 0 ; default option
 
 BTBuyItem_MenuDataHeader:
-	db $40 ; flags
-	db 15, 07 ; start coords
-	db 17, 19 ; end coords
+	db MENU_BACKUP_TILES
+	menu_coords 7, 15, 19, 17
 	dw BTDisplayPurchaseCost
 	db -1 ; default option

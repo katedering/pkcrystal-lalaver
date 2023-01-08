@@ -17,14 +17,14 @@ SilphCo1F_MapScriptHeader:
 	object_event 13,  1, SPRITE_OFFICER, SPRITEMOVEDATA_STANDING_DOWN, 0, 0, -1, -1, PAL_NPC_BLUE, OBJECTTYPE_SCRIPT, 0, SilphCoOfficerScript, -1
 	object_event  4,  2, SPRITE_RECEPTIONIST, SPRITEMOVEDATA_STANDING_DOWN, 0, 0, -1, -1, PAL_NPC_BLUE, OBJECTTYPE_COMMAND, jumptextfaceplayer, SilphCoReceptionistText, -1
 	object_event 11,  4, SPRITE_GENTLEMAN, SPRITEMOVEDATA_STANDING_DOWN, 0, 0, -1, -1, PAL_NPC_BROWN, OBJECTTYPE_COMMAND, jumptextfaceplayer, SilphCo1FGentlemanText, -1
-	object_event  8,  2, SPRITE_BLACK_BELT, SPRITEMOVEDATA_SPINRANDOM_SLOW, 0, 0, -1, -1, PAL_NPC_BROWN, OBJECTTYPE_COMMAND, jumptextfaceplayer, SilphCo1FBlackBeltText, -1
+	object_event  8,  2, SPRITE_BLACK_BELT, SPRITEMOVEDATA_SPINRANDOM_SLOW, 0, 0, -1, -1, PAL_NPC_BROWN, OBJECTTYPE_COMMAND, jumptextfaceplayer, SilphCo1FBlackbeltText, -1
 
 	object_const_def
 	const SILPHCO1F_OFFICER
 
 .SilphCo1FMoveOfficerCallback:
 	checkevent EVENT_RESTORED_POWER_TO_KANTO
-	iffalse .Nothing
+	iffalsefwd .Nothing
 	moveobject SILPHCO1F_OFFICER, 14, 1
 .Nothing
 	endcallback
@@ -33,7 +33,7 @@ SilphCoOfficerScript:
 	faceplayer
 	opentext
 	checkevent EVENT_RESTORED_POWER_TO_KANTO
-	iftrue .OfficerScriptAfterPowerRestored
+	iftruefwd .OfficerScriptAfterPowerRestored
 	jumpopenedtext SilphCoOfficerText
 
 .OfficerScriptAfterPowerRestored
@@ -84,7 +84,7 @@ SilphCo1FGentlemanText:
 	line "here at Silph Co."
 	done
 
-SilphCo1FBlackBeltText:
+SilphCo1FBlackbeltText:
 	text "I'm trying to"
 	line "pluck up the"
 	cont "courage to ask"

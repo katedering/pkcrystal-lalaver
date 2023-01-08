@@ -8,7 +8,7 @@ SpecialGiveShinyDitto:
 	ld hl, .OTAndExtra
 	ld bc, PLAYER_NAME_LENGTH + 3
 	rst CopyBytes
-	
+
 	ld hl, wTempMonSpecies
 	ld a, DITTO
 	ld [hli], a
@@ -55,7 +55,7 @@ endr
 	ld [hli], a
 	xor a
 	ld [hli], a
-	lb bc, MALE, PREMIER_BALL
+	ld c, PREMIER_BALL
 	farcall SetGiftMonCaughtData
 	inc hl
 	ld [hl], 5

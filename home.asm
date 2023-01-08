@@ -1,6 +1,3 @@
-INCLUDE "constants.asm"
-
-
 SECTION "NULL", ROM0
 NULL::
 
@@ -62,12 +59,13 @@ INCLUDE "home/sprite_anims.asm"
 INCLUDE "home/audio.asm"
 INCLUDE "home/restore_music.asm"
 INCLUDE "home/vba.asm"
+INCLUDE "home/vwf.asm"
 
 ; data used within home
 INCLUDE "audio/alternate_music.asm"
 INCLUDE "data/text/ngrams.asm"
+INCLUDE "data/text/compressed_text.asm"
 INCLUDE "data/pokemon/variant_forms.asm"
-INCLUDE "data/moves/hm_moves.asm"
 INCLUDE "data/maps/special_music.asm"
 
 ; data used in multiple banks, or one full bank, outside home

@@ -39,18 +39,19 @@ CheckCanLearnMoveTutorMove:
 	call LoadMenuHeader
 
 	ld a, MON_FORM
-	call GetPartyParamLocation
-	ld a, [hl]
+	call GetPartyParamLocationAndValue
 	and SPECIESFORM_MASK
 	ld [wCurForm], a
-	predef CanLearnTMHMMove
 
-	push bc
 	ld a, [wCurPartyMon]
 	ld hl, wPartyMonNicknames
 	call GetNickname
-	pop bc
 
+	ld a, [wPutativeTMHMMove]
+	and a
+	jr z, .reminder
+
+	predef CanLearnTMHMMove
 	ld a, c
 	and a
 	jr nz, .can_learn
@@ -64,9 +65,6 @@ CheckCanLearnMoveTutorMove:
 	jr .didnt_learn
 
 .can_learn
-	ld a, [wPutativeTMHMMove]
-	and a
-	jr z, .reminder
 	farcall KnowsMove
 	jr c, .didnt_learn
 
@@ -115,6 +113,5 @@ CheckCanLearnMoveTutorMove:
 	ret
 
 .MenuDataHeader:
-	db $40 ; flags
-	db 12, 00 ; start coords
-	db 17, 19 ; end coords
+	db MENU_BACKUP_TILES
+	menu_coords 0, 12, 19, 17

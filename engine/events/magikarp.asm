@@ -8,7 +8,13 @@ CheckMagikarpLength:
 	farcall SelectMonFromParty
 	jr c, .declined
 	ld a, [wCurPartySpecies]
-	cp MAGIKARP
+	cp LOW(MAGIKARP)
+	jr nz, .not_magikarp
+	ld a, [wCurForm]
+	assert MON_IS_EGG == MON_FORM
+	and IS_EGG_MASK | EXTSPECIES_MASK
+	assert !HIGH(MAGIKARP)
+	and a ; cp HIGH(MAGIKARP) << MON_EXTSPECIES_F | IS_EGG_MASK
 	jr nz, .not_magikarp
 
 	; Now let's compute its length based on its DVs and ID.
@@ -100,7 +106,7 @@ PrintMagikarpLength:
 	ld b, a
 	ld a, [wMagikarpLengthMmLo]
 	ld c, a
-	ld de, 2580 ; (1/25.4) << 16
+	ld de, div(1.0q16, 25.4q16, 16) ; 1 in / 25.4 mm = 0.03937 in/mm
 	xor a
 	ldh [hTmpd], a
 	ldh [hTmpe], a

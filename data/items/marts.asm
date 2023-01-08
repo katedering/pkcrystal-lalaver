@@ -36,10 +36,14 @@ Marts:
 	dw SilphCoMart
 	dw FuchsiaMart
 	dw ShamoutiMart1
+	dw ShamoutiMart1Souvenir
 	dw ShamoutiMart2
 	dw BattleTowerMart1
 	dw BattleTowerMart2
 	dw BattleTowerMart3
+	dw BattleFactoryMart1
+	dw BattleFactoryMart2
+	dw BattleFactoryMart3
 	assert_table_length NUM_MARTS
 
 CherrygroveMart:
@@ -76,7 +80,7 @@ VioletMart:
 	db -1
 
 AzaleaMart:
-	db 10 ; # items
+	db 12 ; # items
 	db LURE_BALL
 	db FRIEND_BALL
 	db FAST_BALL
@@ -86,6 +90,8 @@ AzaleaMart:
 	db CHARCOAL
 	db SUPER_POTION
 	db FULL_HEAL
+	db SILVER_LEAF
+	db GOLD_LEAF
 	db FLOWER_MAIL
 	db -1
 
@@ -141,8 +147,8 @@ Celadon5FMart2:
 	db X_ATTACK
 	db X_DEFEND
 	db X_SPEED
-	db X_SPCL_ATK
-	db X_SPCL_DEF
+	db X_SP_ATK
+	db X_SP_DEF
 	db X_ACCURACY
 	db DIRE_HIT
 	db GUARD_SPEC
@@ -150,13 +156,19 @@ Celadon5FMart2:
 
 Goldenrod4FMart:
 Celadon5FMart1:
-	db 6 ; # items
+	db 12 ; # items
 	db PROTEIN
 	db IRON
 	db CARBOS
 	db CALCIUM
 	db ZINC
 	db HP_UP
+	db POMEG_BERRY
+	db KELPSY_BERRY
+	db QUALOT_BERRY
+	db HONDEW_BERRY
+	db GREPA_BERRY
+	db TAMATO_BERRY
 	db -1
 
 Goldenrod5FTMMart:
@@ -247,7 +259,7 @@ MahoganyMart1:
 	db -1
 
 MahoganyMart2:
-	db 11 ; # items
+	db 12 ; # items
 	db RAGECANDYBAR
 	db AIR_BALLOON
 	db QUICK_CLAW
@@ -255,6 +267,7 @@ MahoganyMart2:
 	db GREAT_BALL
 	db SUPER_POTION
 	db HYPER_POTION
+	db FULL_HEAL
 	db SUPER_REPEL
 	db REVIVE
 	db FLOWER_MAIL
@@ -277,8 +290,10 @@ BlackthornMart:
 	db -1
 
 IndigoPlateauMart:
-	db 11 ; # items
+	db 15 ; # items
 	db ULTRA_BALL
+	db TIMER_BALL
+	db QUICK_BALL
 	db MAX_REPEL
 	db MAX_ELIXIR
 	db MAX_REVIVE
@@ -289,6 +304,8 @@ IndigoPlateauMart:
 	db ABILITYPATCH
 	db ABILITY_CAP
 	db EXP_SHARE
+	db LUCKY_EGG
+	db EVIOLITE
 	db -1
 
 ViridianMart:
@@ -319,13 +336,14 @@ PewterMart:
 	db -1
 
 MtMoonMart:
-	db 8 ; # items
+	db 9 ; # items
 	db POKE_DOLL
 	db FRESH_WATER
 	db SODA_POP
 	db LEMONADE
 	db REPEL
 	db SUPER_REPEL
+	db MOON_STONE
 	db MIRAGE_MAIL
 	db PORTRAITMAIL
 	db -1
@@ -400,11 +418,10 @@ Celadon2FMart2:
 	db DIVE_BALL
 	db REPEAT_BALL
 	db DUSK_BALL
+	db LUXURY_BALL
 	db ESCAPE_ROPE
-	db SUPER_REPEL
 	db MAX_REPEL
 	db -1
-
 
 Celadon3FTMMart:
 	db 8 ; # items
@@ -419,7 +436,7 @@ Celadon3FTMMart:
 	db -1
 
 Celadon4FMart:
-	db 15 ; # items
+	db 14 ; # items
 	db POKE_DOLL
 	db ODD_SOUVENIR
 	db FIRE_STONE
@@ -427,7 +444,6 @@ Celadon4FMart:
 	db THUNDERSTONE
 	db LEAF_STONE
 	db ICE_STONE
-	db DAWN_STONE
 	db SUN_STONE
 	db DUSK_STONE
 	db MOON_STONE
@@ -451,13 +467,20 @@ SaffronMart:
 	db -1
 
 SilphCoMart:
-	db 6 ; # items
+	db 13 ; # items
 	db MAX_POTION
 	db MAX_REPEL
 	db DREAM_BALL
 	db CHERISH_BALL
 	db UP_GRADE
 	db DUBIOUS_DISC
+	db DRAGON_SCALE
+	db METAL_COAT
+	db PROTECTOR
+	db ELECTIRIZER
+	db MAGMARIZER
+	db RAZOR_FANG
+	db RAZOR_CLAW
 	db -1
 
 FuchsiaMart:
@@ -473,11 +496,22 @@ FuchsiaMart:
 	db -1
 
 ShamoutiMart1:
-	db 4 ; # items
+	db 5 ; # items
 	db MENTAL_HERB
 	db POWER_HERB
 	db WHITE_HERB
 	db BIG_ROOT
+	db BOTTLE_CAP
+	db -1
+
+ShamoutiMart1Souvenir:
+	db 6 ; # items
+	db ODD_SOUVENIR
+	db MENTAL_HERB
+	db POWER_HERB
+	db WHITE_HERB
+	db BIG_ROOT
+	db BOTTLE_CAP
 	db -1
 
 ShamoutiMart2:
@@ -504,11 +538,12 @@ BattleTowerMart1:
 	db -1
 
 BattleTowerMart2:
-	db 8 ; # items
+	db 9 ; # items
 	db RARE_CANDY,   64
 	db PP_MAX,       64
 	db ABILITY_CAP,  32
 	db WEAK_POLICY,  48
+	db BLUNDRPOLICY, 48
 	db LIFE_ORB,     48
 	db FLAME_ORB,    32
 	db TOXIC_ORB,    32
@@ -516,12 +551,46 @@ BattleTowerMart2:
 	db -1
 
 BattleTowerMart3:
-	db 7 ; # items
+	db 9 ; # items
 	db MACHO_BRACE,  16
+	db POWER_WEIGHT, 24
+	db POWER_BRACER, 24
+	db POWER_BELT,   24
+	db POWER_LENS,   24
+	db POWER_BAND,   24
+	db POWER_ANKLET, 24
+	db ABILITYPATCH, 96
+	db MASTER_BALL,  96
+	db -1
+
+BattleFactoryMart1:
+	db 7 ; # items
 	db FOCUS_BAND,   16
 	db FOCUS_SASH,   48
 	db ASSAULT_VEST, 48
 	db PROTECT_PADS, 16
 	db ROCKY_HELMET, 48
 	db SAFE_GOGGLES, 32
+	db HEAVY_BOOTS,  48
+	db -1
+
+BattleFactoryMart2:
+	db 7 ; # items
+	db IRON_BALL,    32
+	db LAGGING_TAIL, 24
+	db RING_TARGET,  24
+	db EJECT_BUTTON, 32
+	db EJECT_PACK,   32
+	db RED_CARD,     24
+	db ROOM_SERVICE, 24
+	db -1
+
+BattleFactoryMart3:
+	db 6 ; # items
+	db ABSORB_BULB,  16
+	db CELL_BATTERY, 16
+	db LUMINOUSMOSS, 16
+	db SNOWBALL,     16
+	db THROAT_SPRAY, 24
+	db MINT_LEAF,    32
 	db -1

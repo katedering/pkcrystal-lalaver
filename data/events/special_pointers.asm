@@ -1,4 +1,4 @@
-add_special: MACRO
+MACRO add_special
 \1Special::
 	dba \1
 ENDM
@@ -11,7 +11,7 @@ SpecialsPointers::
 	add_special Special_WaitForLinkedFriend
 	add_special Special_CheckLinkTimeout
 	add_special Special_TryQuickSave
-	add_special Special_CheckBothSelectedSameRoom
+	add_special PerformLinkChecks
 	add_special Special_FailedLinkToPast
 	add_special Special_CloseLink
 	add_special WaitForOtherPlayerToExit
@@ -89,7 +89,7 @@ SpecialsPointers::
 	add_special RandomPhoneRareWildMon
 	add_special RandomPhoneWildMon
 	add_special RandomPhoneMon
-	add_special MapCallbackSprites_LoadUsedSpritesGFX
+	add_special RefreshSprites
 	add_special PlaySlowCry
 	add_special SpecialSnorlaxAwake
 	add_special Special_OlderHaircutBrother
@@ -111,14 +111,13 @@ SpecialsPointers::
 	add_special Special_DisplayUnownWords
 	add_special SpecialHoOhChamber
 	add_special Special_CelebiShrineEvent
-	add_special CheckCaughtCelebi
+	add_special CheckBattleCaughtResult
 	add_special JudgeMachine
 	add_special SpecialBuenasPassword
 	add_special Special_SampleKenjiBreakCountdown
 	add_special SpecialBeastsCheck
 	add_special SpecialBirdsCheck
 	add_special SpecialDuoCheck
-	add_special SpecialMonCheck
 	add_special Special_SetPlayerPalette
 	add_special AskRememberPassword
 	add_special LoadMapPalettes
@@ -162,7 +161,16 @@ SpecialsPointers::
 	add_special GetHiddenGrottoContents
 	add_special EmptiedHiddenGrotto
 	add_special Special_HiddenPowerGuru
+	add_special Special_MintTeaPickMon
+	add_special Special_MintTeaChangeNature
 	add_special Special_GetOvercastIndex
 	add_special Special_SetCopycatPalette
 	add_special Special_CurBoxFullCheck
 	add_special GetCurBoxName
+	add_special CountCaught
+	add_special CountSeen
+	add_special PickPsychicInverParty
+	add_special ShowItemIcon
+	add_special ShowKeyItemIcon
+	add_special ShowTMHMIcon
+	add_special FixPlayerEVsAndStats

@@ -16,9 +16,9 @@ TinTower1F_MapScriptHeader:
 	def_bg_events
 
 	def_object_events
-	object_event  7,  9, SPRITE_MON_ICON, SPRITEMOVEDATA_POKEMON, 0, SUICUNE, -1, -1, PAL_NPC_BLUE, OBJECTTYPE_SCRIPT, 0, ObjectEvent, EVENT_TIN_TOWER_1F_SUICUNE
-	object_event  5,  9, SPRITE_MON_ICON, SPRITEMOVEDATA_POKEMON, 0, RAIKOU, -1, -1, PAL_NPC_BROWN, OBJECTTYPE_SCRIPT, 0, ObjectEvent, EVENT_TIN_TOWER_1F_RAIKOU
-	object_event 10,  9, SPRITE_MON_ICON, SPRITEMOVEDATA_POKEMON, 0, ENTEI, -1, -1, PAL_NPC_RED, OBJECTTYPE_SCRIPT, 0, ObjectEvent, EVENT_TIN_TOWER_1F_ENTEI
+	pokemon_event  7,  9, SUICUNE, SPRITEMOVEDATA_POKEMON, -1, -1, PAL_NPC_BLUE, ClearText, EVENT_TIN_TOWER_1F_SUICUNE
+	pokemon_event  5,  9, RAIKOU, SPRITEMOVEDATA_POKEMON, -1, -1, PAL_NPC_BROWN, ClearText, EVENT_TIN_TOWER_1F_RAIKOU
+	pokemon_event 10,  9, ENTEI, SPRITEMOVEDATA_POKEMON, -1, -1, PAL_NPC_RED, ClearText, EVENT_TIN_TOWER_1F_ENTEI
 	object_event  6,  3, SPRITE_EUSINE, SPRITEMOVEDATA_SPINRANDOM_SLOW, 0, 0, -1, -1, 0, OBJECTTYPE_COMMAND, jumptextfaceplayer, TinTowerEusineHoOhText, EVENT_TIN_TOWER_1F_EUSINE
 	object_event  3,  9, SPRITE_ELDER, SPRITEMOVEDATA_SPINRANDOM_SLOW, 0, 0, -1, -1, 0, OBJECTTYPE_COMMAND, jumptextfaceplayer, TinTower1FSage1Text, EVENT_TIN_TOWER_1F_WISE_TRIO_1
 	object_event  9, 11, SPRITE_ELDER, SPRITEMOVEDATA_SPINRANDOM_SLOW, 0, 0, -1, -1, 0, OBJECTTYPE_COMMAND, jumptextfaceplayer, TinTower1FSage2Text, EVENT_TIN_TOWER_1F_WISE_TRIO_1
@@ -37,43 +37,41 @@ TinTower1F_MapScriptHeader:
 	const TINTOWER1F_SAGE3
 
 TinTower1FTrigger0:
-	prioritysjump SuicuneBattle
+	sdefer SuicuneBattle
 	end
 
 UnknownScript_0x18502f:
 	checkevent EVENT_GOT_RAINBOW_WING
-	iftrue UnknownScript_0x185047
+	iftruefwd UnknownScript_0x185047
 	checkevent EVENT_BEAT_ELITE_FOUR
-	iffalse UnknownScript_0x185050
+	iffalsefwd UnknownScript_0x185050
 	special SpecialBeastsCheck
-	iffalse UnknownScript_0x185050
+	iffalsefwd UnknownScript_0x185050
 	clearevent EVENT_TIN_TOWER_1F_WISE_TRIO_2
 	setevent EVENT_TIN_TOWER_1F_WISE_TRIO_1
 UnknownScript_0x185047:
 	checkevent EVENT_FOUGHT_HO_OH
-	iffalse .Done
+	iffalsefwd .Done
 	appear TINTOWER1F_EUSINE
 .Done:
 	endcallback
 
 UnknownScript_0x185050:
 	checkevent EVENT_FOUGHT_SUICUNE
-	iftrue UnknownScript_0x185077
+	iftruefwd UnknownScript_0x185077
 	appear TINTOWER1F_SUICUNE
-	setval RAIKOU
-	special SpecialMonCheck
-	iftrue UnknownScript_0x185065
+	checkflag ENGINE_PLAYER_CAUGHT_RAIKOU
+	iftruefwd UnknownScript_0x185065
 	appear TINTOWER1F_RAIKOU
-	sjump UnknownScript_0x185067
+	sjumpfwd UnknownScript_0x185067
 
 UnknownScript_0x185065:
 	disappear TINTOWER1F_RAIKOU
 UnknownScript_0x185067:
-	setval ENTEI
-	special SpecialMonCheck
-	iftrue UnknownScript_0x185074
+	checkflag ENGINE_PLAYER_CAUGHT_ENTEI
+	iftruefwd UnknownScript_0x185074
 	appear TINTOWER1F_ENTEI
-	sjump UnknownScript_0x185076
+	sjumpfwd UnknownScript_0x185076
 
 UnknownScript_0x185074:
 	disappear TINTOWER1F_ENTEI
@@ -90,7 +88,7 @@ UnknownScript_0x185077:
 
 TinTowerStairsCallback:
 	checkevent EVENT_GOT_RAINBOW_WING
-	iftrue .NoChange
+	iftruefwd .NoChange
 	changeblock 8, 2, $9
 .NoChange:
 	endcallback
@@ -98,9 +96,8 @@ TinTowerStairsCallback:
 SuicuneBattle:
 	applymovement PLAYER, TinTowerPlayerMovement1
 	pause 15
-	setval RAIKOU
-	special SpecialMonCheck
-	iftrue .Next1 ; if player caught Raikou, he doesn't appear in Tin Tower
+	checkflag ENGINE_PLAYER_CAUGHT_RAIKOU
+	iftruefwd .Next1 ; if player caught Raikou, he doesn't appear in Tin Tower
 	applymovement TINTOWER1F_RAIKOU, TinTowerRaikouMovement1
 	turnobject PLAYER, LEFT
 	cry RAIKOU
@@ -111,9 +108,8 @@ SuicuneBattle:
 	playsound SFX_EXIT_BUILDING
 	waitsfx
 .Next1:
-	setval ENTEI
-	special SpecialMonCheck
-	iftrue .Next2 ; if player caught Entei, he doesn't appear in Tin Tower
+	checkflag ENGINE_PLAYER_CAUGHT_ENTEI
+	iftruefwd .Next2 ; if player caught Entei, he doesn't appear in Tin Tower
 	applymovement TINTOWER1F_ENTEI, TinTowerEnteiMovement1
 	turnobject PLAYER, RIGHT
 	cry ENTEI
@@ -143,8 +139,12 @@ SuicuneBattle:
 	setevent EVENT_SAW_SUICUNE_AT_CIANWOOD_CITY
 	setmapscene CIANWOOD_CITY, $0
 	setscene $1
-	clearevent EVENT_SET_WHEN_FOUGHT_HO_OH
+	clearevent EVENT_EUSINES_HOUSE_EUSINE
 	reloadmapafterbattle
+	special CheckBattleCaughtResult
+	iffalsefwd .nocatch
+	setflag ENGINE_PLAYER_CAUGHT_SUICUNE
+.nocatch
 	turnobject PLAYER, DOWN
 	pause 20
 	playmusic MUSIC_MYSTICALMAN_ENCOUNTER
@@ -180,7 +180,7 @@ SuicuneBattle:
 
 TinTower1FSage4Script:
 	checkevent EVENT_FOUGHT_HO_OH
-	iftrue UnknownScript_0x185185
+	iftruefwd UnknownScript_0x185185
 	jumptextfaceplayer TinTower1FSage4Text1
 
 UnknownScript_0x185185:
@@ -190,9 +190,9 @@ TinTower1FSage5Script:
 	faceplayer
 	opentext
 	checkevent EVENT_FOUGHT_HO_OH
-	iftrue UnknownScript_0x1851b6
+	iftruefwd UnknownScript_0x1851b6
 	checkevent EVENT_GOT_RAINBOW_WING
-	iftrue UnknownScript_0x1851b0
+	iftruefwd UnknownScript_0x1851b0
 	writetext TinTower1FSage5Text1
 	promptbutton
 	verbosegivekeyitem RAINBOW_WING
@@ -214,7 +214,7 @@ UnknownScript_0x1851b6:
 
 TinTower1FSage6Script:
 	checkevent EVENT_FOUGHT_HO_OH
-	iftrue UnknownScript_0x1851c5
+	iftruefwd UnknownScript_0x1851c5
 	jumptextfaceplayer TinTower1FSage6Text1
 
 UnknownScript_0x1851c5:

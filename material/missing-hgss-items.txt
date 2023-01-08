@@ -41,23 +41,12 @@ Full Heal	Left path
 
 ----- Johto -----
 
-cherrygrove city:
-nugget in surf grass next to pokémon center
-
 dark cave:
 Poké Ball	In a rock northeast of the Potion
 Max Ether	Southeast of Hyper Potion (requires Rock Smash)
 Elixir	Southwest of entrance from Route 45
 Max Revive	On a rock, north of the man who gives BlackGlasses (requires Surf)
 Hyper Potion	On a rock north of the exit to the Violet City side (requires Surf)
-
-violet city:
-poke ball on island in front of sprout tower
-
-route 32:
-Super Potion	Next to the trees west of the man who gives TM05 (Roar) (requires Cut)
-Heart Scale	In the small rock in the water to the east of the fishermen, next to the leg of the train bridge (requires Surf)
-Great Ball	Outside the entrance to Union Cave
 
 ruins of alph:
 Potion	In the left wall of the building, southmost of the three in the northeast
@@ -66,10 +55,6 @@ TinyMushroom	TinyMushroom	In the small mound of dirt east of the western pond
 Rare Candy	In a solid rock west of a smashable rock to the west of the northern entrance (requires Rock Smash)
 Nugget	On a boulder outside the third chamber (accessed via Union Cave)
 Big Mushroom	On a boulder outside the third chamber (accessed via Union Cave)
-
-union cave:
-Ultra Ball	B2F, on stalagmite northwest of Ace Trainer Emma
-Calcium	B2F, northwest of Ace Trainer Gwen
 
 ilex forest:
 TinyMushroom ×3
@@ -84,16 +69,8 @@ Big Mushroom	At the empty patch west of the pond (requires Surf)
 goldenrod city:
 Super Potion	Northwest of the lamppost south of the Bike Shop
 
-route 35:
-Nugget	Across the small pond, north of the Apricorn tree (requires Surf)
-
 route 36:
 Awakening	In one of the trees north of the large patch of grass
-
-ecruteak city:
-Ether	On the burned logs east of the Burned Tower
-Ultra Ball	West side of town in a lamp post
-Rare Candy	South of the water
 
 burned tower:
 Revive	B1F; south-center in a boulder just west of the smashable rocks

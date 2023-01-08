@@ -1,47 +1,47 @@
-; object_struct members (see macros/wram.asm)
+; object_struct members (see macros/ram.asm)
 rsreset
-OBJECT_SPRITE              rb ; 00
-OBJECT_MAP_OBJECT_INDEX    rb ; 01
-OBJECT_SPRITE_TILE         rb ; 02
-OBJECT_MOVEMENTTYPE        rb ; 03
-OBJECT_FLAGS1              rb ; 04
-OBJECT_FLAGS2              rb ; 05
-OBJECT_PALETTE             rb ; 06
-OBJECT_DIRECTION_WALKING   rb ; 07
-OBJECT_FACING              rb ; 08
-OBJECT_STEP_TYPE           rb ; 09
-OBJECT_STEP_DURATION       rb ; 0a
-OBJECT_ACTION              rb ; 0b
-OBJECT_STEP_FRAME          rb ; 0c
-OBJECT_FACING_STEP         rb ; 0d
-OBJECT_NEXT_TILE           rb ; 0e
-OBJECT_STANDING_TILE       rb ; 0f
-OBJECT_NEXT_MAP_X          rb ; 10
-OBJECT_NEXT_MAP_Y          rb ; 11
-OBJECT_MAP_X               rb ; 12
-OBJECT_MAP_Y               rb ; 13
-OBJECT_INIT_X              rb ; 14
-OBJECT_INIT_Y              rb ; 15
-OBJECT_RADIUS              rb ; 16
-OBJECT_SPRITE_X            rb ; 17
-OBJECT_SPRITE_Y            rb ; 18
-OBJECT_SPRITE_X_OFFSET     rb ; 19
-OBJECT_SPRITE_Y_OFFSET     rb ; 1a
-OBJECT_MOVEMENT_BYTE_INDEX rb ; 1b
-OBJECT_1C                  rb ; 1c
-OBJECT_1D                  rb ; 1d
-OBJECT_1E                  rb ; 1e
-OBJECT_1F                  rb ; 1f
-OBJECT_RANGE               rb ; 20
-OBJECT_LENGTH EQU _RS
-NUM_OBJECT_STRUCTS EQU 13 ; see wObjectStructs
-FIRST_VRAM1_OBJECT_STRUCT EQU 8
+DEF OBJECT_SPRITE           rb ; 00
+DEF OBJECT_MAP_OBJECT_INDEX rb ; 01
+DEF OBJECT_SPRITE_TILE      rb ; 02
+DEF OBJECT_MOVEMENT_TYPE    rb ; 03
+DEF OBJECT_FLAGS1           rb ; 04
+DEF OBJECT_FLAGS2           rb ; 05
+DEF OBJECT_PALETTE          rb ; 06
+DEF OBJECT_WALKING          rb ; 07
+DEF OBJECT_DIRECTION        rb ; 08
+DEF OBJECT_STEP_TYPE        rb ; 09
+DEF OBJECT_STEP_DURATION    rb ; 0a
+DEF OBJECT_ACTION           rb ; 0b
+DEF OBJECT_STEP_FRAME       rb ; 0c
+DEF OBJECT_FACING           rb ; 0d
+DEF OBJECT_TILE             rb ; 0e
+DEF OBJECT_LAST_TILE        rb ; 0f
+DEF OBJECT_MAP_X            rb ; 10
+DEF OBJECT_MAP_Y            rb ; 11
+DEF OBJECT_LAST_MAP_X       rb ; 12
+DEF OBJECT_LAST_MAP_Y       rb ; 13
+DEF OBJECT_INIT_X           rb ; 14
+DEF OBJECT_INIT_Y           rb ; 15
+DEF OBJECT_RADIUS           rb ; 16
+DEF OBJECT_SPRITE_X         rb ; 17
+DEF OBJECT_SPRITE_Y         rb ; 18
+DEF OBJECT_SPRITE_X_OFFSET  rb ; 19
+DEF OBJECT_SPRITE_Y_OFFSET  rb ; 1a
+DEF OBJECT_MOVEMENT_INDEX   rb ; 1b
+DEF OBJECT_STEP_INDEX       rb ; 1c
+DEF OBJECT_1D               rb ; 1d
+DEF OBJECT_1E               rb ; 1e
+DEF OBJECT_JUMP_HEIGHT      rb ; 1f
+DEF OBJECT_RANGE            rb ; 20
+DEF OBJECT_LENGTH EQU _RS
+DEF NUM_OBJECT_STRUCTS EQU 13 ; see wObjectStructs
+DEF FIRST_VRAM1_OBJECT_STRUCT EQU 8
 
-; object_struct OBJECT_FACING values
-OW_DOWN  EQU DOWN  << 2
-OW_UP    EQU UP    << 2
-OW_LEFT  EQU LEFT  << 2
-OW_RIGHT EQU RIGHT << 2
+; object_struct OBJECT_DIRECTION values
+DEF OW_DOWN  EQU DOWN  << 2
+DEF OW_UP    EQU UP    << 2
+DEF OW_LEFT  EQU LEFT  << 2
+DEF OW_RIGHT EQU RIGHT << 2
 
 ; object_struct OBJECT_FLAGS1 bit flags
 	const_def
@@ -54,14 +54,14 @@ OW_RIGHT EQU RIGHT << 2
 	const NOCLIP_OBJS_F   ; 6
 	const EMOTE_OBJECT_F  ; 7
 
-INVISIBLE     EQU 1 << INVISIBLE_F
-WONT_DELETE   EQU 1 << WONT_DELETE_F
-FIXED_FACING  EQU 1 << FIXED_FACING_F
-SLIDING       EQU 1 << SLIDING_F
-NOCLIP_TILES  EQU 1 << NOCLIP_TILES_F
-MOVE_ANYWHERE EQU 1 << MOVE_ANYWHERE_F
-NOCLIP_OBJS   EQU 1 << NOCLIP_OBJS_F
-EMOTE_OBJECT  EQU 1 << EMOTE_OBJECT_F
+DEF INVISIBLE     EQU 1 << INVISIBLE_F
+DEF WONT_DELETE   EQU 1 << WONT_DELETE_F
+DEF FIXED_FACING  EQU 1 << FIXED_FACING_F
+DEF SLIDING       EQU 1 << SLIDING_F
+DEF NOCLIP_TILES  EQU 1 << NOCLIP_TILES_F
+DEF MOVE_ANYWHERE EQU 1 << MOVE_ANYWHERE_F
+DEF NOCLIP_OBJS   EQU 1 << NOCLIP_OBJS_F
+DEF EMOTE_OBJECT  EQU 1 << EMOTE_OBJECT_F
 
 ; object_struct OBJECT_FLAGS2 bit flags
 	const_def
@@ -69,15 +69,14 @@ EMOTE_OBJECT  EQU 1 << EMOTE_OBJECT_F
 	const HIGH_PRIORITY_F ; 1
 	const OBJ_FLAGS2_2    ; 2
 	const OVERHEAD_F      ; 3
-	const USE_OBP1_F      ; 4
+	const_skip            ; 4
 	const FROZEN_F        ; 5
 	const OBJ_FLAGS2_6    ; 6
 	const OBJ_FLAGS2_7    ; 7
 
-LOW_PRIORITY  EQU 1 << LOW_PRIORITY_F
-HIGH_PRIORITY EQU 1 << HIGH_PRIORITY_F
-OVERHEAD      EQU 1 << OVERHEAD_F
-USE_OBP1      EQU 1 << USE_OBP1_F
+DEF LOW_PRIORITY  EQU 1 << LOW_PRIORITY_F
+DEF HIGH_PRIORITY EQU 1 << HIGH_PRIORITY_F
+DEF OVERHEAD      EQU 1 << OVERHEAD_F
 
 ; object_struct OBJECT_PALETTE bit flags
 	const_def 5
@@ -85,47 +84,56 @@ USE_OBP1      EQU 1 << USE_OBP1_F
 	const STRENGTH_BOULDER_F ; 6
 	const BIG_OBJECT_F       ; 7
 
-SWIMMING         EQU 1 << SWIMMING_F
-STRENGTH_BOULDER EQU 1 << STRENGTH_BOULDER_F
-BIG_OBJECT       EQU 1 << BIG_OBJECT_F
+DEF SWIMMING         EQU 1 << SWIMMING_F
+DEF STRENGTH_BOULDER EQU 1 << STRENGTH_BOULDER_F
+DEF BIG_OBJECT       EQU 1 << BIG_OBJECT_F
 
 ; facing attribute bit flags
-RELATIVE_ATTRIBUTES_F EQU 1
-ABSOLUTE_TILE_ID_F    EQU 2
+DEF RELATIVE_ATTRIBUTES_F EQU 1
+DEF ABSOLUTE_TILE_ID_F    EQU 2
+DEF NEXT_PALETTE_F        EQU 3
 
-RELATIVE_ATTRIBUTES EQU 1 << RELATIVE_ATTRIBUTES_F
-ABSOLUTE_TILE_ID    EQU 1 << ABSOLUTE_TILE_ID_F
+DEF RELATIVE_ATTRIBUTES EQU 1 << RELATIVE_ATTRIBUTES_F
+DEF ABSOLUTE_TILE_ID    EQU 1 << ABSOLUTE_TILE_ID_F
+DEF NEXT_PALETTE        EQU 1 << NEXT_PALETTE_F
 
-; map_object struct members (see macros/wram.asm)
+; map_object struct members (see macros/ram.asm)
 rsreset
-MAPOBJECT_OBJECT_STRUCT_ID rb ; 0
-MAPOBJECT_SPRITE           rb ; 1
-MAPOBJECT_Y_COORD          rb ; 2
-MAPOBJECT_X_COORD          rb ; 3
-MAPOBJECT_MOVEMENT         rb ; 4
-MAPOBJECT_RADIUS           rb ; 5
-MAPOBJECT_HOUR             rb ; 6
-MAPOBJECT_TIMEOFDAY        rb ; 7
-MAPOBJECT_COLOR            rb ; 8
-MAPOBJECT_RANGE            rb ; 9
-MAPOBJECT_SCRIPT_POINTER   rw ; a
-MAPOBJECT_EVENT_FLAG       rw ; c
-MAPOBJECT_LENGTH EQU _RS
-NUM_OBJECTS EQU $15
-PLAYER_OBJECT EQU 0
+DEF MAPOBJECT_OBJECT_STRUCT_ID rb ; 0
+DEF MAPOBJECT_SPRITE           rb ; 1
+DEF MAPOBJECT_Y_COORD          rb ; 2
+DEF MAPOBJECT_X_COORD          rb ; 3
+DEF MAPOBJECT_MOVEMENT         rb ; 4
+DEF MAPOBJECT_RADIUS           rb ; 5
+DEF MAPOBJECT_HOUR_1           rb ; 6
+DEF MAPOBJECT_HOUR_2           rb ; 7
+rsset MAPOBJECT_HOUR_2
+DEF MAPOBJECT_TIMEOFDAY        rb ; 7
+DEF MAPOBJECT_PALETTE          rb ; 8
+rsset MAPOBJECT_PALETTE
+DEF MAPOBJECT_TYPE             rb ; 8
+DEF MAPOBJECT_SIGHT_RANGE      rb ; 9
+DEF MAPOBJECT_SCRIPT_POINTER   rw ; a
+DEF MAPOBJECT_EVENT_FLAG       rw ; c
+DEF MAPOBJECT_LENGTH EQU _RS
+DEF NUM_OBJECTS EQU $15
+DEF PLAYER_OBJECT EQU 0
+
+DEF MAPOBJECT_PALETTE_MASK EQU %11110000
+DEF MAPOBJECT_TYPE_MASK    EQU %00001111
 
 ; SpriteMovementData struct members (see data/sprites/map_objects.asm)
 rsreset
-SPRITEMOVEATTR_MOVEMENT rb ; 0
-SPRITEMOVEATTR_FACING   rb ; 1
-SPRITEMOVEATTR_ACTION   rb ; 2
-SPRITEMOVEATTR_FLAGS1   rb ; 3
-SPRITEMOVEATTR_FLAGS2   rb ; 4
-SPRITEMOVEATTR_PALFLAGS rb ; 5
-NUM_SPRITEMOVEDATA_FIELDS EQU _RS
+DEF SPRITEMOVEATTR_MOVEMENT rb ; 0
+DEF SPRITEMOVEATTR_FACING   rb ; 1
+DEF SPRITEMOVEATTR_ACTION   rb ; 2
+DEF SPRITEMOVEATTR_FLAGS1   rb ; 3
+DEF SPRITEMOVEATTR_FLAGS2   rb ; 4
+DEF SPRITEMOVEATTR_PALFLAGS rb ; 5
+DEF NUM_SPRITEMOVEDATA_FIELDS EQU _RS
 
-MAPOBJECT_SCREEN_WIDTH  EQU (SCREEN_WIDTH / 2) + 2
-MAPOBJECT_SCREEN_HEIGHT EQU (SCREEN_HEIGHT / 2) + 2
+DEF MAPOBJECT_SCREEN_WIDTH  EQU (SCREEN_WIDTH / 2) + 2
+DEF MAPOBJECT_SCREEN_HEIGHT EQU (SCREEN_HEIGHT / 2) + 2
 
 ; SpriteMovementData indexes (see data/sprites/map_objects.asm)
 	const_def
@@ -167,13 +175,17 @@ MAPOBJECT_SCREEN_HEIGHT EQU (SCREEN_HEIGHT / 2) + 2
 	const SPRITEMOVEDATA_STANDING_DOWN_FLIP   ; 23
 	const SPRITEMOVEDATA_STANDING_UP_FLIP     ; 24
 	const SPRITEMOVEDATA_POKECOM_NEWS         ; 25
-	const SPRITEMOVEDATA_ARCH_TREE_DOWN       ; 26
-	const SPRITEMOVEDATA_ARCH_TREE_UP         ; 27
+	const SPRITEMOVEDATA_MUSEUM_DRILL_DOWN    ; 26
+	const SPRITEMOVEDATA_MUSEUM_DRILL_UP      ; 27
 	const SPRITEMOVEDATA_ARCH_TREE_LEFT       ; 28
 	const SPRITEMOVEDATA_ARCH_TREE_RIGHT      ; 29
 	const SPRITEMOVEDATA_SAILBOAT_TOP         ; 2a
 	const SPRITEMOVEDATA_SAILBOAT_BOTTOM      ; 2b
-NUM_SPRITEMOVEDATA EQU const_value
+	const SPRITEMOVEDATA_ALOLAN_EXEGGUTOR     ; 2c
+	const SPRITEMOVEDATA_TINY_WINDOWS         ; 2d
+	const SPRITEMOVEDATA_PLACEHOLDER_UP       ; 2e
+	const SPRITEMOVEDATA_MICROPHONE           ; 2f
+DEF NUM_SPRITEMOVEDATA EQU const_value
 
 ; StepFunction_FromMovement.Pointers indexes (see engine/overworld/map_objects.asm)
 	const_def
@@ -204,10 +216,13 @@ NUM_SPRITEMOVEDATA EQU const_value
 	const SPRITEMOVEFN_BIG_GYARADOS          ; 18
 	const SPRITEMOVEFN_STANDING_FLIP         ; 19
 	const SPRITEMOVEFN_POKECOM_NEWS          ; 1a
-	const SPRITEMOVEFN_ARCH_TREE             ; 1b
+	const SPRITEMOVEFN_MUSEUM_DRILL          ; 1b
 	const SPRITEMOVEFN_SAILBOAT_TOP          ; 1c
 	const SPRITEMOVEFN_SAILBOAT_BOTTOM       ; 1d
-NUM_SPRITEMOVEFN EQU const_value
+	const SPRITEMOVEFN_ALOLAN_EXEGGUTOR      ; 1e
+	const SPRITEMOVEFN_TINY_WINDOWS          ; 1f
+	const SPRITEMOVEFN_MICROPHONE            ; 20
+DEF NUM_SPRITEMOVEFN EQU const_value
 
 ; StepTypesJumptable indexes (see engine/overworld/map_objects.asm)
 	const_def
@@ -235,90 +250,106 @@ NUM_SPRITEMOVEFN EQU const_value
 	const STEP_TYPE_SKYFALL_TOP      ; 15
 	const STEP_TYPE_NPC_STAIRS       ; 16
 	const STEP_TYPE_PLAYER_STAIRS    ; 17
-NUM_STEP_TYPES EQU const_value
+DEF NUM_STEP_TYPES EQU const_value
 
 ; ObjectActionPairPointers indexes (see engine/overworld/map_object_action.asm)
 	const_def
-	const OBJECT_ACTION_00              ; 00
-	const OBJECT_ACTION_STAND           ; 01
-	const OBJECT_ACTION_STEP            ; 02
-	const OBJECT_ACTION_BUMP            ; 03
-	const OBJECT_ACTION_SPIN            ; 04
-	const OBJECT_ACTION_SPIN_FLICKER    ; 05
-	const OBJECT_ACTION_FISHING         ; 06
-	const OBJECT_ACTION_SHADOW          ; 07
-	const OBJECT_ACTION_EMOTE           ; 08
-	const OBJECT_ACTION_BIG_SNORLAX     ; 09
-	const OBJECT_ACTION_BOUNCE          ; 0a
-	const OBJECT_ACTION_WEIRD_TREE      ; 0b
-	const OBJECT_ACTION_BIG_DOLL        ; 0c
-	const OBJECT_ACTION_BOULDER_DUST    ; 0d
-	const OBJECT_ACTION_GRASS_SHAKE     ; 0e
-	const OBJECT_ACTION_PUDDLE_SPLASH   ; 0f
-	const OBJECT_ACTION_CUT_TREE        ; 10
-	const OBJECT_ACTION_SKYFALL         ; 11
-	const OBJECT_ACTION_FRUIT           ; 12
-	const OBJECT_ACTION_BIG_GYARADOS    ; 13
-	const OBJECT_ACTION_STAND_FLIP      ; 14
-	const OBJECT_ACTION_POKECOM_NEWS    ; 15
-	const OBJECT_ACTION_ARCH_TREE       ; 16
-	const OBJECT_ACTION_RUN             ; 17
-	const OBJECT_ACTION_SAILBOAT_TOP    ; 18
-	const OBJECT_ACTION_SAILBOAT_BOTTOM ; 19
-NUM_OBJECT_ACTIONS EQU const_value
+	const OBJECT_ACTION_00               ; 00
+	const OBJECT_ACTION_STAND            ; 01
+	const OBJECT_ACTION_STEP             ; 02
+	const OBJECT_ACTION_BUMP             ; 03
+	const OBJECT_ACTION_SPIN             ; 04
+	const OBJECT_ACTION_SPIN_FLICKER     ; 05
+	const OBJECT_ACTION_FISHING          ; 06
+	const OBJECT_ACTION_SHADOW           ; 07
+	const OBJECT_ACTION_EMOTE            ; 08
+	const OBJECT_ACTION_BIG_SNORLAX      ; 09
+	const OBJECT_ACTION_BOUNCE           ; 0a
+	const OBJECT_ACTION_WEIRD_TREE       ; 0b
+	const OBJECT_ACTION_BIG_DOLL         ; 0c
+	const OBJECT_ACTION_BOULDER_DUST     ; 0d
+	const OBJECT_ACTION_GRASS_SHAKE      ; 0e
+	const OBJECT_ACTION_PUDDLE_SPLASH    ; 0f
+	const OBJECT_ACTION_CUT_TREE         ; 10
+	const OBJECT_ACTION_SKYFALL          ; 11
+	const OBJECT_ACTION_FRUIT            ; 12
+	const OBJECT_ACTION_BIG_GYARADOS     ; 13
+	const OBJECT_ACTION_STAND_FLIP       ; 14
+	const OBJECT_ACTION_POKECOM_NEWS     ; 15
+	const OBJECT_ACTION_MUSEUM_DRILL     ; 16
+	const OBJECT_ACTION_RUN              ; 17
+	const OBJECT_ACTION_SAILBOAT_TOP     ; 18
+	const OBJECT_ACTION_SAILBOAT_BOTTOM  ; 19
+	const OBJECT_ACTION_ALOLAN_EXEGGUTOR ; 1a
+	const OBJECT_ACTION_SHAKE_EXEGGUTOR  ; 1b
+	const OBJECT_ACTION_TINY_WINDOWS     ; 1c
+	const OBJECT_ACTION_MICROPHONE       ; 1d
+DEF NUM_OBJECT_ACTIONS EQU const_value
 
 ; Facings indexes (see data/sprites/facings.asm)
 	const_def
-	const FACING_STEP_DOWN_0     ; 00
-	const FACING_STEP_DOWN_1     ; 01
-	const FACING_STEP_DOWN_2     ; 02
-	const FACING_STEP_DOWN_3     ; 03
-	const FACING_STEP_UP_0       ; 04
-	const FACING_STEP_UP_1       ; 05
-	const FACING_STEP_UP_2       ; 06
-	const FACING_STEP_UP_3       ; 07
-	const FACING_STEP_LEFT_0     ; 08
-	const FACING_STEP_LEFT_1     ; 09
-	const FACING_STEP_LEFT_2     ; 0a
-	const FACING_STEP_LEFT_3     ; 0b
-	const FACING_STEP_RIGHT_0    ; 0c
-	const FACING_STEP_RIGHT_1    ; 0d
-	const FACING_STEP_RIGHT_2    ; 0e
-	const FACING_STEP_RIGHT_3    ; 0f
-	const FACING_FISH_DOWN       ; 10
-	const FACING_FISH_UP         ; 11
-	const FACING_FISH_LEFT       ; 12
-	const FACING_FISH_RIGHT      ; 13
-	const FACING_EMOTE           ; 14
-	const FACING_SHADOW          ; 15
-	const FACING_BIG_DOLL_ASYM   ; 16
-	const FACING_BIG_DOLL_SYM    ; 17
-	const FACING_WEIRD_TREE_0    ; 18
-	const FACING_WEIRD_TREE_1    ; 19
-	const FACING_WEIRD_TREE_2    ; 1a
-	const FACING_WEIRD_TREE_3    ; 1b
-	const FACING_BOULDER_DUST_1  ; 1c
-	const FACING_BOULDER_DUST_2  ; 1d
-	const FACING_GRASS_1         ; 1e
-	const FACING_GRASS_2         ; 1f
-	const FACING_SPLASH_1        ; 20
-	const FACING_SPLASH_2        ; 21
-	const FACING_CUT_TREE        ; 22
-	const FACING_APRICORN        ; 23
-	const FACING_BERRY           ; 24
-	const FACING_PICKED_FRUIT    ; 25
-	const FACING_BIG_GYARADOS_1  ; 26
-	const FACING_BIG_GYARADOS_2  ; 27
-	const FACING_STEP_DOWN_FLIP  ; 28
-	const FACING_STEP_UP_FLIP    ; 29
-	const FACING_POKECOM_NEWS    ; 2a
-	const FACING_ARCH_TREE_DOWN  ; 2b
-	const FACING_ARCH_TREE_UP    ; 2c
-	const FACING_ARCH_TREE_LEFT  ; 2d
-	const FACING_ARCH_TREE_RIGHT ; 2e
-	const FACING_SAILBOAT_TOP    ; 2f
-	const FACING_SAILBOAT_BOTTOM ; 30
-NUM_FACINGS EQU const_value
+	const FACING_STEP_DOWN_0        ; 00
+	const FACING_STEP_DOWN_1        ; 01
+	const FACING_STEP_DOWN_2        ; 02
+	const FACING_STEP_DOWN_3        ; 03
+	const FACING_STEP_UP_0          ; 04
+	const FACING_STEP_UP_1          ; 05
+	const FACING_STEP_UP_2          ; 06
+	const FACING_STEP_UP_3          ; 07
+	const FACING_STEP_LEFT_0        ; 08
+	const FACING_STEP_LEFT_1        ; 09
+	const FACING_STEP_LEFT_2        ; 0a
+	const FACING_STEP_LEFT_3        ; 0b
+	const FACING_STEP_RIGHT_0       ; 0c
+	const FACING_STEP_RIGHT_1       ; 0d
+	const FACING_STEP_RIGHT_2       ; 0e
+	const FACING_STEP_RIGHT_3       ; 0f
+	const FACING_FISH_DOWN          ; 10
+	const FACING_FISH_UP            ; 11
+	const FACING_FISH_LEFT          ; 12
+	const FACING_FISH_RIGHT         ; 13
+	const FACING_EMOTE              ; 14
+	const FACING_SHADOW             ; 15
+	const FACING_BIG_DOLL_ASYM      ; 16
+	const FACING_BIG_DOLL_SYM       ; 17
+	const FACING_WEIRD_TREE_0       ; 18
+	const FACING_WEIRD_TREE_1       ; 19
+	const FACING_WEIRD_TREE_2       ; 1a
+	const FACING_WEIRD_TREE_3       ; 1b
+	const FACING_BOULDER_DUST_1     ; 1c
+	const FACING_BOULDER_DUST_2     ; 1d
+	const FACING_GRASS_1            ; 1e
+	const FACING_GRASS_2            ; 1f
+	const FACING_SPLASH_1           ; 20
+	const FACING_SPLASH_2           ; 21
+	const FACING_CUT_TREE           ; 22
+	const FACING_APRICORN           ; 23
+	const FACING_BERRY              ; 24
+	const FACING_PICKED_FRUIT       ; 25
+	const FACING_BIG_GYARADOS_1     ; 26
+	const FACING_BIG_GYARADOS_2     ; 27
+	const FACING_STEP_DOWN_FLIP     ; 28
+	const FACING_STEP_UP_FLIP       ; 29
+	const FACING_POKECOM_NEWS       ; 2a
+	const FACING_MUSEUM_DRILL_DOWN  ; 2b
+	const FACING_MUSEUM_DRILL_UP    ; 2c
+	const FACING_ARCH_TREE_LEFT     ; 2d
+	const FACING_ARCH_TREE_RIGHT    ; 2e
+	const FACING_SAILBOAT_TOP       ; 2f
+	const FACING_SAILBOAT_BOTTOM    ; 30
+	const FACING_ALOLAN_EXEGGUTOR_0 ; 31
+	const FACING_ALOLAN_EXEGGUTOR_1 ; 32
+	const FACING_ALOLAN_EXEGGUTOR_2 ; 33
+	const FACING_ALOLAN_EXEGGUTOR_3 ; 34
+	const FACING_TINY_WINDOWS_0     ; 35
+	const FACING_TINY_WINDOWS_1     ; 36
+	const FACING_TINY_WINDOWS_2     ; 37
+	const FACING_TINY_WINDOWS_3     ; 38
+	const FACING_TINY_WINDOWS_4     ; 39
+	const FACING_TINY_WINDOWS_5     ; 3a
+	const FACING_TINY_WINDOWS_6     ; 3b
+	const FACING_MICROPHONE         ; 3c
+DEF NUM_FACINGS EQU const_value
 
 ; DoPlayerMovement.DoStep arguments (see engine/overworld/player_movement.asm)
 	const_def
@@ -334,4 +365,4 @@ NUM_FACINGS EQU const_value
 	const STEP_SPIN          ; 9
 	const STEP_FAST          ; a (same as STEP_RUN but without doubling animation speed)
 	const STEP_STAIRS        ; b
-NUM_STEPS EQU const_value
+DEF NUM_STEPS EQU const_value

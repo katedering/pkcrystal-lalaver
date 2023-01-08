@@ -7,15 +7,11 @@ ReadTrainerParty:
 	and a
 	ret nz ; populated elsewhere
 
-	ld hl, wOTPartyCount
 	xor a
-	ld [hli], a
-	dec a
-	ld [hl], a
+	ld [wOTPartyCount], a
 
 	ld hl, wOTPartyMons
 	ld bc, PARTYMON_STRUCT_LENGTH * PARTY_LENGTH
-	xor a
 	rst ByteFill
 
 	call FindTrainerData
@@ -29,12 +25,42 @@ ReadTrainerParty:
 	cp $ff
 	ret z
 
+	farcall AdjustLevelForBadges
 	ld [wCurPartyLevel], a
 
 ; species
 	call GetNextTrainerDataByte
 	ld [wCurPartySpecies], a
+	ld c, a
 
+	call GetNextTrainerDataByte
+	ld [wCurForm], a
+	ld b, a
+
+; NPC trainers should appear to have Kantonian Arbok in Kanto,
+; so form 0 becomes 1 (Johto) or 2 (Kanto), non-zero forms remain unchanged
+	assert !HIGH(ARBOK)
+	and SPECIESFORM_MASK
+	jr nz, .not_arbok
+	ld a, c
+	cp LOW(ARBOK)
+	jr nz, .not_arbok
+
+	push bc
+	call RegionCheck
+	ld a, e
+	pop bc
+	and a
+	assert ARBOK_JOHTO_FORM == ARBOK_KANTO_FORM - 1
+	ld c, ARBOK_KANTO_FORM
+	jr nz, .got_arbok_form
+	dec c
+.got_arbok_form
+	ld a, b
+	or c
+	ld [wCurForm], a
+
+.not_arbok
 	ld a, OTPARTYMON
 	ld [wMonType], a
 
@@ -61,30 +87,6 @@ ReadTrainerParty:
 	ld [de], a
 
 .not_item
-; EVs?
-	ld a, [wOtherTrainerType]
-	bit TRNTYPE_EVS, a
-	jr z, .not_evs
-	push hl
-	ld a, [wOTPartyCount]
-	dec a
-	ld hl, wOTPartyMon1EVs
-	ld bc, PARTYMON_STRUCT_LENGTH
-	rst AddNTimes
-	ld d, h
-	ld e, l
-	pop hl
-
-	call GetNextTrainerDataByte
-	push hl
-	ld h, d
-	ld l, e
-rept 6
-	ld [hli], a
-endr
-	pop hl
-
-.not_evs
 ; DVs?
 	ld a, [wOtherTrainerType]
 	bit TRNTYPE_DVS, a
@@ -121,6 +123,7 @@ endr
 	ld a, $ff
 .dv3_ok
 	ld [de], a
+	inc de
 
 .not_dvs
 ; personality?
@@ -128,6 +131,9 @@ endr
 	bit TRNTYPE_PERSONALITY, a
 	jr z, .not_personality
 
+	; We only care about the upper personality byte.
+	; The lower one has already been specified as part of
+	; extended species data ("dp").
 	push hl
 	ld a, [wOTPartyCount]
 	dec a
@@ -137,10 +143,6 @@ endr
 	ld d, h
 	ld e, l
 	pop hl
-
-	call GetNextTrainerDataByte
-	ld [de], a
-	inc de
 	call GetNextTrainerDataByte
 	ld [de], a
 
@@ -179,6 +181,24 @@ endr
 	pop de
 
 .not_nickname
+; EVs?
+	ld a, [wOtherTrainerType]
+	bit TRNTYPE_EVS, a
+	jr z, .not_evs
+	push hl
+	ld a, [wOTPartyCount]
+	dec a
+	ld hl, wOTPartyMon1EVs
+	ld bc, PARTYMON_STRUCT_LENGTH
+	rst AddNTimes
+	ld d, h
+	ld e, l
+	pop hl
+
+	call GetNextTrainerDataByte
+	farcall WriteTrainerEVs
+
+.not_evs
 ; moves?
 	ld a, [wOtherTrainerType]
 	bit TRNTYPE_MOVES, a
@@ -210,13 +230,13 @@ endr
 	push bc
 	ld a, [wOTPartyCount]
 	dec a
-	ld hl, wOTPartyMon1SpdEV
+	ld hl, wOTPartyMon1SpeEV
 	ld bc, PARTYMON_STRUCT_LENGTH
 	rst AddNTimes
 	ld [hl], 0
 	ld a, [wOTPartyCount]
 	dec a
-	ld hl, wOTPartyMon1DefSpdDV
+	ld hl, wOTPartyMon1DefSpeDV
 	ld bc, PARTYMON_STRUCT_LENGTH
 	rst AddNTimes
 	ld a, [hl]
@@ -365,10 +385,14 @@ SetTrainerBattleLevel:
 
 	inc hl
 	call GetNextTrainerDataByte
+
+	farcall AdjustLevelForBadges
 	ld [wCurPartyLevel], a
 	ret
 
 FindTrainerData:
+	farcall SetBadgeBaseLevel
+
 	ld a, [wOtherTrainerClass]
 	dec a
 	ld c, a
@@ -407,4 +431,57 @@ GetNextTrainerDataByte:
 	inc hl
 	ret
 
+; must come before the EVSpreads table below, to define
+; the EV_SPREAD_* values and NUM_EV_SPREADS total
 INCLUDE "data/trainers/parties.asm"
+
+
+SECTION "EV Spreads", ROMX
+
+WriteTrainerEVs:
+; Writes EVs to hl with the EV spread index in a.
+; For classic EVs, writes (EV total / 2) to all stats.
+; For modern EVs, writes the table data directly.
+	push hl
+	push de
+	push bc
+
+	push hl
+	call SwapHLDE
+	ld hl, EVSpreads
+	ld bc, NUM_STATS
+	rst AddNTimes
+	rst CopyBytes
+	pop hl
+
+	; If modern EVs are enabled, we're done.
+	ld a, [wInitialOptions2]
+	and EV_OPTMASK
+	cp EVS_OPT_MODERN
+	jr z, .done
+
+	; Otherwise, calculate total and set EV to total/2.
+	push hl
+	farcall _GetEVTotal
+	pop hl
+	srl b
+	rr c
+	ld a, c
+	cp MODERN_MAX_EV + 1
+	jr c, .got_evs
+	ld a, MODERN_MAX_EV
+.got_evs
+	ld bc, NUM_STATS
+	rst ByteFill
+
+.done
+	jmp PopBCDEHL
+
+EVSpreads:
+	table_width NUM_STATS, EVSpreads
+	for n, NUM_EV_SPREADS
+		; each EV_SPREAD_*_HP/ATK/DEF/SPE/SAT/SDF is implicitly defined
+		; by `ev_spread` (see data/trainers/parties.asm)
+		with_each_stat "db EV_SPREAD_{d:n}_?"
+	endr
+	assert_table_length NUM_EV_SPREADS

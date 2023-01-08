@@ -17,14 +17,14 @@ In the installer, select the following packages: `git`, `python`, `make`, and `g
 In the **Cygwin terminal**:
 
 ```bash
-git clone https://github.com/katedering/polished_custom.git
-cd polished_custom
+git clone https://github.com/Rangi42/polishedcrystal.git
+cd polishedcrystal
 mkdir rgbds
 ```
 
-Then download [**rgbds**](https://rgbds.gbdev.io/). If you're building Polished Crystal 2.2.0, get rgbds version 0.3.9. If you're building the 3.0.0 beta, you'll need version **0.5.1**. Extract the archive and put all the .exe and .dll files in polishedcrystal/rgbds.
+Then download [**rgbds**](https://rgbds.gbdev.io/). If you're building Polished Crystal 2.2.0, get rgbds version 0.3.9. If you're building the 3.0.0 beta, you'll need version **0.6.1**. Extract the archive and put all the .exe and .dll files in polishedcrystal/rgbds.
 
-To build **polished_custom.gbc**:
+To build **polishedcrystal.gbc**:
 
 ```bash
 make
@@ -55,11 +55,11 @@ cd rgbds
 sudo make install
 cd ..
 
-git clone https://github.com/katedering/polished_custom.git
-cd polished_custom
+git clone https://github.com/Rangi42/polishedcrystal.git
+cd polishedcrystal
 ```
 
-To build **polished_custom.gbc**:
+To build **polishedcrystal.gbc**:
 
 ```bash
 make
@@ -82,16 +82,13 @@ In **Terminal**, run:
 ```bash
 xcode-select --install
 
-git clone https://github.com/gbdev/rgbds.git
-cd rgbds
-sudo make install
-cd ..
+brew install rgbds
 
-git clone https://github.com/katedering/polished_custom.git
-cd polished_custom
+git clone https://github.com/Rangi42/polishedcrystal.git
+cd polishedcrystal
 ```
 
-To build **polished_custom.gbc**:
+To build **polishedcrystal.gbc**:
 
 ```bash
 make

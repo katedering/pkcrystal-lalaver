@@ -14,12 +14,13 @@ Route30_MapScriptHeader:
 	bg_event 13, 29, BGEVENT_JUMPTEXT, MrPokemonsHouseDirectionsSignText
 	bg_event 15,  5, BGEVENT_JUMPTEXT, MrPokemonsHouseSignText
 	bg_event  3, 21, BGEVENT_JUMPTEXT, Route30TrainerTipsText
+	bg_event 11,  8, BGEVENT_JUMPTEXT, Route30AdvancedTipsText
 	bg_event 14,  9, BGEVENT_ITEM + POTION, EVENT_ROUTE_30_HIDDEN_POTION
 	bg_event  5, 39, BGEVENT_JUMPTEXT, BerryMastersHouseSignText
 
 	def_object_events
 	object_event  5, 26, SPRITE_YOUNGSTER, SPRITEMOVEDATA_STANDING_UP, 0, 0, -1, -1, 0, OBJECTTYPE_SCRIPT, 0, YoungsterJoey_ImportantBattleScript, EVENT_ROUTE_30_BATTLE
-	object_event  5, 24, SPRITE_MON_ICON, SPRITEMOVEDATA_POKEMON, 0, PIDGEY, -1, -1, PAL_NPC_BROWN, OBJECTTYPE_SCRIPT, 0, ObjectEvent, EVENT_ROUTE_30_BATTLE
+	pokemon_event 5, 24, PIDGEY, SPRITEMOVEDATA_POKEMON, -1, -1, PAL_NPC_BROWN, ClearText, EVENT_ROUTE_30_BATTLE
 	object_event  5, 25, SPRITE_RATTATA_BACK, SPRITEMOVEDATA_POKEMON, 0, 0, -1, -1, PAL_NPC_PURPLE, OBJECTTYPE_SCRIPT, 0, ObjectEvent, EVENT_ROUTE_30_BATTLE
 	object_event  2, 28, SPRITE_YOUNGSTER, SPRITEMOVEDATA_STANDING_RIGHT, 0, 0, -1, -1, 0, OBJECTTYPE_TRAINER, 3, TrainerYoungsterJoey, EVENT_ROUTE_30_YOUNGSTER_JOEY
 	object_event  5, 23, SPRITE_YOUNGSTER, SPRITEMOVEDATA_STANDING_DOWN, 0, 0, -1, -1, 0, OBJECTTYPE_GENERICTRAINER, 1, GenericTrainerYoungsterMikey, -1
@@ -64,23 +65,23 @@ TrainerYoungsterJoey:
 	loadvar VAR_CALLERID, PHONE_YOUNGSTER_JOEY
 	opentext
 	checkflag ENGINE_JOEY_READY_FOR_REMATCH
-	iftrue .Rematch
+	iftruefwd .Rematch
 	checkcellnum PHONE_YOUNGSTER_JOEY
-	iftrue .NumberAccepted
+	iftruefwd .NumberAccepted
 	checkevent EVENT_JOEY_ASKED_FOR_PHONE_NUMBER
-	iftrue .AskAgain
+	iftruefwd .AskAgain
 	writetext YoungsterJoey1AfterText
 	promptbutton
 	setevent EVENT_JOEY_ASKED_FOR_PHONE_NUMBER
 	callstd asknumber1m
-	sjump .RequestNumber
+	sjumpfwd .RequestNumber
 
 .AskAgain:
 	callstd asknumber2m
 .RequestNumber:
 	askforphonenumber PHONE_YOUNGSTER_JOEY
-	ifequal $1, .PhoneFull
-	ifequal $2, .NumberDeclined
+	ifequalfwd $1, .PhoneFull
+	ifequalfwd $2, .NumberDeclined
 	gettrainername YOUNGSTER, JOEY1, $0
 	callstd registerednumberm
 	jumpstd numberacceptedm
@@ -89,23 +90,23 @@ TrainerYoungsterJoey:
 	callstd rematchm
 	winlosstext YoungsterJoey1BeatenText, 0
 	readmem wJoeyFightCount
-	ifequal 4, .Fight4
-	ifequal 3, .Fight3
-	ifequal 2, .Fight2
-	ifequal 1, .Fight1
-	ifequal 0, .LoadFight0
+	ifequalfwd 4, .Fight4
+	ifequalfwd 3, .Fight3
+	ifequalfwd 2, .Fight2
+	ifequalfwd 1, .Fight1
+	ifequalfwd 0, .LoadFight0
 .Fight4:
 	checkevent EVENT_BEAT_ELITE_FOUR
-	iftrue .LoadFight4
+	iftruefwd .LoadFight4
 .Fight3:
 	checkevent EVENT_CLEARED_RADIO_TOWER
-	iftrue .LoadFight3
+	iftruefwd .LoadFight3
 .Fight2:
 	checkflag ENGINE_FLYPOINT_OLIVINE
-	iftrue .LoadFight2
+	iftruefwd .LoadFight2
 .Fight1:
 	checkflag ENGINE_FLYPOINT_GOLDENROD
-	iftrue .LoadFight1
+	iftruefwd .LoadFight1
 .LoadFight0:
 	loadtrainer YOUNGSTER, JOEY1
 	startbattle
@@ -144,12 +145,12 @@ TrainerYoungsterJoey:
 	reloadmapafterbattle
 	clearflag ENGINE_JOEY_READY_FOR_REMATCH
 	checkevent EVENT_JOEY_HP_UP
-	iftrue .GiveHPUp
+	iftruefwd .GiveHPUp
 	checkevent EVENT_GOT_HP_UP_FROM_JOEY
-	iftrue .done
+	iftruefwd .done
 	callstd rematchgiftm
 	verbosegiveitem HP_UP
-	iffalse .PackFull
+	iffalsefwd .PackFull
 	setevent EVENT_GOT_HP_UP_FROM_JOEY
 	jumpstd numberacceptedm
 
@@ -161,7 +162,7 @@ TrainerYoungsterJoey:
 	writetext YoungsterJoeyText_GiveHPUpAfterBattle
 	waitbutton
 	verbosegiveitem HP_UP
-	iffalse .PackFull
+	iffalsefwd .PackFull
 	clearevent EVENT_JOEY_HP_UP
 	setevent EVENT_GOT_HP_UP_FROM_JOEY
 	jumpstd numberacceptedm
@@ -330,6 +331,31 @@ Route30TrainerTipsText:
 	para "# Balls are to"
 	line "be thrown only at"
 	cont "wild #mon!"
+	done
+
+Route30AdvancedTipsText:
+	text "Advanced Tips!"
+
+	para "During a battle,"
+	line "press Select to"
+	cont "switch #mon!"
+
+	para "Press Start to"
+	line "reuse an item!"
+
+	para "Or press B to"
+	line "run away or"
+	cont "forfeit!"
+
+	para "When you're choos-"
+	line "ing a move to use,"
+
+	para "press Select to"
+	line "swap it with an-"
+	cont "other one, or"
+
+	para "press Start to see"
+	line "its description!"
 	done
 
 YoungsterJoeyText_GiveHPUpAfterBattle:

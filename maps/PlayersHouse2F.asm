@@ -21,6 +21,10 @@ PlayersHouse2F_MapScriptHeader:
 	object_event  4,  4, SPRITE_DOLL_1, SPRITEMOVEDATA_STILL, 0, 0, -1, -1, 0, OBJECTTYPE_SCRIPT, 0, Doll1, EVENT_PLAYERS_HOUSE_2F_DOLL_1
 	object_event  5,  4, SPRITE_DOLL_2, SPRITEMOVEDATA_STILL, 0, 0, -1, -1, 0, OBJECTTYPE_SCRIPT, 0, Doll2, EVENT_PLAYERS_HOUSE_2F_DOLL_2
 	object_event  0,  1, SPRITE_BIG_DOLL, SPRITEMOVEDATA_BIGDOLL, 0, 0, -1, -1, 0, OBJECTTYPE_SCRIPT, 0, BigDoll, EVENT_PLAYERS_HOUSE_2F_BIG_DOLL
+	object_event  7,  3, SPRITE_TWIN, SPRITEMOVEDATA_STANDING_DOWN, 0, 0, -1, -1, PAL_NPC_GREEN, OBJECTTYPE_SCRIPT, 0, PlayersHouse2FCuteGirlScript, -1
+	
+	object_const_def
+	const PLAYERSHOUSE2F_CUTE_GIRL
 
 PlayersHouse2FInitializeRoom:
 	special ToggleDecorationsVisibility
@@ -67,7 +71,7 @@ if DEF(DEBUG)
 	; judge machine
 	setflag ENGINE_JUDGE_MACHINE
 	; all key items
-for x, NUM_KEY_ITEMS
+for x, 1, NUM_KEY_ITEMS + 1
 if x != MACHINE_PART
 	givekeyitem x
 endc
@@ -104,20 +108,21 @@ endr
 	giveitem FIRE_STONE, 99
 	giveitem WATER_STONE, 99
 	giveitem THUNDERSTONE, 99
+	giveitem ICE_STONE, 99
 	giveitem MOON_STONE, 99
 	giveitem SUN_STONE, 99
 	giveitem DUSK_STONE, 99
-	giveitem DAWN_STONE, 99
 	giveitem SHINY_STONE, 99
+	giveitem ODD_SOUVENIR, 99
 	giveitem EXP_SHARE, 99
 	giveitem LEFTOVERS, 99
-	giveitem BIG_NUGGET, 99
+	giveitem MULCH, 99
+	giveitem SWEET_HONEY, 99
 	giveitem SILVER_LEAF, 99
 	giveitem GOLD_LEAF, 99
-	giveitem BOTTLE_CAP, 99
-	giveitem MULCH, 99
 	giveitem MINT_LEAF, 99
-	giveitem ODD_SOUVENIR, 10
+	giveitem BOTTLE_CAP, 99
+	giveitem BIG_NUGGET, 99
 	giveitem ARMOR_SUIT, 1
 	; all decorations except Diploma
 for x, EVENT_DECO_BED_1, EVENT_DECO_BIG_LAPRAS_DOLL + 1
@@ -182,6 +187,7 @@ endr
 	setflag ENGINE_FLYPOINT_AZALEA
 	setflag ENGINE_FLYPOINT_GOLDENROD
 	setflag ENGINE_FLYPOINT_ECRUTEAK
+	setflag ENGINE_FLYPOINT_SNOWTOP_MOUNTAIN
 	setflag ENGINE_FLYPOINT_OLIVINE
 	setflag ENGINE_FLYPOINT_CIANWOOD
 	setflag ENGINE_FLYPOINT_YELLOW_FOREST
@@ -203,13 +209,15 @@ endr
 	setflag ENGINE_FLYPOINT_FUCHSIA
 	setflag ENGINE_FLYPOINT_SAFFRON
 	setflag ENGINE_FLYPOINT_CINNABAR
+	setflag ENGINE_FLYPOINT_SHAMOUTI
+	setflag ENGINE_FLYPOINT_VALENCIA
+	setflag ENGINE_FLYPOINT_NAVEL
 	; magnet train works
 	setevent EVENT_RESTORED_POWER_TO_KANTO
 	; post-e4
 	setflag ENGINE_CREDITS_SKIP
-	setflag ENGINE_HAVE_SHINY_CHARM
 	; good party
-	givepoke MEWTWO, NO_FORM, 100, BRIGHTPOWDER
+	givepoke MEWTWO, PLAIN_FORM, 100, BRIGHTPOWDER
 	loadmem wPartyMon1EVs+0, 252
 	loadmem wPartyMon1EVs+1, 252
 	loadmem wPartyMon1EVs+2, 252
@@ -230,32 +238,25 @@ endr
 	loadmem wPartyMon1Stats+7, LOW(999)
 	loadmem wPartyMon1Stats+8, HIGH(999)
 	loadmem wPartyMon1Stats+9, LOW(999)
-	; hm slaves
-	givepoke MEW, NO_FORM, 100, LEFTOVERS
-	givepoke MEW, NO_FORM, 100, LEFTOVERS
+	; hm slave
+	givepoke MEW, PLAIN_FORM, 100, LEFTOVERS
 	loadmem wPartyMon2Moves+0, FLY
-	loadmem wPartyMon2Moves+1, SURF
-	loadmem wPartyMon2Moves+2, STRENGTH
-	loadmem wPartyMon2Moves+3, CUT
+	loadmem wPartyMon2Moves+1, HEADBUTT
+	loadmem wPartyMon2Moves+2, DIG
+	loadmem wPartyMon2Moves+3, FRESH_SNACK
 	loadmem wPartyMon2PP+0, 15
 	loadmem wPartyMon2PP+1, 15
-	loadmem wPartyMon2PP+2, 15
-	loadmem wPartyMon2PP+3, 30
-	loadmem wPartyMon3Moves+0, FLASH
-	loadmem wPartyMon3Moves+1, ROCK_SMASH
-	loadmem wPartyMon3Moves+2, HEADBUTT
-	loadmem wPartyMon3Moves+3, WATERFALL
-	loadmem wPartyMon3PP+0, 20
-	loadmem wPartyMon3PP+1, 15
-	loadmem wPartyMon3PP+2, 15
-	loadmem wPartyMon3PP+3, 15
+	loadmem wPartyMon2PP+2, 10
+	loadmem wPartyMon2PP+3, 10
 	; variant form test
-	givepoke SLOWKING, GALARIAN_FORM, 50
-;	givepoke ARTICUNO, GALARIAN_FORM, 50
-;	givepoke ZAPDOS, GALARIAN_FORM, 50
-;	givepoke MOLTRES, GALARIAN_FORM, 50
+	givepoke TYPHLOSION, HISUIAN_FORM, 50
+	loadmem wPartyMon3Shiny, SHINY_MASK
+	; ext species test
+	givepoke ANNIHILAPE, 50
+	givepoke DUDUNSPARCE, DUDUNSPARCE_THREE_SEGMENT_FORM, 50
+	givepoke FARIGIRAF, 50
 	; fill pokedex
-;	callasm FillPokedex
+	callasm FillPokedex
 	; intro events
 	addcellnum PHONE_MOM
 	setmapscene PLAYERS_HOUSE_1F, $1
@@ -276,32 +277,24 @@ endr
 	end
 
 FillPokedex:
-	ld a, 1
-;	ld [wUnlockedUnownMode], a
-	ld [wFirstUnownSeen], a
-	ld [wFirstMagikarpSeen], a
-;	ld hl, wUnownDex
-;	ld a, 1
-;rept NUM_UNOWN
-;	ld [hli], a
-;	inc a
-;endr
 	ld hl, wPokedexSeen
 	call .Fill
 	ld hl, wPokedexCaught
 .Fill:
 	ld a, %11111111
-	ld bc, 31 ; 001-248
+	ld bc, NUM_UNIQUE_POKEMON / 8
 	rst ByteFill
-	ld [hl], %00111111 ; 249-254
+if NUM_UNIQUE_POKEMON % 8
+	ld [hl], 2**(NUM_UNIQUE_POKEMON % 8) - 1
+endc
 	ret
 
 else
 
 	checkevent EVENT_GOT_A_POKEMON_FROM_ELM
-	iftrue .NormalRadio
+	iftruefwd .NormalRadio
 	checkevent EVENT_LISTENED_TO_INITIAL_RADIO
-	iftrue .AbbreviatedRadio
+	iftruefwd .AbbreviatedRadio
 	playmusic MUSIC_POKEMON_TALK
 	opentext
 	writetext PlayerRadioText1
@@ -349,7 +342,7 @@ PokemonJournalProfElmScript:
 PlayersHousePC:
 	opentext
 	special Special_PlayersHousePC
-	iftrue .Warp
+	iftruefwd .Warp
 	endtext
 .Warp:
 	warp NONE, 0, 0
@@ -373,5 +366,96 @@ PlayerRadioText3:
 PlayerRadioText4:
 	text "#mon!"
 	line "#mon Channel…"
+	done
+
+PlayersHouse2FCuteGirlScript:
+	faceplayer
+	opentext
+	checkevent EVENT_CUTE_INTRO
+	iffalsefwd .CuteGirlIntro
+	checkevent EVENT_GOT_A_POKEMON_FROM_ELM
+	iftruefwd .ContinueCuteGirl
+	writetext .NeedToGetYourStarterText
+	waitbutton
+	closetext
+	end
+
+.CuteGirlIntro
+	writetext .CuteGirlIntroText
+	setevent EVENT_CUTE_INTRO
+	waitbutton
+	closetext
+	end
+
+.ContinueCuteGirl:
+	writetext .CuteGirlBattleText
+	yesorno
+	iffalse_jumpopenedtext .DontNeedItText
+	writetext .AcceptedText
+	waitbutton
+	closetext
+	winlosstext .BeatenCuteGirlText, .HowDidYouLoseText
+	setlasttalked PLAYERSHOUSE2F_CUTE_GIRL
+	loadtrainer CUTE, 1
+	loadvar VAR_BATTLETYPE, BATTLETYPE_CANLOSE
+	startbattle
+	reloadmapafterbattle
+	opentext
+	writetext .CuteGirlAfterBattleText
+	closetext
+	end
+
+.CuteGirlIntroText
+	text "Hello!"
+	
+	para "I'm your cute"
+	line "little Debug Girl!"
+	done
+
+.NeedToGetYourStarterText
+	text "I'm sorry, but"
+	line "you really need"
+	cont "to go downstairs"
+	cont "first!"
+	done
+
+.CuteGirlBattleText
+	text "Would you like"
+	line "some fairly"
+	cont "easy experience"
+	cont "points and money?"
+	done
+
+.DontNeedItText
+	text "Wow! You must be"
+	line "really sure of"
+	cont "yourself!"
+	done
+	
+.AcceptedText
+	text "OK! Debug Battle"
+	line "Start Now!"
+	done
+
+.BeatenCuteGirlText
+	text "You won!"
+	line "Congratulations!"
+	done
+
+.HowDidYouLoseText
+	text "Oh? I'm not quite"
+	line "sure how you lost,"
+	cont "but you can always"
+	cont "try again!"
+	done
+
+.CuteGirlAfterBattleText
+	text "Feel free to"
+	line "battle again at"
+	cont "any time!"
+	
+	para "Thank you for"
+	line "using Cute Girl"
+	cont "Debug Services!"
 	done
 

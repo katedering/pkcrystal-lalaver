@@ -17,11 +17,15 @@ GetSpriteVTile::
 	pop bc
 	ld hl, wSpriteFlags
 	res 5, [hl]
-	; SPRITE_BIG_GYARADOS and SPRITE_SAILBOAT use the last object_struct
-	; (SPRITE_BIG_GYARADOS has more than 12 tiles, and SPRITE_SAILBOAT
-	; needs to be in VRAM1)
+	; SPRITE_BIG_GYARADOS, SPRITE_ALOLAN_EXEGGUTOR, and SPRITE_SAILBOAT
+	; use the last object_struct
+	; (SPRITE_BIG_GYARADOS has more than 12 tiles, and SPRITE_SAILBOAT and
+	; SPRITE_ALOLAN_EXEGGUTOR need to be in VRAM1 so text won't overwrite
+	; their tiles)
 	ldh a, [hUsedSpriteIndex]
 	cp SPRITE_BIG_GYARADOS
+	jr z, .use_last_struct
+	cp SPRITE_ALOLAN_EXEGGUTOR
 	jr z, .use_last_struct
 	cp SPRITE_SAILBOAT
 	ldh a, [hObjectStructIndexBuffer]
@@ -54,7 +58,7 @@ GetSpriteVTile::
 	jmp PopBCDEHL
 
 GetPlayerStandingTile::
-	ld a, [wPlayerStandingTile]
+	ld a, [wPlayerTile]
 	; fallthrough
 
 GetTileCollision::
@@ -102,7 +106,7 @@ CheckObjectVisibility::
 	ret
 
 CheckObjectTime::
-	ld hl, MAPOBJECT_HOUR
+	ld hl, MAPOBJECT_HOUR_1
 	add hl, bc
 	ld a, [hl]
 	cp -1
@@ -136,10 +140,10 @@ CheckObjectTime::
 	db 1 << EVE  ; 8
 
 .check_hour
-	ld hl, MAPOBJECT_HOUR
+	ld hl, MAPOBJECT_HOUR_1
 	add hl, bc
 	ld d, [hl]
-	ld hl, MAPOBJECT_TIMEOFDAY
+	ld hl, MAPOBJECT_HOUR_2
 	add hl, bc
 	ld e, [hl]
 	ld hl, hHours
@@ -207,10 +211,6 @@ ApplyDeletionToMapObject::
 	ld [wObjectFollow_Follower], a
 	ret
 
-DeleteObjectStruct::
-	call ApplyDeletionToMapObject
-	jmp MaskObject
-
 CopyPlayerObjectTemplate::
 	push hl
 	call GetMapObject
@@ -238,7 +238,7 @@ LoadMovementDataPointer::
 	call CheckObjectVisibility
 	ret c
 
-	ld hl, OBJECT_MOVEMENTTYPE
+	ld hl, OBJECT_MOVEMENT_TYPE
 	add hl, bc
 	ld [hl], SPRITEMOVEDATA_SCRIPTED
 
@@ -304,10 +304,10 @@ _GetMovementByte::
 	push af
 	ld a, [hli]
 	rst Bankswitch
-; Load the current script byte as given by OBJECT_MOVEMENT_BYTE_INDEX, and increment OBJECT_MOVEMENT_BYTE_INDEX
+; Load the current script byte as given by OBJECT_MOVEMENT_INDEX, and increment OBJECT_MOVEMENT_INDEX
 	ld a, [hli]
 	ld d, [hl]
-	ld hl, OBJECT_MOVEMENT_BYTE_INDEX
+	ld hl, OBJECT_MOVEMENT_INDEX
 	add hl, bc
 	add [hl]
 	ld e, a
@@ -349,7 +349,7 @@ DoesObjectHaveASprite::
 SetSpriteDirection::
 	; preserves other flags
 	push af
-	ld hl, OBJECT_FACING
+	ld hl, OBJECT_DIRECTION
 	add hl, bc
 	ld a, [hl]
 	and %11110011
@@ -361,7 +361,7 @@ SetSpriteDirection::
 	ret
 
 GetSpriteDirection::
-	ld hl, OBJECT_FACING
+	ld hl, OBJECT_DIRECTION
 	add hl, bc
 	ld a, [hl]
 	and %00001100

@@ -5,7 +5,7 @@ PlayRadioShow:
 	jr nc, .ok
 ; If Team Rocket is not occupying the radio tower, we don't need to be here.
 	ld a, [wStatusFlags2]
-	bit 0, a ; ENGINE_ROCKETS_IN_RADIO_TOWER
+	bit STATUSFLAGS2_ROCKETS_IN_RADIO_TOWER_F, a
 	jr z, .ok
 ; If we're in Kanto, we don't need to be here.
 	call GetCurrentLandmark
@@ -139,7 +139,7 @@ PrintRadioLine:
 	ld [wNumRadioLinesPrinted], a
 	cp 2
 	jr nz, .print
-	bccoord 1, 16
+	bccoord TEXTBOX_INNERX, TEXTBOX_INNERY + 2
 	call PlaceWholeStringInBoxAtOnce
 	jr .skip
 .print
@@ -230,7 +230,7 @@ endr
 	; (Disallows EVE.)
 .loop2
 	call Random
-	and 3
+	and 3 ; no-optimize a & X == X
 	cp 3
 	jr z, .loop2
 
@@ -239,7 +239,7 @@ endr
 .loop3
 	; Choose one of the middle three Pokemon.
 	call Random
-	and NUM_GRASSMON
+	maskbits NUM_GRASSMON
 	cp 2
 	jr c, .loop3
 	cp 5
@@ -251,9 +251,13 @@ endr
 	add hl, de
 	inc hl ; skip level
 	ld a, BANK(JohtoGrassWildMons)
-	call GetFarByte
+	call GetFarWord
+	ld a, l
 	ld [wNamedObjectIndex], a
 	ld [wCurPartySpecies], a
+	ld a, h
+	ld [wNamedObjectIndex+1], a
+	ld [wCurForm], a
 	call GetPokemonName
 	ld hl, wStringBuffer1
 	ld de, wMonOrItemNameBuffer
@@ -318,8 +322,11 @@ OPT_OakText3:
 	text_end
 
 OaksPkmnTalk7:
+	ld hl, wNamedObjectIndex
 	ld a, [wCurPartySpecies]
-	ld [wNamedObjectIndex], a
+	ld [hli], a
+	ld a, [wCurForm]
+	ld [hl], a
 	call GetPokemonName
 	ld hl, OPT_MaryText1
 	ld a, OAKS_POKEMON_TALK_8
@@ -453,15 +460,15 @@ OaksPkmnTalk9:
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
-	ld a, [wOaksPkmnTalkSegmentCounter]
-	dec a
-	ld [wOaksPkmnTalkSegmentCounter], a
+	push hl
+	ld hl, wOaksPkmnTalkSegmentCounter
+	dec [hl]
 	ld a, OAKS_POKEMON_TALK_4
 	jr nz, .ok
-	ld a, 5
-	ld [wOaksPkmnTalkSegmentCounter], a
+	ld [hl], 5
 	ld a, OAKS_POKEMON_TALK_10
 .ok
+	pop hl
 	jmp NextRadioLine
 
 .Descriptors:
@@ -659,19 +666,29 @@ ClearBottomLine:
 PokedexShow1:
 	call StartRadioStation
 .loop
-	call Random
-	cp NUM_POKEMON
-	jr nc, .loop
-	ld c, a
-	push bc
+	ld bc, NUM_SPECIES
+	call RandomRange16
 	ld a, c
-	call CheckCaughtMon
+	and a
+	jr z, .loop
+	inc a
+	jr z, .loop
+	ld a, b
+	assert (EXTSPECIES_MASK > %00011111) && (EXTSPECIES_MASK & %00100000)
+	swap a
+	rla
+	ld b, a
+	push bc
+	call CheckCosmeticCaughtMon
 	pop bc
 	jr z, .loop
-	inc c
+	ld hl, wNamedObjectIndex
 	ld a, c
 	ld [wCurPartySpecies], a
-	ld [wNamedObjectIndex], a
+	ld [hli], a
+	ld a, b
+	ld [wCurForm], a
+	ld [hl], a
 	call GetPokemonName
 	ld hl, PokedexShowText
 	ld a, POKEDEX_SHOW_2
@@ -679,51 +696,12 @@ PokedexShow1:
 
 PokedexShow2:
 	ld a, [wCurPartySpecies]
-	dec a
-	ld hl, PokedexDataPointerTable
 	ld c, a
-	ld b, 0
-	add hl, bc
-	add hl, bc
-	add hl, bc
-	ld a, BANK(PokedexDataPointerTable)
-	call GetFarByte
+	ld a, [wCurForm]
 	ld b, a
-	inc hl
-	ld a, BANK(PokedexDataPointerTable)
-	call GetFarWord
-	ld a, b
-	push af
-	push hl
-	call CopyDexEntryPart1
-	dec hl
-	ld [hl], "<DONE>"
-	ld hl, wPokedexShowPointerAddr
-	call CopyRadioTextToRAM
-	pop hl
-	pop af
-	call CopyDexEntryPart2
-rept 4
-	inc hl
-endr
-;	call GetFarByte
-;	cp $2f
-;	jr nz, .load
-;	inc hl
-;	ld a, [wOptions2]
-;	bit POKEDEX_UNITS, a
-;	jr z, .imperial
-;	ld a, d
-;	call GetFarWord
-;	jr .load
-;.imperial
-;	inc hl
-;	inc hl
-;.load
-	ld a, l
-	ld [wPokedexShowPointerAddr], a
-	ld a, h
-	ld [wPokedexShowPointerAddr + 1], a
+	call GetSpeciesAndFormIndex
+	call GetDexEntryPointer
+	call CopyDexEntryParts
 	ld a, POKEDEX_SHOW_3
 	jmp PrintRadioLine
 
@@ -763,18 +741,9 @@ CopyDexEntry:
 	ld h, [hl]
 	ld l, a
 	ld a, [wPokedexShowPointerBank]
+CopyDexEntryParts:
 	push af
 	push hl
-	call CopyDexEntryPart1
-	dec hl
-	ld [hl], "<DONE>"
-	ld hl, wPokedexShowPointerAddr
-	call CopyRadioTextToRAM
-	pop hl
-	pop af
-	jr CopyDexEntryPart2
-
-CopyDexEntryPart1:
 	ld de, wPokedexShowPointerBank
 	ld bc, SCREEN_WIDTH - 1
 	call FarCopyBytes
@@ -783,25 +752,16 @@ CopyDexEntryPart1:
 	ld [hli], a
 	ld a, "<LINE>"
 	ld [hli], a
-.loop
-	ld a, [hli]
-	cp "@"
-	ret z
-	cp "<NEXT>"
-	ret z
-	jr .loop
-
-CopyDexEntryPart2:
+	ld d, BANK(@)
+	call .CopyLine
+	dec hl
+	ld [hl], "<DONE>"
+	ld hl, wPokedexShowPointerAddr
+	call CopyRadioTextToRAM
+	pop hl
+	pop af
 	ld d, a
-.loop
-	ld a, d
-	call GetFarByte
-	inc hl
-	cp "@"
-	jr z, .okay
-	cp "<NEXT>"
-	jr nz, .loop
-.okay
+	call .CopyLine
 	ld a, l
 	ld [wPokedexShowPointerAddr], a
 	ld a, h
@@ -809,6 +769,16 @@ CopyDexEntryPart2:
 	ld a, d
 	ld [wPokedexShowPointerBank], a
 	ret
+
+.CopyLine:
+	ld a, d
+	call GetFarByte
+	inc hl
+	cp "@"
+	ret z
+	cp "<NEXT>"
+	ret z
+	jr .CopyLine
 
 PokedexShowText:
 	; @ @
@@ -1123,7 +1093,7 @@ PeoplePlaces4: ; People
 	push af
 	ld hl, PnP_HiddenPeople
 	ld a, [wStatusFlags]
-	bit 6, a ; ENGINE_CREDITS_SKIP
+	bit STATUSFLAGS_HALL_OF_FAME_F, a
 	jr z, .ok
 	ld hl, PnP_HiddenPeople_BeatE4
 	ld a, [wKantoBadges]
@@ -1509,9 +1479,8 @@ BuenasPassword4:
 	ld e, a
 ; For each group, choose one of the three passwords.
 .greater_than_three
-	call Random
-	and $3
-	cp NUM_PASSWORDS_PER_CATEGORY
+	ld a, NUM_PASSWORDS_PER_CATEGORY
+	call RandomRange
 	jr nc, .greater_than_three
 ; The high nybble of wBuenasPassword will now contain the password group index, and the low nybble contains the actual password.
 	add e
@@ -1570,6 +1539,7 @@ GetBuenasPassword:
 	dw .RawString
 
 .Mon:
+	sla c
 	call .GetTheIndex
 	jmp GetPokemonName
 
@@ -1585,8 +1555,10 @@ GetBuenasPassword:
 	ld h, 0
 	ld l, c
 	add hl, de
-	ld a, [hl]
+	ld a, [hli]
 	ld [wNamedObjectIndex], a
+	ld a, [hl] ; items and moves just ignore this anyway
+	ld [wNamedObjectIndex+1], a
 	ret
 
 .RawString:

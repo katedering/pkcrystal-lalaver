@@ -416,7 +416,8 @@ HandleFutureSight:
 	xor a
 	ld [wAttackMissed], a
 	ld [wAlreadyDisobeyed], a
-	ld a, $10
+	; Future Sight does typeless damage
+	ld a, EFFECTIVE
 	ld [wTypeModifier], a
 	farcall DoMove
 	xor a
@@ -958,7 +959,7 @@ HandleStatusOrbs:
 	ld b, 1 << PSN | 1 << TOX
 	ret nz
 	push bc
-	ld b, 0
+	ld b, 2
 	farcall CanPoisonTarget
 	pop bc
 	ret nz
@@ -967,7 +968,7 @@ HandleStatusOrbs:
 	jr .do_status
 .burn
 	push bc
-	ld b, 0
+	ld b, 2
 	farcall CanBurnTarget
 	pop bc
 	ret nz

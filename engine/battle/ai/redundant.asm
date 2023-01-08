@@ -43,6 +43,7 @@ AI_Redundant:
 	dbw EFFECT_BATON_PASS,    .BatonPass
 	dbw EFFECT_ROOST,         .Roost
 	dbw EFFECT_TRICK_ROOM,    .TrickRoom
+	dbw EFFECT_DESTINY_BOND,  .DestinyBond
 	db -1
 
 .Confuse:
@@ -104,6 +105,7 @@ AI_Redundant:
 	ret
 
 .BatonPass:
+.Teleport:
 	call CallOpponentTurn
 .Roar:
 	push hl
@@ -137,13 +139,13 @@ AI_Redundant:
 
 .SleepTalk:
 	ld a, [wEnemyMonStatus]
-	and SLP
+	and SLP_MASK
 	jr .InvertZero
 
 .Spikes:
 	ld a, [wPlayerHazards]
-	and HAZARDS_SPIKES
-	cp HAZARDS_SPIKES
+	or ~HAZARDS_SPIKES
+	inc a
 	jr .InvertZero
 
 .ToxicSpikes:
@@ -189,7 +191,7 @@ AI_Redundant:
 
 .DreamEater:
 	ld a, [wBattleMonStatus]
-	and SLP
+	and SLP_MASK
 	; fallthrough
 .InvertZero:
 	jr z, .Redundant
@@ -211,8 +213,12 @@ AI_Redundant:
 	farcall AICheckEnemyMaxHP
 	jr nc, .NotRedundant
 
-.Teleport:
 .Redundant:
 	ld a, 1
 	and a
+	ret
+
+.DestinyBond:
+	ld a, [wEnemySubStatus2]
+	bit SUBSTATUS_DESTINY_BOND, a
 	ret

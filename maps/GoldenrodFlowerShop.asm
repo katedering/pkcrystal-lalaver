@@ -21,15 +21,27 @@ GoldenrodFlowerShop_MapScriptHeader:
 
 FlowerShopTeacherScript:
 	checkevent EVENT_FOUGHT_SUDOWOODO
-	iftrue .SellMulch
-	checkevent EVENT_GOT_SQUIRTBOTTLE
-	iftrue_jumptextfaceplayer GoldenrodFlowerShopTeacherDontDoAnythingDangerousText
-	checkevent EVENT_MET_FLORIA
+	iftruefwd .SellMulch
+	checkevent EVENT_FLORIA_AT_SUDOWOODO
+	iftruefwd .MetFloria
+	checkflag ENGINE_PLAINBADGE
 	iffalse_jumptextfaceplayer GoldenrodFlowerShopTeacherMySisterWentToSeeWigglyTreeRoute36Text
-	checkevent EVENT_TALKED_TO_FLORIA_AT_FLOWER_SHOP
-	iffalse .Lalala
+	checkevent EVENT_GOT_SQUIRTBOTTLE
+	iftrue_jumptextfaceplayer GoldenrodFlowerShopTeacherStopMySisterText
+	faceplayer
+	opentext
+	writetext GoldenrodFlowerShopTeacherBetterThanWhitneyText
+	promptbutton
+	verbosegivekeyitem SQUIRTBOTTLE
+	setevent EVENT_GOT_SQUIRTBOTTLE
+	closetext
+	end
+
+.MetFloria:
 	checkflag ENGINE_PLAINBADGE
 	iffalse_jumptextfaceplayer GoldenrodFlowerShopTeacherAskWantToBorrowWaterBottleText
+	checkevent EVENT_GOT_SQUIRTBOTTLE
+	iftrue_jumptextfaceplayer GoldenrodFlowerShopTeacherDontDoAnythingDangerousText
 	faceplayer
 	opentext
 	writetext GoldenrodFlowerShopTeacherHeresTheSquirtbottleText
@@ -37,13 +49,7 @@ FlowerShopTeacherScript:
 	verbosegivekeyitem SQUIRTBOTTLE
 	setevent EVENT_GOT_SQUIRTBOTTLE
 	closetext
-	setevent EVENT_FLORIA_AT_SUDOWOODO
-	clearevent EVENT_FLORIA_AT_FLOWER_SHOP
 	end
-
-.Lalala:
-	turnobject GOLDENRODFLOWERSHOP_TEACHER, LEFT
-	jumptext GoldenrodFlowerShopTeacherLalalaHavePlentyOfWaterText
 
 .SellMulch:
 	faceplayer
@@ -53,21 +59,21 @@ FlowerShopTeacherScript:
 	loadmenu .MenuDataHeader
 	verticalmenu
 	closewindow
-	ifequal $1, .Buy1
-	ifequal $2, .Buy10
+	ifequalfwd $1, .Buy1
+	ifequalfwd $2, .Buy10
 	jumpopenedtext DontBuyMulchText
 
 .Buy1:
 	checkmoney $0, 200
-	ifequal $2, .NotEnoughMoney
+	ifequalfwd $2, .NotEnoughMoney
 	giveitem MULCH
 	iffalse_jumpopenedtext NoRoomForMulchText
 	takemoney $0, 200
-	sjump .Done
+	sjumpfwd .Done
 
 .Buy10:
 	checkmoney $0, 2000
-	ifequal $2, .NotEnoughMoney
+	ifequalfwd $2, .NotEnoughMoney
 	giveitem MULCH, 10
 	iffalse_jumpopenedtext NoRoomForMulchText
 	takemoney $0, 2000
@@ -83,9 +89,8 @@ FlowerShopTeacherScript:
 	jumpopenedtext NotEnoughMulchMoneyText
 
 .MenuDataHeader:
-	db $40 ; flags
-	db 04, 00 ; start coords
-	db 11, 14 ; end coords
+	db MENU_BACKUP_TILES
+	menu_coords 0, 4, 14, 11
 	dw .MenuData2
 	db 1 ; default option
 
@@ -97,24 +102,18 @@ FlowerShopTeacherScript:
 	db "Cancel@"
 
 FlowerShopFloriaScript:
-	faceplayer
-	opentext
+	checkflag ENGINE_PLAINBADGE
+	iffalse_jumptextfaceplayer GoldenrodFlowerShopFloriaWonderIfSisWillLendWaterBottleText
 	checkevent EVENT_FOUGHT_SUDOWOODO
-	iftrue .FoughtSudowoodo
-	checkevent EVENT_GOT_SQUIRTBOTTLE
-	iftrue_jumpopenedtext GoldenrodFlowerShopFloriaYouBeatWhitneyText
-	writetext GoldenrodFlowerShopFloriaWonderIfSisWillLendWaterBottleText
-	waitbutton
-	closetext
-	setevent EVENT_TALKED_TO_FLORIA_AT_FLOWER_SHOP
-	setevent EVENT_FLORIA_AT_FLOWER_SHOP
-	clearevent EVENT_FLORIA_AT_SUDOWOODO
-	end
-
-.FoughtSudowoodo:
+	iffalse_jumptextfaceplayer GoldenrodFlowerShopFloriaYouBeatWhitneyText
 	checkitem MULCH
-	iftrue_jumpopenedtext DescribeMulchText
-	jumpopenedtext GoldenrodFlowerShopFloriaItReallyWasAMonText
+	iftrue_jumptextfaceplayer DescribeMulchText
+	jumpthistextfaceplayer
+
+	text "So that jiggly"
+	line "tree really was a"
+	cont "#mon!"
+	done
 
 GoldenrodFlowerShopTeacherMySisterWentToSeeWigglyTreeRoute36Text:
 	text "Have you seen that"
@@ -133,6 +132,20 @@ GoldenrodFlowerShopTeacherMySisterWentToSeeWigglyTreeRoute36Text:
 	line "it dangerous?"
 	done
 
+GoldenrodFlowerShopTeacherStopMySisterText:
+	text "My little sister"
+	line "got all excited"
+
+	para "and went to see"
+	line "the wiggly tree…"
+
+	para "I'm worried… Can"
+	line "you please stop"
+
+	para "her from getting"
+	line "hurt by it?"
+	done
+
 GoldenrodFlowerShopTeacherAskWantToBorrowWaterBottleText:
 	text "Do you want to"
 	line "borrow the water"
@@ -144,24 +157,34 @@ GoldenrodFlowerShopTeacherAskWantToBorrowWaterBottleText:
 	line "dangerous with it."
 	done
 
+GoldenrodFlowerShopTeacherBetterThanWhitneyText:
+	text "Oh, you're better"
+	line "than Whitney."
+
+	para "Do you know about"
+	line "that wiggly tree?"
+
+	para "If you wet it with"
+	line "a water bottle, it"
+	cont "attacks."
+
+	para "But since you"
+	line "have some Badges,"
+	cont "you should be OK."
+	done
+
 GoldenrodFlowerShopTeacherHeresTheSquirtbottleText:
 	text "Oh, you're better"
 	line "than Whitney…"
 
 	para "You'll be OK,"
-	line "then. Here's the"
-	cont "SquirtBottle!"
+	line "then. Here's my"
+	cont "water bottle!"
 	done
 
 GoldenrodFlowerShopTeacherDontDoAnythingDangerousText:
 	text "Don't do anything"
 	line "too dangerous!"
-	done
-
-GoldenrodFlowerShopTeacherLalalaHavePlentyOfWaterText:
-	text "Lalala lalalala."
-	line "Have plenty of"
-	cont "water, my lovely!"
 	done
 
 GoldenrodFlowerShopFloriaWonderIfSisWillLendWaterBottleText:
@@ -181,11 +204,14 @@ GoldenrodFlowerShopFloriaWonderIfSisWillLendWaterBottleText:
 GoldenrodFlowerShopFloriaYouBeatWhitneyText:
 	text "Wow, you beat"
 	line "Whitney? Cool!"
-	done
 
-GoldenrodFlowerShopFloriaItReallyWasAMonText:
-	text "So it really was a"
-	line "#mon!"
+	para "Maybe you can take"
+	line "care of the jiggly"
+	cont "tree."
+
+	para "You'll just need a"
+	line "water bottle like"
+	cont "my sis has."
 	done
 
 WoukdYouLikeMulchText:

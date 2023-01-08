@@ -20,7 +20,7 @@ SeagallopFerryNavelGate_MapScriptHeader:
 	const SEAGALLOPFERRYNAVELGATE_SAILOR
 
 SeagallopFerryNavelGateTrigger1:
-	prioritysjump SeagallopFerryNavelGate_PlayerArrives
+	sdefer SeagallopFerryNavelGate_PlayerArrives
 SeagallopFerryNavelGateTrigger0:
 	end
 
@@ -41,7 +41,7 @@ SeagallopFerryNavelGateSailorScript:
 	opentext
 	writetext SeagallopFerryNavelToVermilionQuestionText
 	yesorno
-	iffalse .RefuseFerry
+	iffalsefwd .RefuseFerry
 	writetext SeagallopFerryNavelToVermilionText
 	waitbutton
 	closetext

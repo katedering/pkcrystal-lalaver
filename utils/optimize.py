@@ -7,6 +7,7 @@ Search all .asm files for N code lines in a row that match some conditions.
 
 from collections import namedtuple
 from glob import iglob
+from sys import argv
 
 # Regular expressions are useful for text processing
 import re
@@ -25,6 +26,11 @@ def isVolatile(code):
 	return any(r in code for r in {
 		'[hli]', '[hld]', '[hl+]', '[hl-]',
 		'[rJOYP]', '[rBGPD]', '[rOBPD]'
+	})
+
+def isNotReallyHram(code):
+	return any(r in code for r in {
+		'rROMB0', 'rROMB1', 'rRAMG', 'rRAMB', 'rRTCLATCH'
 	})
 
 # Each line has five properties:
@@ -57,22 +63,27 @@ patterns = {
 	(lambda line1, prev: re.match(r'(?:add|adc|sub|sbc|and|xor|or|cp) a,', line1.code)),
 ],
 'nops': [
+	# Bad: nop
+	# Good: omit (unless you need it for timing or halt)
+	(lambda line1, prev: line1.code != 'halt'),
+	(lambda line2, prev: line2.code == 'nop'),
+],
+'no-ops': [
 	# Bad: ld b, b (or other identical registers)
-	# Meh: nop
 	# Good: omit (unless you need it for timing)
-	(lambda line1, prev: re.match(r'ld ([abcdehl]), \1$', line1.code)
-		or line1.code == 'nop'),
+	(lambda line1, prev: re.match(r'ld ([abcdehl]), \1$', line1.code)),
 ],
 'Inefficient HRAM load': [
 	# Bad: ld a, [hFoo] (or [rFoo])
 	# Good: ldh a, [hFoo]
-	(lambda line1, prev: re.match(r'ld a, \[[hr][^l]', line1.code)),
+	(lambda line1, prev: re.match(r'ld a, \[[hr][^l]', line1.code)
+		and not isNotReallyHram(line1.code)),
 ],
 'Inefficient HRAM store': [
 	# Bad: ld [hFoo], a (or [rFoo])
 	# Good: ldh [hFoo], a
 	(lambda line1, prev: re.match(r'ld \[[hr][^l]', line1.code)
-		and line1.code.endswith(', a')),
+		and not isNotReallyHram(line1.code) and line1.code.endswith(', a')),
 ],
 # 'a = 0': [
 # 	# Bad: ld a, 0
@@ -102,7 +113,7 @@ patterns = {
 	# Bad: ld a, P / jr c|nc, .ok / xor|inc|dec a / .ok
 	# Good: solutions involving sbc a
 	(lambda line1, prev: re.match(r'ld a, [^afbcdehl\[]', line1.code)),
-	(lambda line2, prev: re.match(r'j[rp] n?c,', line2.code)),
+	(lambda line2, prev: re.match(r'(jr|jp|jmp) n?c,', line2.code)),
 	(lambda line3, prev: re.match(r'ld a, [^afbcdehl\[]', line3.code)
 		or line3.code in {'xor a', 'inc a', 'dec a'}),
 	(lambda line4, prev: line4.code.rstrip(':') == prev[1].code.split(',')[1].strip()),
@@ -110,7 +121,14 @@ patterns = {
 'a++|a-- if carry': [
 	# Bad: jr nc, .ok / { inc|dec a }+ / .ok
 	# Good: adc|sbc 0
-	(lambda line1, prev: re.match(r'j[rp] nc,', line1.code)),
+	(lambda line1, prev: re.match(r'(jr|jp|jmp) nc,', line1.code)),
+	(lambda line2, prev: line2.code in {'inc a', 'dec a'}),
+	(1, lambda line3, prev: line3.code.rstrip(':') == prev[0].code.split(',')[1].strip()),
+],
+'a++|a-- if not carry': [
+	# Bad: jr c, .ok / { inc|dec a }+ / .ok
+	# Good: adc|sbc -1
+	(lambda line1, prev: re.match(r'(jr|jp|jmp) c,', line1.code)),
 	(lambda line2, prev: line2.code in {'inc a', 'dec a'}),
 	(1, lambda line3, prev: line3.code.rstrip(':') == prev[0].code.split(',')[1].strip()),
 ],
@@ -134,22 +152,41 @@ patterns = {
 	# Good: ld b, a / adc|sbc c|N / sub|add b
 	(lambda line1, prev: re.match(r'ld ([bcdehl]|\[hl\]), a', line1.code)),
 	(lambda line2, prev: re.match(r'ld a, [%\$&]?0+$', line2.code)),
-	(lambda line3, prev: (line3.code.startswith('adc ') or line3.code.startswith('sbc '))
-		and ((not line3.code.startswith('adc [') and not line3.code.startswith('sbc ['))
-			or line3.code == 'adc [hl]' or line3.code == 'sbc [hl]')),
+	(lambda line3, prev: line3.code.startswith(('adc ', 'sbc '))
+		and (not line3.code.startswith(('adc [', 'sbc ['))
+			or line3.code in {'adc [hl]', 'sbc [hl]'})),
 ],
 'a|b|c|d|e|h|l = z|nz|c|nc ? P : Q': [
 	# Bad: jr z|nz|c|nc, .p / ld a|b|c|d|e|h|l, Q / jr .ok / .p / (ld a|b|c|d|e|h|l, P | xor a) / (.ok | jr .ok)
 	# Good: ld a|b|c|d|e|h|l, Q / jr nz|z|nc|c, .ok / .p / (ld a|b|c|d|e|h|l, P | xor a) / .ok
-	(lambda line1, prev: re.match(r'j[rp] n?[zc],', line1.code)),
+	(lambda line1, prev: re.match(r'(jr|jp|jmp) n?[zc],', line1.code)),
 	(lambda line2, prev: re.match(r'ldh? [abcdehl],', line2.code)),
-	(lambda line3, prev: re.match(r'j[rp] ', line3.code) and ',' not in line3.code
-		and line3.code != 'jm?p hl'),
+	(lambda line3, prev: re.match(r'(jr|jp|jmp) ', line3.code) and ',' not in line3.code
+		and line3.code != 'jp hl'),
 	(lambda line4, prev: line4.code.rstrip(':') == prev[0].code.split(',')[1].strip()),
 	(lambda line5, prev: re.match(r'ldh? [abcdehl],', line5.code)
 		or (line5.code in {'xor a', 'xor a, a'} and re.match(r'ldh? a,', prev[1].code))),
 	(lambda line6, prev: line6.code == prev[2].code
-		or line6.code.rstrip(':') == prev[2].code[3:].strip()),
+		or line6.code.rstrip(':') == prev[2].code.split(maxsplit=1)[-1].strip()),
+],
+'a & X == X': [
+	# Bad: and N / cp N
+	# Good: or ~N / inc a (unless you need the masked value or the carry flag)
+	(lambda line1, prev: re.match(r'and (?:a, )?[^afbcdehl\[]', line1.code)),
+	(lambda line2, prev: re.match(r'cp (?:a, )?[^afbcdehl\[]', line2.code)
+		and prev[0].code[4:] == line2.code[3:]),
+],
+'a = (a & MASK) | (b|c|d|e|h|l & ~MASK)': [
+	# Bad: and MASK / ld c, a / ld a, b / and ~MASK / or c
+	# Good: xor b / and MASK / xor b
+	(lambda line1, prev: re.match(r'and (?:a, )?[^afbcdehl\[]', line1.code)),
+	(lambda line2, prev: re.match(r'ld [bcdehl], a', line2.code)),
+	(lambda line3, prev: re.match(r'ld a, [bcdehl]', line3.code)
+		and prev[1].code[3] != line3.code[6]),
+	(lambda line4, prev: re.match(r'and (?:a, )?[^afbcdehl\[]', line4.code)
+		and True), # TODO: and the masks are complementary
+	(lambda line5, prev: re.match(r'or (?:a, )?[bcdehl]', line5.code)
+		and prev[1].code[3] == line5.code[-1]),
 ],
 'hl|bc|de += a|N': [
 	# Bad: add l|N / ld l, a / ld a, h|0 / adc 0|h / ld h, a (hl or bc or de)
@@ -170,7 +207,7 @@ patterns = {
 	(lambda line1, prev: re.match(r'add (?:a, )?(?:[lce]|[^afbdh\[])', line1.code)),
 	(lambda line2, prev: re.match(r'ld [lce], a', line2.code)
 		and (lambda x: line2.code[3] == x or x not in 'lce')(prev[0].code.replace('add a,', 'add')[4])),
-	(lambda line3, prev: re.match(r'j[rp] nc,', line3.code)),
+	(lambda line3, prev: re.match(r'(jr|jp|jmp) nc,', line3.code)),
 	(lambda line4, prev: re.match(r'inc [hbd]', line4.code)
 		and line4.code[4] == PAIRS[prev[1].code[3]]),
 	(lambda line5, prev: line5.code.rstrip(':') == prev[2].code.split(',')[1].strip()),
@@ -304,7 +341,7 @@ patterns = {
 	(lambda line1, prev: re.match(r'(?:cp|or) [%\$&]?0+$', line1.code)
 		or re.match(r'and (?:255|-1|\$[Ff][Ff]|%11111111|&377)$', line1.code)),
 ],
-' ei + ret': [
+'ei + ret': [
 	# Bad: ei / ret
 	# Good: reti
 	(lambda line1, prev: line1.code == 'ei'),
@@ -314,6 +351,12 @@ patterns = {
 	# Bad: call Foo / ret (unless Foo messes with the stack)
 	# Good: jr|jp Foo
 	(lambda line1, prev: line1.code.startswith('call ') and ',' not in line1.code),
+	(lambda line2, prev: line2.code == 'ret'),
+],
+'Tail farcall': [
+	# Bad: farcall Foo / ret (unless Foo messes with the stack)
+	# Good: farjp Foo
+	(lambda line1, prev: line1.code.startswith('farcall ') and ',' not in line1.code),
 	(lambda line2, prev: line2.code == 'ret'),
 ],
 'Tail predef': [
@@ -334,24 +377,24 @@ patterns = {
 	# Good: call nz|z|nc|c, Foo
 	# Bad: jr z|nz|c|nc, .ok / call Foo / jr .ok
 	# Good: call nz|z|nc|c, Foo / jr .ok
-	(lambda line1, prev: re.match(r'j[rp] n?[zc],', line1.code)),
+	(lambda line1, prev: re.match(r'(jr|jp|jmp) n?[zc],', line1.code)),
 	(lambda line2, prev: line2.code.startswith('call ') and ',' not in line2.code),
-	(lambda line3, prev: (re.match(r'j[rp] ', line3.code) and ',' not in line3.code
+	(lambda line3, prev: (re.match(r'(jr|jp|jmp) ', line3.code) and ',' not in line3.code
 		and line3.code.split()[-1].strip() == prev[0].code.split(',')[1].strip())
 		or line3.code.rstrip(':') == prev[0].code.split(',')[1].strip()),
 ],
 'Conditional return': [
 	# Bad: jr z|nz|c|nc, .skip / ret / .skip
 	# Good: ret nz|z|nc|c .bar
-	(lambda line1, prev: re.match(r'j[rp] n?[zc],', line1.code)),
+	(lambda line1, prev: re.match(r'(jr|jp|jmp) n?[zc],', line1.code)),
 	(lambda line2, prev: line2.code == 'ret'),
 	(lambda line3, prev: line3.code.rstrip(':') == prev[0].code.split(',')[1].strip()),
 ],
 'Conditional fallthrough': [
 	# Bad: jr z|nz|c|nc, .foo / jr .bar / .foo: ...
 	# Good: jr nz|z|nc|c .bar / .foo: ...
-	(lambda line1, prev: re.match(r'j[rp] n?[zc],', line1.code)),
-	(lambda line2, prev: re.match(r'j[rp] ', line2.code) and ',' not in line2.code
+	(lambda line1, prev: re.match(r'(jr|jp|jmp) n?[zc],', line1.code)),
+	(lambda line2, prev: re.match(r'(jr|jp|jmp) ', line2.code) and ',' not in line2.code
 		and line2.code != 'jp hl'),
 	(lambda line3, prev: line3.code.rstrip(':') == prev[0].code.split(',')[1].strip()),
 ],
@@ -367,26 +410,26 @@ patterns = {
 'Pointless jumps': [
 	# Bad: jr|jp Foo / Foo: ...
 	# Good: fall through to Foo: ...
-	(lambda line1, prev: (line1.code.startswith('jr ') or line1.code.startswith('jp ')
-		or line1.code.startswith('jmp ')) and ',' not in line1.code),
-	(lambda line2, prev: line2.code.rstrip(':') == prev[0].code[3:].strip()
+	(lambda line1, prev: re.match(r'^(jr|jp|jmp|jump|sjump|jumpchannel|sound_jump) ', line1.code)
+		and ',' not in line1.code),
+	(lambda line2, prev: line2.code.rstrip(':') == prev[0].code.split(maxsplit=1)[-1].strip()
 		and (line2.context == prev[0].context or line2.context == line2.code)),
 ],
 'Useless loads': [
 	# Bad: ld P, Q / ld P, R (unless the lds have side effects)
 	# Good: ld P, R
-	(lambda line1, prev: (line1.code.startswith('ld ') or line1.code.startswith('ldh '))
-		and ',' in line1.code and not isVolatile(line1.code)),
-	(lambda line2, prev: (line2.code.startswith('ld ') or line2.code.startswith('ldh '))
-		and ',' in line2.code and line2.code.split(',')[0] == prev[0].code.split(',')[0]),
+	(lambda line1, prev: line1.code.startswith(('ld ', 'ldh ')) and ',' in line1.code
+		and not isVolatile(line1.code)),
+	(lambda line2, prev: line2.code.startswith(('ld ', 'ldh ')) and ',' in line2.code
+		and line2.code.split(',')[0] == prev[0].code.split(',')[0]
+		and line2.code not in {'ld h, [hl]', 'ld l, [hl]'}),
 ],
 'Redundant loads': [
 	# Bad: ld P, Q / ld Q, P (unless the lds have side effects)
 	# Good: ld P, Q
-	(lambda line1, prev: (line1.code.startswith('ld ') or line1.code.startswith('ldh '))
-		and ',' in line1.code and not isVolatile(line1.code)),
-	(lambda line2, prev: (line2.code.startswith('ld ') or line2.code.startswith('ldh '))
-		and ',' in line2.code
+	(lambda line1, prev: line1.code.startswith(('ld ', 'ldh ')) and ',' in line1.code
+		and not isVolatile(line1.code)),
+	(lambda line2, prev: line2.code.startswith(('ld ', 'ldh ')) and ',' in line2.code
 		and line2.code[3:].split(',')[0].strip() == prev[0].code.split(',')[1].strip()
 		and line2.code.split(',')[1].strip() == prev[0].code[3:].split(',')[0].strip()
 		and line2.context == prev[0].context),
@@ -394,8 +437,8 @@ patterns = {
 'Similar loads': [
 	# Bad: ld P, X / ld a, X (unless the lds have side effects)
 	# Good: ld a, X / ld P, a (if possible)
-	(lambda line1, prev: (line1.code.startswith('ld ') or line1.code.startswith('ldh '))
-		and ',' in line1.code and not isVolatile(line1.code)
+	(lambda line1, prev: line1.code.startswith(('ld ', 'ldh ')) and ',' in line1.code
+		and not isVolatile(line1.code)
 		and line1.code.split(',')[1].strip() not in 'afbcdehl'),
 	(lambda line2, prev: line2.code.startswith('ld a,')
 		and line2.code.split(',')[1] == prev[0].code.split(',')[1]),
@@ -403,7 +446,7 @@ patterns = {
 'Conditionally load 0': [
 	# Bad: and|or X / jr|jp nz, .foo / ld P, 0
 	# Good: and|or X / jr|jp nz, .foo / ld P, a (if possible)
-	(lambda line1, prev: line1.code.startswith('and ') or line1.code.startswith('or ')),
+	(lambda line1, prev: line1.code.startswith(('and ', 'or '))),
 	(lambda line2, prev: re.match(r'(jr|jp|jmp) nz,', line2.code)),
 	(lambda line3, prev: re.match(r'ld .+, [%\$&]?0+$', line3.code)),
 ],
@@ -415,9 +458,7 @@ patterns = {
 'Redundant and|or': [
 	# Bad: and|or|xor X / and|or a
 	# Good: and|or|xor N
-	(lambda line1, prev: line1.code.startswith('and ')
-		or line1.code.startswith('or ')
-		or line1.code.startswith('xor ')),
+	(lambda line1, prev: line1.code.startswith(('and ', 'or ', 'xor '))),
 	(lambda line2, prev: line2.code in {'and a', 'or a', 'and a, a', 'or a, a'}),
 ],
 'Pointless and|or a': [
@@ -425,17 +466,62 @@ patterns = {
 	# Good: (the instruction that affects z and c)
 	(lambda line1, prev: line1.code in {'and a', 'or a', 'and a, a', 'or a, a'}),
 	(lambda line2, prev: line2.code in {'rlca', 'rrca', 'rla', 'rra', 'daa', 'pop af'}
-		or any(line2.code.startswith(x) for x in
-			{'add ', 'adc ', 'sub ', 'sbc ', 'and ', 'or ', 'xor ', 'cp ',
+		or line2.code.startswith((
+			'add ', 'adc ', 'sub ', 'sbc ', 'and ', 'or ', 'xor ', 'cp ',
 			'rlc ', 'rrc ', 'rl ', 'rr ', 'sla ', 'sra ', 'swap ', 'srl ',
-			'ld hl, sp', 'ldhl sp'})),
+			'ld hl, sp', 'ldhl sp'))),
 ],
 'Redundant inc|dec': [
 	# Bad: ld P, N / inc|dec P (unless the inc|dec flags are needed)
 	# Good: ld P, X+/-1
 	(lambda line1, prev: re.match(r'ld .+, [^afbcdehl\[]', line1.code)),
-	(lambda line2, prev: (line2.code.startswith('inc ') or line2.code.startswith('dec '))
+	(lambda line2, prev: line2.code.startswith(('inc ', 'dec '))
 		and line2.code[4:].strip() == prev[0].code.split(',')[0][2:].strip()),
+],
+'hl|bc|de = N / bc|de|hl = K / hl|bc|de += bc|de|hl': [
+	# Bad: hl|bc|de = N / bc|de|hl = K / hl|bc|de += bc|de|hl (unless K is needed in bc|de|hl)
+	# Good: hl|bc|de = N + K
+	(lambda line1, prev: re.match(r'ld (?:hl|bc|de), [^\[]', line1.code)),
+	(lambda line2, prev: re.match(r'ld (?:hl|bc|de), [^\[]', line2.code)
+		and line2.code[2] != prev[0].code[3]),
+	(1, lambda line3, prev: re.match(r'add (?:hl|bc|de), (?!hl|bc|de)', line3.code)
+		and line3.code[4] == prev[0].code[3] and line3.code[8] == prev[1].code[3]),
+],
+'hl|bc|de = N / ... / inc|dec hl|bc|de': [
+	# Bad: hl|bc|de = N / ... / inc|dec hl|bc|de
+	# Good: hl|bc|de = N +/- 1 / ...
+	(lambda line1, prev: re.match(r'ld (?:hl|bc|de), [^\[]', line1.code)),
+	(1, lambda line2, prev: not re.match(r'^(jr|jp|jmp|call|rst|ret|predef)', line2.code)
+		and line2.code[:5] != prev[0].code[:5]
+		and '[' + prev[0].code[3:5] not in line2.code
+		and not re.match(r'^(?:push|pop) ' + prev[0].code[3:5], line2.code)
+		and not (line2.code.startswith('.') or line2.code.endswith(':'))),
+	(1, lambda line3, prev: re.match(r'(?:inc|dec) (?:hl|bc|de)', line3.code)
+		and line3.code[4] == prev[0].code[3]),
+],
+'hl|bc|de = N / ... / bc|de|hl = K / hl|bc|de += bc|de|hl': [
+	# Bad: hl|bc|de = N / ... / bc|de|hl = K / hl|bc|de += bc|de|hl (unless K is needed in bc|de|hl)
+	# Good: hl|bc|de = N + K / ...
+	(lambda line1, prev: re.match(r'ld (?:hl|bc|de), [^\[]', line1.code)),
+	(1, lambda line2, prev: not re.match(r'^(jr|jp|jmp|call|rst|ret|predef)', line2.code)
+		and line2.code[:5] != prev[0].code[:5]
+		and '[' + prev[0].code[3:5] not in line2.code
+		and not re.match(r'^(?:push|pop) ' + prev[0].code[3:5], line2.code)
+		and not (line2.code.startswith('.') or line2.code.endswith(':'))),
+	(lambda line3, prev: re.match(r'ld (?:hl|bc|de), [^\[]', line3.code)
+		and line3.code[2] != prev[0].code[3]),
+	(1, lambda line4, prev: re.match(r'add (?:hl|bc|de), (?!hl|bc|de)', line4.code)
+		and line4.code[4] == prev[0].code[3] and line4.code[8] == prev[1].code[3]),
+],
+'dec a, then AddNTimes': [
+	# Bad: ld hl, Foo / dec a / ld bc, BAR / call|rst AddNTimes
+	# Bad: ld hl, Foo / ld bc, BAR / dec a / call|rst AddNTimes
+	# Good: ld hl, Foo - BAR / ld bc, BAR / call|rst AddNTimes
+	(lambda line1, prev: re.match(r'ld hl, [^\[]', line1.code)),
+	(lambda line2, prev: re.match(r'ld bc, [^\[]', line2.code) or line2.code == 'dec a'),
+	(lambda line3, prev: (re.match(r'ld bc, [^\[]', line3.code) or line3.code == 'dec a')
+		and (line3.code == 'dec a') != (prev[1].code == 'dec a')),
+	(lambda line4, prev: re.match(r'(?:call|rst) AddNTimes', line4.code)),
 ],
 'Redundant ret': [
 	# Bad: ret z|nz|c|nc / ret
@@ -469,13 +555,22 @@ patterns = {
 		and line1.code.lower() not in {'endc', 'endr', 'endm'}),
 	(lambda line2, prev: line2.code.startswith('jr ') and ',' not in line2.code),
 ],
+# 'Inefficient WRAM increment/decrement': [
+	# # Bad: ld a, [wFoo] / inc|dec a / ld [wFoo], a (unless hl needs to be preserved)
+	# # Good: ld hl, wFoo / inc|dec [hl]
+	# (lambda line1, prev: re.match(r'ld a, \[w', line1.code)),
+	# (lambda line2, prev: line2.code in {'inc a', 'dec a'}),
+	# (lambda line3, prev: re.match(r'ld \[w.*?\], a', line3.code)
+		# and line3.code.split(", ")[0].lstrip("ld ") == prev[0].code.split(", ")[-1]),
+# ],
 }
 
 # Count the total instances of the pattern
 count = 0
 
 # Check all the .asm files
-for filename in iglob('**/*.asm', recursive=True):
+filenames = argv[1:] if len(argv) > 1 else iglob('**/*.asm', recursive=True)
+for filename in filenames:
 	printed = False
 	# Read each file line by line
 	with open(filename, 'r') as f:
@@ -496,8 +591,9 @@ for filename in iglob('**/*.asm', recursive=True):
 		while i < n:
 			text = lines[i]
 			# Remove comments
-			code = text.split(';')[0].rstrip()
-			comment = text.split(';', 1)[1].strip() if ';' in text else ''
+			parts = text.split(';', 1)
+			code = parts[0].rstrip()
+			comment = parts[1].strip() if len(parts) > 1 else ''
 			# Skip blank lines:
 			if not code:
 				i += 1

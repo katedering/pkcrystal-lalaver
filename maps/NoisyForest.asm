@@ -19,9 +19,9 @@ NoisyForest_MapScriptHeader:
 	bg_event  7, 29, BGEVENT_ITEM + FULL_RESTORE, EVENT_NOISY_FOREST_HIDDEN_FULL_RESTORE
 
 	def_object_events
-	object_event 20, 19, SPRITE_ANABEL, SPRITEMOVEDATA_WALK_UP_DOWN, 1, 0, -1, -1, 0, OBJECTTYPE_SCRIPT, 0, NoisyForestAnabelScript, EVENT_NOISY_FOREST_ANABEL
 	object_event 19, 36, SPRITE_YOUNGSTER, SPRITEMOVEDATA_STANDING_RIGHT, 0, 0, -1, -1, 0, OBJECTTYPE_SCRIPT, 0, ObjectEvent, EVENT_TOLD_ABOUT_PIKABLU
-	object_event 24, 31, SPRITE_MON_ICON, SPRITEMOVEDATA_POKEMON, 0, MARILL, -1, -1, PAL_NPC_BLUE, OBJECTTYPE_SCRIPT, 0, NoisyForestPikabluScript, EVENT_NOISY_FOREST_PIKABLU
+	object_event 24, 31, SPRITE_MON_ICON, SPRITEMOVEDATA_POKEMON, 0, MARILL, -1, -1, PAL_NPC_BLUE, OBJECTTYPE_SCRIPT, NO_FORM, NoisyForestPikabluScript, EVENT_NOISY_FOREST_PIKABLU
+	object_event 20, 19, SPRITE_KATY, SPRITEMOVEDATA_SPINRANDOM_SLOW, 0, 0, -1, -1, 0, OBJECTTYPE_SCRIPT, 0, KatyScript, -1
 	object_event 10, 15, SPRITE_BIRD_KEEPER, SPRITEMOVEDATA_STANDING_RIGHT, 0, 0, -1, -1, 0, OBJECTTYPE_GENERICTRAINER, 4, GenericTrainerBird_keeperTrent, -1
 	object_event 20,  4, SPRITE_BUG_MANIAC, SPRITEMOVEDATA_STANDING_DOWN, 0, 0, -1, -1, 0, OBJECTTYPE_GENERICTRAINER, 3, GenericTrainerBug_maniacPierre, -1
 	object_event  4, 27, SPRITE_BUG_MANIAC, SPRITEMOVEDATA_STANDING_RIGHT, 0, 0, -1, -1, 0, OBJECTTYPE_GENERICTRAINER, 1, GenericTrainerBug_maniacDylan, -1
@@ -32,96 +32,14 @@ NoisyForest_MapScriptHeader:
 	object_event 40, 15, SPRITE_CHILD, SPRITEMOVEDATA_WALK_LEFT_RIGHT, 0, 1, -1, -1, PAL_NPC_BLUE, OBJECTTYPE_COMMAND, jumptextfaceplayer, NoisyForestChildText, -1
 	itemball_event 41,  2, BALMMUSHROOM, 1, EVENT_NOISY_FOREST_BALMMUSHROOM
 	itemball_event 16, 28, MULCH, 1, EVENT_NOISY_FOREST_MULCH
-	tmhmball_event 17, 23, TM_DRAIN_PUNCH, EVENT_NOISY_FOREST_TM_DRAIN_PUNCH
+	tmhmball_event 17, 22, TM_DRAIN_PUNCH, EVENT_NOISY_FOREST_TM_DRAIN_PUNCH
 	cuttree_event 40, 12, EVENT_NOISY_FOREST_CUT_TREE_1
 	cuttree_event 12, 21, EVENT_NOISY_FOREST_CUT_TREE_2
 
 	object_const_def
-	const NOISYFOREST_ANABEL
 	const NOISYFOREST_YOUNGSTER
 	const NOISYFOREST_MARILL
-
-NoisyForestAnabelScript:
-	faceplayer
-	checkevent EVENT_BEAT_ANABEL
-	iftrue .Beaten
-	opentext
-	writetext .ChallengeText
-	yesorno
-	iffalse_jumpopenedtext .NoText
-	writetext .YesText
-	waitbutton
-	closetext
-	winlosstext .BeatenText, 0
-	setlasttalked NOISYFOREST_ANABEL
-	loadtrainer ANABEL, 1
-	startbattle
-	reloadmapafterbattle
-	setevent EVENT_BEAT_ANABEL
-.Beaten
-	opentext
-	writetext .ItemText
-	promptbutton
-	verbosegiveitem POWER_BAND
-	iffalse_endtext
-	writetext .GoodbyeText
-	waitbutton
-	closetext
-	special Special_FadeBlackQuickly
-	special Special_ReloadSpritesNoPalettes
-	disappear NOISYFOREST_ANABEL
-	pause 15
-	special Special_FadeInQuickly
-	clearevent EVENT_BATTLE_TOWER_ANABEL
-	end
-
-.ChallengeText:
-	text "Greetings… My name"
-	line "is Anabel."
-
-	para "…You are <PLAYER>?"
-	line "I have heard sev-"
-	cont "eral rumors about"
-	cont "you…"
-
-	para "Let me see your"
-	line "talent in its"
-	cont "entirety…"
-	done
-
-.YesText:
-	text "Let's begin,"
-	line "shall we?"
-	done
-
-.NoText:
-	text "It's very dis-"
-	line "appointing…"
-	done
-
-.BeatenText:
-	text "OK, I understand…"
-	done
-
-.ItemText:
-	text "Fufufu, nicely"
-	line "done…"
-
-	para "Take this, please…"
-	done
-
-.GoodbyeText:
-	text "I urge you to keep"
-	line "battling and keep"
-	cont "on winning."
-
-	para "I will be waiting"
-	line "for you in Battle"
-	cont "Tower."
-
-	para "Until the next"
-	line "time we meet…"
-	done
+	const NOISYFOREST_KATY
 
 GenericTrainerBug_maniacPierre:
 	generictrainer BUG_MANIAC, PIERRE, EVENT_BEAT_BUG_MANIAC_PIERRE, .SeenText, .BeatenText
@@ -268,7 +186,7 @@ NoisyForestPikabluScript:
 	writetext .OwnerText2
 	promptbutton
 	verbosegiveitem ODD_SOUVENIR
-	iffalse .NoItem
+	iffalsefwd .NoItem
 	setevent EVENT_GOT_ODD_SOUVENIR_FROM_PIKABLU_GUY
 	writetext .OwnerText3
 .Leave:
@@ -340,6 +258,143 @@ NoisyForestPikabluScript:
 	step_left
 	step_left
 	step_end
+
+KatyScript:
+	faceplayer
+	checkevent EVENT_BEAT_KATY
+	iftruefwd .After
+	opentext
+	checkevent EVENT_INTRODUCED_KATY
+	iftruefwd .Introduced
+	writetext .IntroText
+	sjumpfwd .Question
+.Introduced
+	writetext .RematchText
+.Question
+	yesorno
+	iffalse_jumpopenedtext .RefusedText
+	writetext .SeenText
+	waitbutton
+	closetext
+	setevent EVENT_INTRODUCED_KATY
+	winlosstext .BeatenText, 0
+	setlasttalked NOISYFOREST_KATY
+	checkevent EVENT_BEAT_ELITE_FOUR_AGAIN
+	iftruefwd .Rematch
+	loadtrainer KATY, 1
+	sjumpfwd .StartBattle
+.Rematch
+	loadtrainer KATY, 2
+.StartBattle
+	startbattle
+	reloadmapafterbattle
+	setevent EVENT_BEAT_KATY
+.After
+	opentext
+	checkevent EVENT_GOT_SWEET_HONEY_FROM_KATY
+	iftruefwd .Done
+	writetext .RewardText
+	promptbutton
+	verbosegiveitem SWEET_HONEY
+	iffalse_endtext
+	setevent EVENT_GOT_SWEET_HONEY_FROM_KATY
+.Done
+	jumpthisopenedtext
+
+	text "May your future"
+	line "adventures be as"
+
+	para "sweet and lovely"
+	line "as a good dessert."
+
+	para "Off you go, then."
+	line "Until we meet"
+	cont "again!"
+	done
+
+.RewardText:
+	text "Your strength rose"
+	line "during our battle"
+
+	para "like a nice bread"
+	line "in the oven."
+
+	para "I may need to work"
+	line "on my own strength"
+	cont "as well!"
+
+	para "Allow me to pre-"
+	line "sent you with"
+
+	para "this for your"
+	line "victory!"
+	done
+
+.IntroText:
+	text "Hello there!"
+	line "My name is Katy."
+
+	para "I'm the owner of a"
+	line "patisserie in a"
+	cont "far-away region."
+
+	para "Oh? That's right,"
+	line "I'm not in my shop."
+
+	para "I'm collecting"
+	line "ingredients."
+
+	para "Little sweets that"
+	line "bring happiness"
+	cont "in just one bite,"
+
+	para "Bug-type #mon"
+	line "hiding in foliage…"
+
+	para "Both are small but"
+	line "very powerful."
+
+	para "Shall I give you"
+	line "a taste?"
+	done
+
+.RematchText:
+	text "Hello again,"
+	line "<PLAYER>!"
+
+	para "You really looked"
+	line "like you were en-"
+	cont "joying yourself"
+
+	para "during our last"
+	line "battle."
+
+	para "How about a second"
+	line "helping?"
+	done
+
+.SeenText:
+	text "Don't let your"
+	line "guard down unless"
+
+	para "you would like to"
+	line "be knocked off"
+	cont "your feet!"
+	done
+
+.BeatenText:
+	text "My sweet little"
+	line "#mon dropped"
+	cont "like flies!"
+	done
+
+.RefusedText:
+	text "Awww. Not yet?"
+	line "Do come back when"
+
+	para "you're good and"
+	line "ready!"
+	done
 
 NoisyForestSignpostText:
 	text "Noisy Forest"

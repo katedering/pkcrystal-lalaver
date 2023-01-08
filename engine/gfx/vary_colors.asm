@@ -2,19 +2,19 @@ CopyDVsToColorVaryDVs:
 ; e = HPAtkDV
 	ld a, [hli]
 	ld e, a
-; d = DefSpdDV
+; d = DefSpeDV
 	ld a, [hli]
 	ld d, a
 ; c = SatSdfDV
+	push bc
 	ld a, [hli]
 	ld c, a
 ; b = Shiny
-	push bc
 	ld a, [hl]
 	ld b, a
 
 	ldh a, [rSVBK]
-	ld c, a
+	push af
 	ld a, $5
 	ldh [rSVBK], a
 
@@ -22,23 +22,28 @@ CopyDVsToColorVaryDVs:
 ; wColorVaryDVs = HPAtkDV
 	ld a, e
 	ld [hli], a
-; wColorVaryDVs+1 = DefSpdDV
+; wColorVaryDVs+1 = DefSpeDV
 	ld a, d
+	ld [hli], a
+; wColorVaryDVs+2 = SatSdfDV
+	ld a, c
 	ld [hli], a
 	inc hl
 	inc hl
+	assert wColorVaryDVs + 5 == wColorVaryShiny
 ; wColorVaryShiny = Shiny
 	ld a, b
 	ld [hld], a
-	ld a, c
+	pop af
 	ld d, a
 	pop bc
-; wColorVarySpecies = Species
+	assert wColorVaryShiny - 1 == wColorVaryForm
+; wColorVaryForm = Form
 	ld a, b
 	ld [hld], a
-; wColorVaryDVs+2 = SatSdfDV
-	ld a, c
-	ld [hl], a
+	assert wColorVaryForm - 1 == wColorVarySpecies
+; wColorVarySpecies = Species
+	ld [hl], c
 
 	ld a, d
 	ldh [rSVBK], a
@@ -157,12 +162,27 @@ VaryBlueByDV:
 	ld [hld], a
 	ret
 
+VaryBGPal0ByTempMonDVs:
+	ld hl, wBGPals1 palette 0 + 2
+	jr VaryBGPalByTempMonDVs
+VaryBGPal1ByTempMonDVs:
+	ld hl, wBGPals1 palette 1 + 2
+VaryBGPalByTempMonDVs:
+	push hl
+	ld hl, wTempMonDVs
+	ld a, [wTempMonSpecies]
+	ld c, a
+	ld a, [wTempMonForm]
+	ld b, a
+	call CopyDVsToColorVaryDVs
+	pop hl
 VaryColorsByDVs::
 ; hl = colors
 ; [hl+0] = gggr:rrrr
 ; [hl+1] = 0bbb:bbgg
 ; [hl+2] = GGGR:RRRR
 ; [hl+3] = 0BBB:BBGG
+; returns with hl += 4
 
 ; DVs in wColorVaryDVs
 ; [bc+0] = hhhh:aaaa
@@ -170,16 +190,21 @@ VaryColorsByDVs::
 ; [bc+2] = pppp:qqqq
 
 ; [wColorVarySpecies] = species
+; [wColorVaryForm] = form
 ; [wColorVaryShiny] = shiny
 
-if DEF(MONOCHROME) || DEF(NOIR)
-	ret
-endc
-
+if !DEF(MONOCHROME) && !DEF(NOIR)
 	ld a, [wInitialOptions]
 	bit COLOR_VARY_OPT, a
-	ret z
+	jr nz, .continue
+endc
+	inc hl
+	inc hl
+	inc hl
+	inc hl
+	ret
 
+.continue
 	ldh a, [rSVBK]
 	push af
 	ld a, $5
@@ -188,9 +213,15 @@ endc
 	ld bc, wColorVaryDVs
 
 	ld a, [wColorVarySpecies]
-	cp SMEARGLE
+	cp LOW(SMEARGLE)
+	jr nz, .VaryColors
+	ld a, [wColorVaryForm]
+	and EXTSPECIES_MASK
+	assert HIGH(SMEARGLE) << MON_EXTSPECIES_F == 0
+	and a
 	jr z, .Smeargle
 
+.VaryColors:
 ;;; LiteRed ~ HPDV, aka, rrrrr ~ hhhh
 ; store HPDV in e
 	ld a, [bc]
@@ -208,7 +239,7 @@ endc
 ; vary LiteGrn by e
 	call VaryGreenByDV
 
-;;; advance from HP/Atk DV to Def/Spd DV
+;;; advance from HP/Atk DV to Def/Spe DV
 	inc bc
 
 ;;; LiteBlu ~ DefDV, aka, bbbbb ~ dddd
@@ -225,15 +256,15 @@ endc
 	inc hl
 
 .Finish:
-;;; DarkRed ~ SpdDV, aka, RRRRR ~ ssss
-; store SpdDV in e
+;;; DarkRed ~ SpeDV, aka, RRRRR ~ ssss
+; store SpeDV in e
 	ld a, [bc]
 	and %1111
 	ld e, a
 ; vary DarkRed by e
 	call VaryRedByDV
 
-;;; move from Def/Spd DV to SAt/SDf DV
+;;; move from Def/Spe DV to SAt/SDf DV
 	inc bc
 
 ;;; DarkGrn ~ SAtDV, aka, GGGGG ~ pppp
@@ -252,6 +283,10 @@ endc
 	ld e, a
 ; vary DarkBlu by e
 	call VaryBlueByDV
+
+;;; advance past Dark color
+	inc hl
+	inc hl
 
 	pop af
 	ldh [rSVBK], a
@@ -299,7 +334,7 @@ endc
 	ld a, d
 	ld [hld], a
 	dec hl
-;;; LiteRGB ~ Spd,SAt,SDfDVs
+;;; LiteRGB ~ Spe,SAt,SDfDVs
 	jr .Finish
 
 ; red and blue channels: no 0 or 31
@@ -307,89 +342,7 @@ endc
 ; need to be able to add or subtract 1 without overflow/underflow
 
 .SmearglePals:
-if !DEF(MONOCHROME)
-	RGB 14, 05, 06 ; maroon (fighting)
-	RGB 27, 09, 26 ; lavender (flying)
-	RGB 29, 05, 06 ; red (poison)
-	RGB 26, 26, 26 ; white (ground)
-	RGB 18, 11, 05 ; brown (rock)
-	RGB 16, 28, 01 ; lime (bug)
-	RGB 14, 06, 27 ; purple (ghost)
-	RGB 14, 14, 18 ; gray (steel)
-	RGB 29, 13, 02 ; orange (fire)
-	RGB 01, 09, 28 ; blue (water)
-	RGB 04, 19, 01 ; green (grass)
-	RGB 30, 25, 01 ; yellow (electric)
-	RGB 30, 10, 13 ; pink (psychic)
-	RGB 02, 22, 26 ; teal (ice)
-	RGB 07, 11, 30 ; indigo (dragon)
-	RGB 08, 06, 06 ; black (dark)
-else
-	RGB_MONOCHROME_DARK
-	RGB_MONOCHROME_DARK
-	RGB_MONOCHROME_DARK
-	RGB_MONOCHROME_DARK
-	RGB_MONOCHROME_DARK
-	RGB_MONOCHROME_DARK
-	RGB_MONOCHROME_DARK
-	RGB_MONOCHROME_DARK
-	RGB_MONOCHROME_DARK
-	RGB_MONOCHROME_DARK
-	RGB_MONOCHROME_DARK
-	RGB_MONOCHROME_DARK
-	RGB_MONOCHROME_DARK
-	RGB_MONOCHROME_DARK
-	RGB_MONOCHROME_DARK
-	RGB_MONOCHROME_DARK
-endc
+INCLUDE "gfx/pokemon/smeargle.pal"
 
 .SmeargleShinyPals: ; TODO
-if !DEF(MONOCHROME)
-	RGB 14, 05, 06 ; maroon (fighting)
-	RGB 27, 09, 26 ; lavender (flying)
-	RGB 29, 05, 06 ; red (poison)
-	RGB 26, 26, 26 ; white (ground)
-	RGB 18, 11, 05 ; brown (rock)
-	RGB 16, 28, 01 ; lime (bug)
-	RGB 14, 06, 27 ; purple (ghost)
-	RGB 14, 14, 18 ; gray (steel)
-	RGB 29, 13, 02 ; orange (fire)
-	RGB 01, 09, 28 ; blue (water)
-	RGB 04, 19, 01 ; green (grass)
-	RGB 30, 25, 01 ; yellow (electric)
-	RGB 30, 10, 13 ; pink (psychic)
-	RGB 02, 22, 26 ; teal (ice)
-	RGB 07, 11, 30 ; indigo (dragon)
-	RGB 08, 06, 06 ; black (dark)
-else
-	RGB_MONOCHROME_DARK
-	RGB_MONOCHROME_DARK
-	RGB_MONOCHROME_DARK
-	RGB_MONOCHROME_DARK
-	RGB_MONOCHROME_DARK
-	RGB_MONOCHROME_DARK
-	RGB_MONOCHROME_DARK
-	RGB_MONOCHROME_DARK
-	RGB_MONOCHROME_DARK
-	RGB_MONOCHROME_DARK
-	RGB_MONOCHROME_DARK
-	RGB_MONOCHROME_DARK
-	RGB_MONOCHROME_DARK
-	RGB_MONOCHROME_DARK
-	RGB_MONOCHROME_DARK
-	RGB_MONOCHROME_DARK
-endc
-
-VaryBGPal0ByTempMonDVs:
-	ld hl, wBGPals1 palette 0 + 2
-	jr VaryBGPalByTempMonDVs
-VaryBGPal1ByTempMonDVs:
-	ld hl, wBGPals1 palette 1 + 2
-VaryBGPalByTempMonDVs:
-	push hl
-	ld hl, wTempMonDVs
-	ld a, [wTempMonSpecies]
-	ld b, a
-	call CopyDVsToColorVaryDVs
-	pop hl
-	jmp VaryColorsByDVs
+INCLUDE "gfx/pokemon/smeargle_shiny.pal"

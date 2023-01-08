@@ -30,49 +30,13 @@ _AnimateTileset::
 	jmp IndirectHL
 
 TilesetJohto1Anim::
-	dw vTiles2 tile $14, AnimateWaterTile
-	dw NULL,  DoNothing
-	dw NULL,  DoNothing
-	dw NULL,  DoNothing
-	dw NULL,  DoNothing
-	dw NULL,  AnimateFlowerTile
-	dw WhirlpoolFrames1, AnimateWhirlpoolTile
-	dw WhirlpoolFrames2, AnimateWhirlpoolTile
-	dw WhirlpoolFrames3, AnimateWhirlpoolTile
-	dw WhirlpoolFrames4, AnimateWhirlpoolTile
-	dw NULL,  DoNothing
-	dw NULL,  StandingTileFrame8
-	dw vTiles2 tile $40, WriteTileToBuffer
-	dw NULL,  DoNothing
-	dw wTileAnimBuffer, ScrollTileDown
-	dw NULL,  DoNothing
-	dw wTileAnimBuffer, ScrollTileDown
-	dw NULL,  DoNothing
-	dw wTileAnimBuffer, ScrollTileDown
-	dw NULL,  DoNothing
-	dw vTiles2 tile $40, ReadTileFromBuffer
-	dw NULL,  DoneTileAnimation
-
 TilesetJohto2Anim::
-	dw vTiles2 tile $14, AnimateWaterTile
-	dw vTiles2 tile $1b, AnimateRainPuddleTile
-	dw vTiles2 tile $1c, AnimateRainWaterTile
-	dw NULL,  DoNothing
-	dw NULL,  AnimateFlowerTile
-	dw WhirlpoolFrames1, AnimateWhirlpoolTile
-	dw WhirlpoolFrames2, AnimateWhirlpoolTile
-	dw WhirlpoolFrames3, AnimateWhirlpoolTile
-	dw WhirlpoolFrames4, AnimateWhirlpoolTile
-	dw NULL,  DoNothing
-	dw NULL,  StandingTileFrame8
-	dw NULL,  DoNothing
-	dw NULL,  DoneTileAnimation
-
+TilesetJohto3Anim::
 TilesetJohto4Anim::
+TilesetJohto5Anim::
 	dw vTiles2 tile $14, AnimateWaterTile
-	dw vTiles2 tile $1b, AnimateRainPuddleTile
-	dw vTiles2 tile $1c, AnimateRainWaterTile
-	dw NULL,  DoNothing
+	dw vTiles2 tile $1c, AnimateRainPuddleTile
+	dw vTiles2 tile $1d, AnimateRainWaterTile
 	dw NULL,  DoNothing
 	dw NULL,  DoNothing
 	dw NULL,  AnimateFlowerTile
@@ -82,7 +46,7 @@ TilesetJohto4Anim::
 	dw WhirlpoolFrames4, AnimateWhirlpoolTile
 	dw NULL,  DoNothing
 	dw NULL,  StandingTileFrame8
-	dw vTiles2 tile $40, WriteTileToBuffer
+	dw vTiles2 tile $35, WriteTileToBuffer
 	dw NULL,  DoNothing
 	dw wTileAnimBuffer, ScrollTileDown
 	dw NULL,  DoNothing
@@ -90,24 +54,26 @@ TilesetJohto4Anim::
 	dw NULL,  DoNothing
 	dw wTileAnimBuffer, ScrollTileDown
 	dw NULL,  DoNothing
-	dw vTiles2 tile $40, ReadTileFromBuffer
+	dw vTiles2 tile $35, ReadTileFromBuffer
 	dw NULL,  DoneTileAnimation
 
 TilesetKanto1Anim::
+TilesetKanto2Anim::
 	dw vTiles2 tile $14, AnimateKantoWaterTile
-	dw NULL,  DoNothing
 	dw vTiles2 tile $40, WriteTileToBuffer
-	dw NULL,  DoNothing
 	dw wTileAnimBuffer, ScrollTileDown
-	dw NULL,  DoNothing
 	dw wTileAnimBuffer, ScrollTileDown
-	dw NULL,  DoNothing
 	dw wTileAnimBuffer, ScrollTileDown
-	dw NULL,  DoNothing
 	dw vTiles2 tile $40, ReadTileFromBuffer
+	dw vTiles2 tile $10, ScrollTileUp
+	dw vTiles2 tile $11, ScrollTileDown
+	dw vTiles2 tile $12, ScrollTileLeft
+	dw vTiles2 tile $13, ScrollTileRight
 	dw NULL,  AnimateKantoFlowerTile
-	dw NULL,  DoNothing
-	dw NULL,  DoNothing
+	dw vTiles2 tile $10, ScrollTileUp
+	dw vTiles2 tile $11, ScrollTileDown
+	dw vTiles2 tile $12, ScrollTileLeft
+	dw vTiles2 tile $13, ScrollTileRight
 	dw NULL,  StandingTileFrame8
 	dw NULL,  DoneTileAnimation
 
@@ -131,25 +97,6 @@ TilesetGym1Anim::
 	dw NULL,  DoNothing
 	dw NULL,  DoNothing
 	dw NULL,  LavaBubbleAnim1
-	dw NULL,  DoNothing
-	dw NULL,  StandingTileFrame8
-	dw NULL,  DoneTileAnimation
-
-TilesetKanto2Anim::
-	dw vTiles2 tile $14, AnimateKantoWaterTile
-	dw NULL,  DoNothing
-	dw NULL,  DoNothing
-	dw vTiles2 tile $20, ScrollTileUp
-	dw vTiles2 tile $21, ScrollTileDown
-	dw vTiles2 tile $22, ScrollTileLeft
-	dw vTiles2 tile $23, ScrollTileRight
-	dw NULL,  DoNothing
-	dw NULL,  AnimateKantoFlowerTile
-	dw NULL,  DoNothing
-	dw vTiles2 tile $20, ScrollTileUp
-	dw vTiles2 tile $21, ScrollTileDown
-	dw vTiles2 tile $22, ScrollTileLeft
-	dw vTiles2 tile $23, ScrollTileRight
 	dw NULL,  DoNothing
 	dw NULL,  StandingTileFrame8
 	dw NULL,  DoneTileAnimation
@@ -323,14 +270,34 @@ TilesetValenciaAnim::
 	dw NULL,  DoNothing
 	dw NULL,  DoNothing
 	dw NULL,  DoNothing
+	dw NULL,  DoNothing
 	dw NULL,  AnimateFlowerTile
+	dw NULL,  DoNothing
+	dw NULL,  DoNothing
 	dw NULL,  DoNothing
 	dw NULL,  DoNothing
 	dw NULL,  DoNothing
 	dw NULL,  StandingTileFrame8
 	dw NULL,  DoneTileAnimation
 
-TilesetJohto3Anim::
+TilesetSnowtopMountainAnim::
+	dw TinyWaterTileFrames, AnimateTinyWaterTile
+	dw TinyPierTileFrames,  AnimateTinyWaterTile
+	dw TinyShoreTileFrames, AnimateTinyWaterTile
+	dw NULL,  DoNothing
+	dw NULL,  DoNothing
+	dw NULL,  DoNothing
+	dw NULL,  DoNothing
+	dw NULL,  DoNothing
+	dw NULL,  DoNothing
+	dw NULL,  DoNothing
+	dw NULL,  DoNothing
+	dw NULL,  DoNothing
+	dw NULL,  DoNothing
+	dw NULL,  DoNothing
+	dw NULL,  StandingTileFrame8
+	dw NULL,  DoneTileAnimation
+
 TilesetHouse1Anim::
 TilesetHouse2Anim::
 TilesetPokeCenterAnim::
@@ -497,9 +464,8 @@ AnimateFountain:
 	sub l
 	ld h, a
 
-	ld a, [hli]
-	ld h, [hl]
-	ld l, a
+	ld sp, hl
+	pop hl
 
 	ld sp, hl
 	jmp WriteTileToDE
@@ -642,7 +608,7 @@ AnimateFarawayWaterTile:
 
 ForestTreeLeftAnimation:
 	ld a, [wCelebiEvent]
-	bit 2, a
+	bit CELEBIEVENT_FOREST_IS_RESTLESS_F, a
 	ret z
 
 	ld hl, sp+$0
@@ -666,7 +632,7 @@ ForestTreeLeftAnimation:
 
 ForestTreeRightAnimation:
 	ld a, [wCelebiEvent]
-	bit 2, a
+	bit CELEBIEVENT_FOREST_IS_RESTLESS_F, a
 	ret z
 
 	ld hl, sp+$0
@@ -690,7 +656,7 @@ ForestTreeRightAnimation:
 
 ForestTreeLeftAnimation2:
 	ld a, [wCelebiEvent]
-	bit 2, a
+	bit CELEBIEVENT_FOREST_IS_RESTLESS_F, a
 	ret z
 
 	ld hl, sp+$0
@@ -715,7 +681,7 @@ ForestTreeLeftAnimation2:
 
 ForestTreeRightAnimation2:
 	ld a, [wCelebiEvent]
-	bit 2, a
+	bit CELEBIEVENT_FOREST_IS_RESTLESS_F, a
 	ret z
 
 	ld hl, sp+$0
@@ -1069,6 +1035,36 @@ AnimateWhirlpoolTile:
 	ld sp, hl
 	jmp WriteTileToDE
 
+AnimateTinyWaterTile:
+	ld hl, sp+$0
+	ld b, h
+	ld c, l
+
+	ld l, e
+	ld h, d
+	ld e, [hl]
+	inc hl
+	ld d, [hl]
+	inc hl
+
+	; period 2, every 2 frames, offset to 1 tile (16 bytes)
+	ld a, [wTileAnimationTimer]
+	maskbits 2, 1
+	add a
+	add a
+	add a
+
+	add [hl]
+	inc hl
+	ld h, [hl]
+	ld l, a
+	adc h
+	sub l
+	ld h, a
+
+	ld sp, hl
+	jmp WriteTileToDE
+
 AnimateLCDTile:
 	ld hl, sp+$0
 	ld b, h
@@ -1086,7 +1082,7 @@ AnimateLCDTile:
 	ld h, a
 
 	ld sp, hl
-	ld hl, vTiles2 tile $6f
+	ld hl, vTiles2 tile $5e
 	jmp WriteTile
 
 .LCDTileFrames:
@@ -1198,10 +1194,10 @@ TowerPillarTile8:  INCBIN "gfx/tilesets/tower-pillar/8.2bpp"
 TowerPillarTile9:  INCBIN "gfx/tilesets/tower-pillar/9.2bpp"
 TowerPillarTile10: INCBIN "gfx/tilesets/tower-pillar/10.2bpp"
 
-WhirlpoolFrames1: dw vTiles2 tile $32, WhirlpoolTiles1
-WhirlpoolFrames2: dw vTiles2 tile $33, WhirlpoolTiles2
-WhirlpoolFrames3: dw vTiles2 tile $42, WhirlpoolTiles3
-WhirlpoolFrames4: dw vTiles2 tile $43, WhirlpoolTiles4
+WhirlpoolFrames1: dw vTiles2 tile $31, WhirlpoolTiles1
+WhirlpoolFrames2: dw vTiles2 tile $32, WhirlpoolTiles2
+WhirlpoolFrames3: dw vTiles2 tile $41, WhirlpoolTiles3
+WhirlpoolFrames4: dw vTiles2 tile $42, WhirlpoolTiles4
 
 WhirlpoolTiles1: INCBIN "gfx/tilesets/whirlpool/1.2bpp"
 WhirlpoolTiles2: INCBIN "gfx/tilesets/whirlpool/2.2bpp"
@@ -1213,3 +1209,11 @@ FarawayWaterFrames2: dw vTiles2 tile $15, FarawayWaterTiles2
 
 FarawayWaterTiles1: INCBIN "gfx/tilesets/water/faraway_water_1.2bpp"
 FarawayWaterTiles2: INCBIN "gfx/tilesets/water/faraway_water_2.2bpp"
+
+TinyWaterTileFrames: dw vTiles2 tile $0a, TinyWaterTile
+TinyPierTileFrames:  dw vTiles2 tile $0b, TinyPierTile
+TinyShoreTileFrames: dw vTiles2 tile $0c, TinyShoreTile
+
+TinyWaterTile: INCBIN "gfx/tilesets/tiny/water.2bpp"
+TinyPierTile:  INCBIN "gfx/tilesets/tiny/pier.2bpp"
+TinyShoreTile: INCBIN "gfx/tilesets/tiny/shore.2bpp"

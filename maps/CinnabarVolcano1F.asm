@@ -27,7 +27,6 @@ CinnabarVolcano1F_MapScriptHeader:
 	strengthboulder_event 15, 22, EVENT_BOULDER_IN_CINNABAR_VOLCANO_1F_2
 	strengthboulder_event 19,  4, EVENT_BOULDER_IN_CINNABAR_VOLCANO_1F_3
 	strengthboulder_event  5,  4, EVENT_BOULDER_IN_CINNABAR_VOLCANO_1F_4
-	strengthboulder_event 23, 16
 	object_event  2, 19, SPRITE_SCIENTIST, SPRITEMOVEDATA_STANDING_RIGHT, 0, 0, -1, -1, 0, OBJECTTYPE_GENERICTRAINER, 3, GenericTrainerScientistOskar, -1
 	object_event 17, 24, SPRITE_SUPER_NERD, SPRITEMOVEDATA_SPINRANDOM_SLOW, 0, 0, -1, -1, 0, OBJECTTYPE_GENERICTRAINER, 2, GenericTrainerSuperNerdLuis, -1
 	smashrock_event  5, 18
@@ -58,34 +57,34 @@ CinnabarVolcano1FBouldersFall:
 
 .Disappear1:
 	disappear CINNABARVOLCANO1F_BOULDER1
-	sjump .Fall
+	sjumpfwd .Fall
 
 .Disappear2:
 	disappear CINNABARVOLCANO1F_BOULDER2
-	sjump .Fall
+	sjumpfwd .Fall
 
 .Disappear3:
 	disappear CINNABARVOLCANO1F_BOULDER3
-	sjump .Fall
+	sjumpfwd .Fall
 
 .Disappear4:
 	disappear CINNABARVOLCANO1F_BOULDER4
-	sjump .Fall
+	; fallthrough
 
 .Fall:
 	pause 30
-	scall .FX
-	jumptext CinnabarVolcano1FBoulderFellText
-
-.FX:
 	playsound SFX_STRENGTH
 	earthquake 80
-	end
+	jumpthistext
+
+	text "The boulder fell"
+	line "through!"
+	done
 
 CinnabarVolcano1FBuckScript:
 	faceplayer
 	checkevent EVENT_BEAT_BUCK
-	iftrue .Beaten
+	iftruefwd .Beaten
 	opentext
 	writetext .ChallengeText
 	yesorno
@@ -229,9 +228,4 @@ SuperNerdLuisSeenText:
 SuperNerdLuisBeatenText:
 	text "You just taught"
 	line "me…"
-	done
-
-CinnabarVolcano1FBoulderFellText:
-	text "The boulder fell"
-	line "through!"
 	done

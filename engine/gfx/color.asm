@@ -16,11 +16,16 @@ CheckShininess:
 InitPartyMenuPalettes:
 	ld de, wBGPals1
 	ld hl, PartyMenuBGPals
-rept 4
-	call LoadHLPaletteIntoDE
-endr
+	ld c, 4 palettes
+	call LoadPalettes
 	call InitPartyMenuOBPals
-	jmp WipeAttrMap
+	; fallthrough
+WipeAttrMap:
+	hlcoord 0, 0, wAttrmap
+	ld bc, SCREEN_WIDTH * SCREEN_HEIGHT
+	xor a
+	rst ByteFill
+	ret
 
 ApplyHPBarPals:
 	ld a, [wWhichHPBar]
@@ -57,7 +62,7 @@ ApplyHPBarPals:
 .PartyMenu:
 	ld e, c
 	inc e
-	hlcoord 11, 1, wAttrMap
+	hlcoord 11, 1, wAttrmap
 	ld bc, 2 * SCREEN_WIDTH
 	ld a, [wCurPartyMon]
 .loop
@@ -98,6 +103,9 @@ LoadEnemyStatusIconPalette:
 	ld bc, 2
 	jmp FarCopyColorWRAM
 
+StatusIconPals:
+INCLUDE "gfx/battle/status.pal"
+
 LoadBattleCategoryAndTypePals:
 	ld a, [wPlayerMoveStruct + MOVE_CATEGORY]
 	ld b, a
@@ -132,25 +140,24 @@ LoadCategoryAndTypePals:
 	ld bc, 2
 	jmp FarCopyColorWRAM
 
+CategoryIconPals:
+	table_width PAL_COLOR_SIZE * 2, CategoryIconPals
+INCLUDE "gfx/battle/categories.pal"
+	assert_table_length NUM_CATEGORIES
+
+TypeIconPals:
+	table_width PAL_COLOR_SIZE, TypeIconPals
+INCLUDE "gfx/battle/types.pal"
+	assert_table_length NUM_TYPES + 1
+
 LoadKeyItemIconPalette:
 	ld a, [wCurKeyItem]
-	dec a
-	ld bc, KeyItemIconPalettes
-	jr LoadIconPalette
-
-LoadKeyItemIconPaletteForOverworld:
-	ld a, [wCurKeyItem]
-	ld bc, KeyItemIconPalettes
-	jr LoadIconPalette
-
-LoadApricornIconPalette:
-	ld a, [wCurFruit]
-	dec a
-	ld bc, ApricornIconPalettes
+	ld bc, KeyItemIconPalettes - PAL_COLOR_SIZE * 2
 	jr LoadIconPalette
 
 LoadItemIconPalette:
-	ld a, [wCurSpecies]
+	ld a, [wCurItem]
+LoadItemIconPaletteFromA:
 	ld bc, ItemIconPalettes
 LoadIconPalette:
 	ld l, a
@@ -158,10 +165,11 @@ LoadIconPalette:
 	add hl, hl
 	add hl, hl
 	add hl, bc
+LoadIconPaletteFromHL:
 	ld de, wBGPals1 palette 7 + 2
 	ld bc, 4
 	call FarCopyColorWRAM
-	ld hl, BlackPalette
+	ld hl, BlackColor
 	ld bc, 2
 	jmp FarCopyColorWRAM
 
@@ -178,9 +186,36 @@ endr
 	ld de, wBGPals1 palette 7 + 2
 	ld bc, 4
 	call FarCopyColorWRAM
-	ld hl, BlackPalette
+	ld hl, BlackColor
 	ld bc, 2
 	jmp FarCopyColorWRAM
+
+ItemIconPalettes:
+CaughtBallPals:
+ParkBallIconPalette:
+	table_width PAL_COLOR_SIZE * 2, ItemIconPalettes
+INCLUDE "gfx/items/items.pal"
+	assert_table_length NUM_ITEMS + 1
+
+KeyItemIconPalettes:
+	table_width PAL_COLOR_SIZE * 2, KeyItemIconPalettes
+INCLUDE "gfx/items/key_items.pal"
+	assert_table_length NUM_KEY_ITEMS
+
+TMHMTypeIconPals:
+	table_width PAL_COLOR_SIZE * 2, TMHMTypeIconPals
+INCLUDE "gfx/items/tm_hm_types.pal"
+	assert_table_length NUM_TYPES
+
+ApricornIconPalettes:
+	table_width PAL_COLOR_SIZE * 2, ApricornIconPalettes
+INCLUDE "gfx/items/apricorns.pal"
+	assert_table_length NUM_APRICORNS
+
+WingIconPalettes:
+	table_width PAL_COLOR_SIZE * 2, WingIconPalettes
+INCLUDE "gfx/items/wings.pal"
+	assert_table_length NUM_WINGS
 
 LoadStatsScreenPals:
 	ldh a, [rSVBK]
@@ -218,9 +253,25 @@ LoadStatsScreenPals:
 	ld a, $1
 	ret
 
-LoadHLPaletteIntoDE:
+StatsScreenPagePals:
+INCLUDE "gfx/stats/stats.pal"
+
+LoadOneColor:
+	ld c, 2
+LoadColorBytes:
+	ld a, [hli]
+	ld [de], a
+	inc de
+	dec c
+	jr nz, LoadColorBytes
+	ret
+
+LoadOnePalette:
+; Loads a single palette from hl to de in GBC Video WRAMX
 	ld c, 1 palettes
-LoadCPaletteBytesFromHLIntoDE:
+	; fallthrough
+LoadPalettes:
+; Load c palette bytes from hl to de in GBC Video WRAMX
 	ldh a, [rSVBK]
 	push af
 	ld a, BANK("GBC Video")
@@ -328,12 +379,49 @@ endc
 
 	jmp PopAFBCDEHL
 
-WipeAttrMap:
-	hlcoord 0, 0, wAttrMap
-	ld bc, SCREEN_WIDTH * SCREEN_HEIGHT
-	xor a
-	rst ByteFill
+ApplyWhiteTransparency:
+; Apply transparency for colors in bc towards white.
+if !DEF(MONOCHROME)
+	push hl
+	; Remove least significant bit from each pal color.
+	ld hl, palred 30 + palgreen 30 + palblue 30
+	ld a, c
+	and l
+	ld c, a
+	ld a, b
+	and h
+	ld b, a
+	; Halve all palette colors
+	srl b
+	rr c
+	; Add 16 to each palette color.
+	ld hl, palred 16 + palgreen 16 + palblue 16
+	add hl, bc
+	ld b, h
+	ld c, l
+	pop hl
 	ret
+else
+	assert HIGH(PAL_MONOCHROME_WHITE) != HIGH(PAL_MONOCHROME_LIGHT) && \
+		HIGH(PAL_MONOCHROME_WHITE) != HIGH(PAL_MONOCHROME_DARK) && \
+		HIGH(PAL_MONOCHROME_WHITE) != HIGH(PAL_MONOCHROME_BLACK) && \
+		HIGH(PAL_MONOCHROME_LIGHT) != HIGH(PAL_MONOCHROME_DARK) && \
+		HIGH(PAL_MONOCHROME_LIGHT) != HIGH(PAL_MONOCHROME_BLACK) && \
+		HIGH(PAL_MONOCHROME_DARK) != HIGH(PAL_MONOCHROME_BLACK)
+	ld a, b
+	cp HIGH(PAL_MONOCHROME_BLACK)
+	jr z, .dark
+	cp HIGH(PAL_MONOCHROME_DARK)
+	jr z, .light
+	ld bc, PAL_MONOCHROME_WHITE
+	ret
+.light
+	ld bc, PAL_MONOCHROME_LIGHT
+	ret
+.dark
+	ld bc, PAL_MONOCHROME_DARK
+	ret
+endc
 
 ApplyPals:
 	ld hl, wBGPals1
@@ -342,7 +430,7 @@ ApplyPals:
 	jmp FarCopyColorWRAM
 
 LoadMailPalettes:
-	ld l, e
+	ld l, a
 	ld h, 0
 	add hl, hl
 	add hl, hl
@@ -351,16 +439,21 @@ LoadMailPalettes:
 	add hl, de
 	ld de, wBGPals1
 	ld bc, 1 palettes
-	call FarCopyColorWRAM
+	jmp FarCopyColorWRAM
+
+MailPals:
+INCLUDE "gfx/mail/mail.pal"
+
+LoadAndApplyMailPalettes:
+	call LoadMailPalettes
 	call ApplyPals
 	call WipeAttrMap
 	; fallthrough
-
 ApplyAttrMap:
 	ldh a, [rLCDC]
-	bit 7, a
+	bit rLCDC_ENABLE, a
 	jr nz, ApplyAttrMapVBank0
-	hlcoord 0, 0, wAttrMap
+	hlcoord 0, 0, wAttrmap
 	debgcoord 0, 0
 	ld b, SCREEN_HEIGHT
 	ld a, 1
@@ -406,7 +499,7 @@ ApplyPartyMenuHPPals:
 	ld a, [de]
 	inc a
 	ld e, a
-	hlcoord 11, 2, wAttrMap
+	hlcoord 11, 2, wAttrmap
 	ld bc, 2 * SCREEN_WIDTH
 	ld a, [wHPPalIndex]
 .loop
@@ -420,28 +513,88 @@ ApplyPartyMenuHPPals:
 	ld a, e
 	jmp FillBoxWithByte
 
-SetPartyMenuPal:
-; Writes mon icon color a to palette in de
-	ld hl, PartyMenuOBPals
-	ld bc, 1 palettes
-	push bc
-	rst AddNTimes
-	pop bc
-	ld bc, 1 palettes
-	jmp FarCopyColorWRAM
-
 InitPartyMenuOBPals:
 	ld hl, PartyMenuOBPals
 	ld de, wOBPals1
 	ld bc, 8 palettes
-	jmp FarCopyColorWRAM
+	call FarCopyColorWRAM
+
+	ld a, [wPartyCount]
+	ld hl, wPartyMon1Species
+	ld de, wOBPals1 palette 2 + 2
+.loop
+	push af
+	push hl
+	push de
+	; a = species
+	ld a, [hl]
+	; bc = personality
+	push hl
+	ld bc, MON_PERSONALITY - MON_SPECIES
+	add hl, bc
+	ld b, h
+	ld c, l
+	; a = EGG if is egg
+	inc hl
+	bit MON_IS_EGG_F, [hl]
+	jr z, .not_egg
+	ld a, EGG
+.not_egg
+	; hl = palette
+	call GetMonNormalOrShinyPalettePointer
+	; load palette
+	ld bc, 4
+	call FarCopyColorWRAM
+	; c = species
+	pop hl
+	ld c, [hl]
+	; b = form
+	ld de, MON_FORM - MON_SPECIES
+	add hl, de
+	ld b, [hl]
+	; hl = DVs
+	ld de, MON_DVS - MON_FORM
+	add hl, de
+	; vary colors by DVs
+	call CopyDVsToColorVaryDVs ; clobbers hl but not bc
+	pop de
+	ld h, d
+	ld l, e
+	call VaryColorsByDVs
+	; skip this black and next white to next colors
+rept 4
+	inc hl
+endr
+	ld d, h
+	ld e, l
+	pop hl
+	ld bc, PARTYMON_STRUCT_LENGTH
+	add hl, bc
+	pop af
+	dec a
+	jr nz, .loop
+	ret
+
+PartyMenuOBPals:
+INCLUDE "gfx/stats/party_menu_ob.pal"
 
 InitPokegearPalettes:
 ; This is needed because the regular palette is dark at night.
 	ld hl, PokegearOBPals
 	ld de, wOBPals1
-	ld bc, 2 palettes
+	ld bc, 3 palettes
+	call FarCopyColorWRAM
+
+	ld hl, PokegearFlyPalette
+	ld de, wOBPals1 palette 3
+	ld bc, 1 palettes
 	jmp FarCopyColorWRAM
+
+PokegearOBPals:
+INCLUDE "gfx/icons/icons.pal"
+
+PokegearFlyPalette:
+INCLUDE "gfx/pokegear/fly.pal"
 
 GetBattlemonBackpicPalettePointer:
 	push de
@@ -472,15 +625,15 @@ GetPlayerOrMonPalettePointer:
 	cp BATTLETYPE_TUTORIAL
 	ret z
 
-	ld hl, ChrisPalette
-	ld a, [wPlayerSpriteSetupFlags]
-	bit 2, a ; transformed to male
-	ret nz
 	ld a, [wPlayerGender]
-	and a
+	ld hl, ChrisPalette
+	and a ; PLAYER_MALE
 	ret z
-
 	ld hl, KrisPalette
+	dec a ; PLAYER_FEMALE
+	ret z
+	; PLAYER_ENBY
+	ld hl, CrysPalette
 	ret
 
 GetFrontpicPalettePointer:
@@ -493,7 +646,7 @@ GetTrainerPalettePointer:
 	ld h, 0
 	add hl, hl
 	add hl, hl
-	ld bc, TrainerPalettes
+	ld bc, TrainerPalettes - PAL_COLOR_SIZE * 2
 	add hl, bc
 	ret
 
@@ -518,16 +671,40 @@ GetMonPalettePointer:
 	ld a, [hl]
 	and SPECIESFORM_MASK
 	ld b, a
+	pop af
+_GetMonPalettePointer:
 	; bc = index
+	push af
 	call GetSpeciesAndFormIndex
 	ld h, b
 	ld l, c
+	inc hl
 	add hl, hl
 	add hl, hl
 	add hl, hl
 	ld bc, PokemonPalettes
 	add hl, bc
 	pop af
+	ret
+
+GetMonPalInBCDE:
+; Returns (non-shiny) mon palette for species+form bc in bcde.
+	call _GetMonPalettePointer
+	and SHINY_MASK
+	jr z, .shiny_done
+	; Shiny is the pal right below.
+	inc hl
+	inc hl
+	inc hl
+	inc hl
+.shiny_done
+	ld a, [hli]
+	ld c, a
+	ld a, [hli]
+	ld b, a
+	ld a, [hli]
+	ld e, a
+	ld d, [hl]
 	ret
 
 GetMonNormalOrShinyPalettePointer:
@@ -546,14 +723,19 @@ endr
 LoadPokemonPalette:
 	; a = species
 	ld a, [wCurPartySpecies]
+
+	; This allows us to use the same function as with
+	; GetMonNormalOrShinyPalettePointer.
+	ld bc, wCurForm - 1
+
 	; hl = palette
 	call GetMonPalettePointer
-	; load palette in BG 7
-	ld de, wBGPals1 palette 7 + 2
+	; load palette into de (set by caller)
 	ld bc, 4
 	jmp FarCopyColorWRAM
 
 LoadPartyMonPalette:
+	push de
 	; bc = personality
 	ld hl, wPartyMon1Personality
 	ld a, [wCurPartyMon]
@@ -564,21 +746,39 @@ LoadPartyMonPalette:
 	ld a, [wCurPartySpecies]
 	; hl = palette
 	call GetMonNormalOrShinyPalettePointer
-	; load palette in BG 7
-	ld de, wBGPals1 palette PAL_BG_TEXT + 2
+	; load palette in de (set by caller)
 	ld bc, 4
 	call FarCopyColorWRAM
 	; hl = DVs
 	ld hl, wPartyMon1DVs
 	ld a, [wCurPartyMon]
 	call GetPartyLocation
-	; b = species
+	; fallthrough
+_FinishLoadNicknamedMonPalette:
+	; c = species, b = extspecies+form
 	ld a, [wCurPartySpecies]
+	ld c, a
+	ld a, [wCurForm]
 	ld b, a
 	; vary colors by DVs
 	call CopyDVsToColorVaryDVs
-	ld hl, wBGPals1 palette PAL_BG_TEXT + 2
+	pop hl
 	jmp VaryColorsByDVs
+
+LoadTempMonPalette:
+	push de
+	; bc = personality
+	ld bc, wTempMonPersonality
+	; a = species
+	ld a, [wCurPartySpecies]
+	; hl = palette
+	call GetMonNormalOrShinyPalettePointer
+	; load palette in de (set by caller)
+	ld bc, 4
+	call FarCopyColorWRAM
+	; hl = DVs
+	ld hl, wTempMonDVs
+	jr _FinishLoadNicknamedMonPalette
 
 LoadTrainerPalette:
 	; a = class
@@ -689,6 +889,7 @@ LoadMapPals:
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
+
 	; Further refine by time of day
 	ld a, [wTimeOfDayPal]
 	and 3
@@ -700,13 +901,15 @@ LoadMapPals:
 	add hl, de
 	ld e, l
 	ld d, h
+
 	; Switch to palettes WRAM bank
 	ldh a, [rSVBK]
 	push af
 	ld a, $5
 	ldh [rSVBK], a
+
 	ld hl, wBGPals1
-	ld b, 8
+	ld b, 7
 .outer_loop
 	ld a, [de] ; lookup index for TilesetBGPalette
 	push de
@@ -732,10 +935,12 @@ LoadMapPals:
 	inc de
 	dec b
 	jr nz, .outer_loop
+
 	pop af
 	ldh [rSVBK], a
 
 .got_pals
+	; copy OB palettes
 	ld a, [wTimeOfDayPal]
 	and 3
 	ld bc, 8 palettes
@@ -748,11 +953,11 @@ LoadMapPals:
 	farcall LoadSpecialMapOBPalette
 
 	ld a, [wMapTileset]
-	cp TILESET_FOREST ; for Yellow Forest
+	cp TILESET_SNOWTOP_MOUNTAIN
 	ret z
 
 	; overcast maps have their own roof color table
-	call GetOvercastIndex
+	farcall GetOvercastIndex
 	and a
 	jr z, .not_overcast
 	dec a
@@ -789,13 +994,14 @@ LoadMapPals:
 .nite
 	add hl, de
 .morn_day
-	ld de, wBGPals1 palette 6 + 2
+	ld de, wBGPals1 palette PAL_BG_ROOF + 2
 	ld bc, 4
 	jmp FarCopyColorWRAM
 
 INCLUDE "data/maps/environment_colors.asm"
 
 TilesetBGPalette::
+	table_width 1 palettes, TilesetBGPalette
 if DEF(HGSS)
 INCLUDE "gfx/tilesets/palettes/hgss/bg.pal"
 elif DEF(MONOCHROME)
@@ -803,8 +1009,10 @@ INCLUDE "gfx/tilesets/palettes/monochrome/bg.pal"
 else
 INCLUDE "gfx/tilesets/bg_tiles.pal"
 endc
+	assert_table_length 8 * 5 + 4 ; morn, day, nite, eve, indoor, water
 
 MapObjectPals:
+	table_width 1 palettes, MapObjectPals
 if DEF(HGSS)
 INCLUDE "gfx/tilesets/palettes/hgss/ob.pal"
 elif DEF(MONOCHROME)
@@ -812,6 +1020,7 @@ INCLUDE "gfx/tilesets/palettes/monochrome/ob.pal"
 else
 INCLUDE "gfx/overworld/npc_sprites.pal"
 endc
+	assert_table_length 8 * 4 ; morn, day, nite, eve
 
 RoofPals:
 	table_width PAL_COLOR_SIZE * 2 * 3, RoofPals

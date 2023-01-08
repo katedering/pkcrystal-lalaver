@@ -19,6 +19,7 @@ Route34_MapScriptHeader:
 	def_bg_events
 	bg_event 12,  6, BGEVENT_JUMPTEXT, Route34SignText
 	bg_event 13, 33, BGEVENT_JUMPTEXT, Route34TrainerTipsText
+	bg_event 18, 23, BGEVENT_JUMPTEXT, Route34AdvancedTipsSignText
 	bg_event 10, 13, BGEVENT_JUMPTEXT, DayCareSignText
 	bg_event  8, 32, BGEVENT_ITEM + RARE_CANDY, EVENT_ROUTE_34_HIDDEN_RARE_CANDY
 	bg_event 17, 19, BGEVENT_ITEM + SUPER_POTION, EVENT_ROUTE_34_HIDDEN_SUPER_POTION
@@ -36,7 +37,7 @@ Route34_MapScriptHeader:
 	object_event 17, 19, SPRITE_DAYCARE_MON_2, SPRITEMOVEDATA_POKEMON, 0, 0, -1, -1, 0, OBJECTTYPE_SCRIPT, 0, DayCareMon2Script, EVENT_DAYCARE_MON_2
 	object_event 11, 48, SPRITE_ACE_TRAINER_F, SPRITEMOVEDATA_STANDING_LEFT, 0, 0, -1, -1, 0, OBJECTTYPE_TRAINER, 5, TrainerCooltrainerfIrene, -1
 	object_event  3, 48, SPRITE_ACE_TRAINER_F, SPRITEMOVEDATA_STANDING_RIGHT, 0, 0, -1, -1, 0, OBJECTTYPE_TRAINER, 3, TrainerCooltrainerfJenn, -1
-	object_event  6, 51, SPRITE_ACE_TRAINER_F, SPRITEMOVEDATA_STANDING_UP, 0, 0, -1, -1, 0, OBJECTTYPE_TRAINER, 2, TrainerCooltrainerfKimi, -1
+	object_event  6, 51, SPRITE_ACE_TRAINER_F, SPRITEMOVEDATA_STANDING_UP, 0, 0, -1, -1, 0, OBJECTTYPE_TRAINER, 2, TrainerCooltrainerfKate, -1
 	itemball_event  7, 30, NUGGET, 1, EVENT_ROUTE_34_NUGGET
 
 	object_const_def
@@ -46,31 +47,31 @@ Route34_MapScriptHeader:
 
 Route34EggCheckCallback:
 	checkflag ENGINE_DAY_CARE_MAN_HAS_EGG
-	iftrue .PutDayCareManOutside
+	iftruefwd .PutDayCareManOutside
 	checkscene
-	iftrue .PutDayCareManOutside
+	iftruefwd .PutDayCareManOutside
 	clearevent EVENT_DAYCARE_MAN_IN_DAYCARE
 	setevent EVENT_DAYCARE_MAN_ON_ROUTE_34
-	sjump .CheckMon1
+	sjumpfwd .CheckMon1
 
 .PutDayCareManOutside:
 	setevent EVENT_DAYCARE_MAN_IN_DAYCARE
 	clearevent EVENT_DAYCARE_MAN_ON_ROUTE_34
-	sjump .CheckMon1
+	; fallthrough
 
 .CheckMon1:
 	checkflag ENGINE_DAY_CARE_MAN_HAS_MON
-	iffalse .HideMon1
+	iffalsefwd .HideMon1
 	clearevent EVENT_DAYCARE_MON_1
-	sjump .CheckMon2
+	sjumpfwd .CheckMon2
 
 .HideMon1:
 	setevent EVENT_DAYCARE_MON_1
-	sjump .CheckMon2
+	; fallthrough
 
 .CheckMon2:
 	checkflag ENGINE_DAY_CARE_LADY_HAS_MON
-	iffalse .HideMon2
+	iffalsefwd .HideMon2
 	clearevent EVENT_DAYCARE_MON_2
 	endcallback
 
@@ -80,7 +81,7 @@ Route34EggCheckCallback:
 
 Route34LyraTrigger1:
 	applyonemovement PLAYER, step_right
-	sjump Route34LyraTrigger2
+	sjumpfwd Route34LyraTrigger2
 
 Route34LyraTrigger3:
 	applyonemovement PLAYER, step_left
@@ -102,24 +103,16 @@ Route34LyraTrigger2:
 	applyonemovement PLAYER, step_up
 	pause 10
 	turnobject ROUTE34_LYRA, RIGHT
-	opentext
-	checkflag ENGINE_PLAYER_IS_FEMALE
-	iftrue .IntroduceFemale
-	writetext Route34LyraIntroductionText1
-	sjump .Continue
-.IntroduceFemale:
-	writetext Route34LyraIntroductionText2
-.Continue:
-	waitbutton
-	closetext
+	readvar VAR_PLAYERGENDER
+	scalltable Route34LyraIntroductionTable
 	turnobject ROUTE34_LYRA, DOWN
 	pause 10
 	showtext Route34LyraChallengeText
 	setevent EVENT_LYRA_ROUTE_34
 	checkevent EVENT_GOT_TOTODILE_FROM_ELM
-	iftrue .Totodile
+	iftruefwd .Totodile
 	checkevent EVENT_GOT_CHIKORITA_FROM_ELM
-	iftrue .Chikorita
+	iftruefwd .Chikorita
 	winlosstext Route34LyraWinText, Route34LyraLossText
 	setlasttalked ROUTE34_LYRA
 	loadtrainer LYRA1, LYRA1_4
@@ -128,7 +121,7 @@ Route34LyraTrigger2:
 	reloadmapafterbattle
 	special DeleteSavedMusic
 	playmusic MUSIC_LYRA_DEPARTURE_HGSS
-	sjump .AfterBattle
+	sjumpfwd .AfterBattle
 
 .Totodile:
 	winlosstext Route34LyraWinText, Route34LyraLossText
@@ -138,7 +131,7 @@ Route34LyraTrigger2:
 	dontrestartmapmusic
 	reloadmapafterbattle
 	playmusic MUSIC_LYRA_DEPARTURE_HGSS
-	sjump .AfterBattle
+	sjumpfwd .AfterBattle
 
 .Chikorita:
 	winlosstext Route34LyraWinText, Route34LyraLossText
@@ -173,11 +166,11 @@ DayCareManScript_Outside:
 	special Special_DayCareManOutside
 	waitbutton
 	closetext
-	ifequal $1, .end_fail
+	ifequalfwd $1, .end_fail
 	clearflag ENGINE_DAY_CARE_MAN_HAS_EGG
 	setevent EVENT_BRED_AN_EGG
 	readvar VAR_FACING
-	ifequal LEFT, .walk_around_player
+	ifequalfwd LEFT, .walk_around_player
 	applyonemovement ROUTE34_GRAMPS, slow_step_right
 	playsound SFX_ENTER_DOOR
 	disappear ROUTE34_GRAMPS
@@ -207,25 +200,25 @@ TrainerCamperTodd1:
 	loadvar VAR_CALLERID, PHONE_CAMPER_TODD
 	opentext
 	checkflag ENGINE_TODD_READY_FOR_REMATCH
-	iftrue .Rematch
+	iftruefwd .Rematch
 	checkflag ENGINE_GOLDENROD_DEPT_STORE_SALE_IS_ON
 	iftrue_jumpopenedtext CamperToddSaleText
 	checkcellnum PHONE_CAMPER_TODD
-	iftrue .NumberAccepted
+	iftruefwd .NumberAccepted
 	checkevent EVENT_TODD_ASKED_FOR_PHONE_NUMBER
-	iftrue .AskAgain
+	iftruefwd .AskAgain
 	writetext CamperTodd1AfterText
 	promptbutton
 	setevent EVENT_TODD_ASKED_FOR_PHONE_NUMBER
 	callstd asknumber1m
-	sjump .FinishAsk
+	sjumpfwd .FinishAsk
 
 .AskAgain:
 	callstd asknumber2m
 .FinishAsk:
 	askforphonenumber PHONE_CAMPER_TODD
-	ifequal $1, .PhoneFull
-	ifequal $2, .NumberDeclined
+	ifequalfwd $1, .PhoneFull
+	ifequalfwd $2, .NumberDeclined
 	gettrainername CAMPER, TODD1, $0
 	callstd registerednumberm
 	jumpstd numberacceptedm
@@ -234,23 +227,23 @@ TrainerCamperTodd1:
 	callstd rematchm
 	winlosstext CamperTodd1BeatenText, 0
 	readmem wToddFightCount
-	ifequal 4, .Fight4
-	ifequal 3, .Fight3
-	ifequal 2, .Fight2
-	ifequal 1, .Fight1
-	ifequal 0, .LoadFight0
+	ifequalfwd 4, .Fight4
+	ifequalfwd 3, .Fight3
+	ifequalfwd 2, .Fight2
+	ifequalfwd 1, .Fight1
+	ifequalfwd 0, .LoadFight0
 .Fight4:
 	checkevent EVENT_RESTORED_POWER_TO_KANTO
-	iftrue .LoadFight4
+	iftruefwd .LoadFight4
 .Fight3:
 	checkevent EVENT_BEAT_ELITE_FOUR
-	iftrue .LoadFight3
+	iftruefwd .LoadFight3
 .Fight2:
 	checkflag ENGINE_FLYPOINT_BLACKTHORN
-	iftrue .LoadFight2
+	iftruefwd .LoadFight2
 .Fight1:
 	checkflag ENGINE_FLYPOINT_CIANWOOD
-	iftrue .LoadFight1
+	iftruefwd .LoadFight1
 .LoadFight0:
 	loadtrainer CAMPER, TODD1
 	startbattle
@@ -306,25 +299,25 @@ TrainerPicnickerGina1:
 	loadvar VAR_CALLERID, PHONE_PICNICKER_GINA
 	opentext
 	checkflag ENGINE_GINA_READY_FOR_REMATCH
-	iftrue .Rematch
+	iftruefwd .Rematch
 	checkflag ENGINE_GINA_HAS_LEAF_STONE
-	iftrue .LeafStone
+	iftruefwd .LeafStone
 	checkcellnum PHONE_PICNICKER_GINA
-	iftrue .NumberAccepted
+	iftruefwd .NumberAccepted
 	checkevent EVENT_GINA_ASKED_FOR_PHONE_NUMBER
-	iftrue .AskAgain
+	iftruefwd .AskAgain
 	writetext PicnickerGina1AfterText
 	promptbutton
 	setevent EVENT_GINA_ASKED_FOR_PHONE_NUMBER
 	callstd asknumber1f
-	sjump .FinishAsk
+	sjumpfwd .FinishAsk
 
 .AskAgain:
 	callstd asknumber2f
 .FinishAsk:
 	askforphonenumber PHONE_PICNICKER_GINA
-	ifequal $1, .PhoneFull
-	ifequal $2, .NumberDeclined
+	ifequalfwd $1, .PhoneFull
+	ifequalfwd $2, .NumberDeclined
 	gettrainername PICNICKER, GINA1, $0
 	callstd registerednumberf
 	jumpstd numberacceptedf
@@ -333,23 +326,23 @@ TrainerPicnickerGina1:
 	callstd rematchf
 	winlosstext PicnickerGina1BeatenText, 0
 	readmem wGinaFightCount
-	ifequal 4, .Fight4
-	ifequal 3, .Fight3
-	ifequal 2, .Fight2
-	ifequal 1, .Fight1
-	ifequal 0, .LoadFight0
+	ifequalfwd 4, .Fight4
+	ifequalfwd 3, .Fight3
+	ifequalfwd 2, .Fight2
+	ifequalfwd 1, .Fight1
+	ifequalfwd 0, .LoadFight0
 .Fight4:
 	checkevent EVENT_RESTORED_POWER_TO_KANTO
-	iftrue .LoadFight4
+	iftruefwd .LoadFight4
 .Fight3:
 	checkevent EVENT_BEAT_ELITE_FOUR
-	iftrue .LoadFight3
+	iftruefwd .LoadFight3
 .Fight2:
 	checkevent EVENT_CLEARED_RADIO_TOWER
-	iftrue .LoadFight2
+	iftruefwd .LoadFight2
 .Fight1:
 	checkflag ENGINE_FLYPOINT_MAHOGANY
-	iftrue .LoadFight1
+	iftruefwd .LoadFight1
 .LoadFight0:
 	loadtrainer PICNICKER, GINA1
 	startbattle
@@ -392,7 +385,7 @@ TrainerPicnickerGina1:
 .LeafStone:
 	callstd giftf
 	verbosegiveitem LEAF_STONE
-	iffalse .BagFull
+	iffalsefwd .BagFull
 	clearflag ENGINE_GINA_HAS_LEAF_STONE
 	setevent EVENT_GINA_GAVE_LEAF_STONE
 	jumpstd numberacceptedf
@@ -447,7 +440,7 @@ Route34RichBoyIrvingScript:
 	iftrue_jumptextfaceplayer .AfterText2
 	faceplayer
 	checkevent EVENT_BEAT_RICH_BOY_IRVING
-	iftrue .Beaten
+	iftruefwd .Beaten
 	checkevent EVENT_BEAT_CAMPER_TODD
 	iffalse_jumptext .IntroText
 	checkevent EVENT_BEAT_PICNICKER_GINA
@@ -503,6 +496,12 @@ Route34RichBoyIrvingScript:
 
 	para "beat everyone else"
 	line "here first!"
+
+	para "Even the Officer,"
+	line "although she may"
+
+	para "not battle you"
+	line "until night."
 	done
 
 .QuestionText:
@@ -560,12 +559,12 @@ TrainerCooltrainerfIrene:
 
 .Script:
 	endifjustbattled
-	checkevent EVENT_GOT_POWER_HERB_FROM_KIMI
+	checkevent EVENT_GOT_POWER_HERB_FROM_KATE
 	iftrue_jumptext CooltrainerfIreneAfterText2
 	jumpthistext
 
 	text "Irene: My sister"
-	line "Kimi will get you"
+	line "Kate will get you"
 	cont "for this!"
 	done
 
@@ -574,32 +573,32 @@ TrainerCooltrainerfJenn:
 
 .Script:
 	endifjustbattled
-	checkevent EVENT_GOT_POWER_HERB_FROM_KIMI
+	checkevent EVENT_GOT_POWER_HERB_FROM_KATE
 	iftrue_jumptext CooltrainerfJennAfterText2
 	jumpthistext
 
 	text "Jenn: Don't get"
 	line "cocky! My sister"
-	cont "Kimi is tough!"
+	cont "Kate is tough!"
 	done
 
-TrainerCooltrainerfKimi:
-	trainer COOLTRAINERF, KIMI, EVENT_BEAT_COOLTRAINERF_KIMI, CooltrainerfKimiSeenText, CooltrainerfKimiBeatenText, 0, .Script
+TrainerCooltrainerfKate:
+	trainer COOLTRAINERF, KATE, EVENT_BEAT_COOLTRAINERF_KATE, CooltrainerfKateSeenText, CooltrainerfKateBeatenText, 0, .Script
 
 .Script:
 	endifjustbattled
-	checkevent EVENT_GOT_POWER_HERB_FROM_KIMI
-	iftrue_jumptext CooltrainerfKimiAfterText
+	checkevent EVENT_GOT_POWER_HERB_FROM_KATE
+	iftrue_jumptext CooltrainerfKateAfterText
 	opentext
-	writetext CooltrainerfKimiOfferPowerHerbText
+	writetext CooltrainerfKateOfferPowerHerbText
 	promptbutton
 	verbosegiveitem POWER_HERB
 	iffalse_endtext
-	setevent EVENT_GOT_POWER_HERB_FROM_KIMI
+	setevent EVENT_GOT_POWER_HERB_FROM_KATE
 	jumpthisopenedtext
 
-CooltrainerfKimiAfterText:
-	text "Kimi: I'm sorry we"
+CooltrainerfKateAfterText:
+	text "Kate: I'm sorry we"
 	line "jumped you."
 
 	para "We never expected"
@@ -646,7 +645,14 @@ Route34LyraGreetingText:
 	text "Lyra: Hi, <PLAYER>!"
 	done
 
-Route34LyraIntroductionText1:
+Route34LyraIntroductionTable:
+	dw .Male
+	dw .Female
+	dw .Enby
+
+.Male:
+	jumpthistext
+
 	text "This is <PLAYER>."
 	line "He's a trainer."
 
@@ -657,12 +663,28 @@ Route34LyraIntroductionText1:
 	line "as you, of course!"
 	done
 
-Route34LyraIntroductionText2:
+.Female:
+	jumpthistext
+
 	text "This is <PLAYER>."
 	line "She's a trainer."
 
 	para "She's quite good at"
 	line "raising #mon."
+
+	para "Well, not as good"
+	line "as you, of course!"
+	done
+
+.Enby:
+	jumpthistext
+
+	text "This is <PLAYER>."
+	line "They're a trainer."
+
+	para "They're quite good"
+	line "at raising #-"
+	cont "mon."
 
 	para "Well, not as good"
 	line "as you, of course!"
@@ -822,19 +844,19 @@ CooltrainerfJennAfterText2:
 	cont "stronger."
 	done
 
-CooltrainerfKimiSeenText:
-	text "Kimi: You sure"
+CooltrainerfKateSeenText:
+	text "Kate: You sure"
 	line "were mean to my"
 	cont "little sisters!"
 	done
 
-CooltrainerfKimiBeatenText:
-	text "Kimi: No! I can't"
+CooltrainerfKateBeatenText:
+	text "Kate: No! I can't"
 	line "believe I lost."
 	done
 
-CooltrainerfKimiOfferPowerHerbText:
-	text "Kimi: You're too"
+CooltrainerfKateOfferPowerHerbText:
+	text "Kate: You're too"
 	line "strong. I didn't"
 	cont "stand a chance."
 
@@ -862,6 +884,23 @@ Route34TrainerTipsText:
 	para "Make a note of"
 	line "which trees bear"
 	cont "which Berries."
+	done
+
+Route34AdvancedTipsSignText:
+	text "Advanced Tips!"
+
+	para "Some #mon have"
+	line "inherent potential"
+
+	para "to be stronger"
+	line "than others!"
+
+	para "But all #mon"
+	line "can put in effort"
+	cont "during battle, or"
+
+	para "take vitamins,"
+	line "to gain strength!"
 	done
 
 DayCareSignText:

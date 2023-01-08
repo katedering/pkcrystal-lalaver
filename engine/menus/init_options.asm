@@ -1,4 +1,4 @@
-NUM_INITIAL_OPTIONS EQU 8
+DEF NUM_INITIAL_OPTIONS EQU 9
 
 SetInitialOptions:
 	ld a, $10
@@ -11,27 +11,35 @@ SetInitialOptions:
 	call DelayFrames
 
 	call ClearBGPalettes
-	call LoadFontsExtra
+	call LoadFrame
 
 	hlcoord 0, 0
 	ld bc, SCREEN_HEIGHT * SCREEN_WIDTH
 	xor a
 	rst ByteFill
 
-	hlcoord 0, 0, wAttrMap
+	hlcoord 0, 0, wAttrmap
 	ld bc, SCREEN_HEIGHT * SCREEN_WIDTH
 	xor a
 	rst ByteFill
 
-	ld hl, .BGPalette
+	hlcoord 1, 17, wAttrmap
+	ld a, $01
+	ld c, 12
+.attr_loop
+	ld [hli], a
+	dec c
+	jr nz, .attr_loop
+
+	ld hl, .BGPalettes
 	ld de, wBGPals1
-	ld bc, 1 palettes
+	ld bc, 2 palettes
 	call FarCopyColorWRAM
 
-	ld de, .BGTiles
-	ld hl, vTiles2 tile $00
-	lb bc, BANK(.BGTiles), 3
-	call Get2bpp
+	ld hl, .BGTiles
+	ld de, vTiles2 tile $00
+	lb bc, BANK(.BGTiles), 15
+	call DecompressRequest2bpp
 
 	farcall ApplyPals
 
@@ -44,10 +52,16 @@ SetInitialOptions:
 	ld hl, hInMenu
 	ld a, [hl]
 	push af
-	ld [hl], $1
+	xor a
+	ld [wJumptableIndex], a
+	inc a
+	ld [hl], a
 
 ;	call ClearBGPalettes
 
+.rerender
+	xor a
+	ldh [hBGMapMode], a
 	hlcoord 0, 0
 	ld a, " "
 	ld bc, SCREEN_WIDTH * SCREEN_HEIGHT
@@ -70,10 +84,21 @@ SetInitialOptions:
 	ld de, .InitialOptionsString
 	rst PlaceString
 
-;	ld a, CGB_DIPLOMA
+	hlcoord 1, 17
+	ld a, $03
+	ld d, 12
+.select_start_loop
+	ld [hli], a
+	inc a
+	dec d
+	jr nz, .select_start_loop
+
+;	ld a, CGB_PLAIN
 ;	call GetCGBLayout
 ;	call SetPalettes
 
+	ld a, [wJumptableIndex]
+	push af
 	xor a
 	ld [wJumptableIndex], a
 	ldh [hJoyPressed], a
@@ -88,24 +113,27 @@ SetInitialOptions:
 	inc [hl]
 	dec c
 	jr nz, .print_text_loop
-
-	xor a
+	pop af
 	ld [wJumptableIndex], a
-	inc a
+
+	ld a, $1
 	ldh [hBGMapMode], a
 	call ApplyTilemapInVBlank
 
 .joypad_loop
 	call JoyTextDelay
 	ldh a, [hJoyPressed]
+	bit SELECT_F, a
+	jr nz, .ShowDescription
 	and START | B_BUTTON
 	jr nz, .ExitOptions
 	call InitialOptionsControl
-	jr c, .dpad
+	jr c, .DPad
 	call GetInitialOptionPointer
 	jr c, .ExitOptions
+	; fallthrough
 
-.dpad
+.DPad:
 	call InitialOptions_UpdateCursorPosition
 	ld c, 3
 	call DelayFrames
@@ -121,42 +149,49 @@ SetInitialOptions:
 	ldh [hInMenu], a
 	ret
 
+.ShowDescription:
+	ld hl, InitialOptionDescriptions
+	ld a, [wJumptableIndex]
+	add a
+	ld d, 0
+	ld e, a
+	add hl, de
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	call PrintText
+	jmp .rerender
+
 .InitialOptionsText:
 	text_far _InitialOptionsText
 	text_end
 
-.BGPalette:
-if !DEF(MONOCHROME)
-	RGB 31, 31, 31
-	RGB 09, 30, 31
-	RGB 01, 11, 31
-	RGB 00, 00, 00
-else
-	MONOCHROME_RGB_FOUR
-endc
+.BGPalettes:
+INCLUDE "gfx/new_game/init_bg.pal"
 
 .BGTiles:
-INCBIN "gfx/new_game/init_bg.2bpp"
+INCBIN "gfx/new_game/init_bg.2bpp.lz"
 
 .InitialOptionsString:
-	db "Natures<LNBRK>"
-	db "            :<LNBRK>"
-	db "Abilities<LNBRK>"
-	db "            :<LNBRK>"
-	db "Phys/Spcl split<LNBRK>"
-	db "            :<LNBRK>"
-	db "Exp. scaling<LNBRK>"
-	db "            :<LNBRK>"
-	db "IVs vary colors<LNBRK>"
-	db "            :<LNBRK>"
-	db "Perfect stats<LNBRK>"
-	db "            :<LNBRK>"
-	db "Traded #mon<LNBRK>"
-	db "treat you as OT<LNBRK>"
-	db "            :<LNBRK>"
-	db "Nuzlocke mode<LNBRK>"
-	db "            :<LNBRK>"
-	db "Done@"
+	text  "Natures"
+	next1 "            :"
+	next1 "Abilities"
+	next1 "            :"
+	next1 "Phys/Spcl split"
+	next1 "            :"
+	next1 "EV gain"
+	next1 "            :"
+	next1 "Exp. scaling"
+	next1 "            :"
+	next1 "IVs vary colors"
+	next1 "            :"
+	next1 "Perfect stats"
+	next1 "            :"
+	next1 "Traded <PK><MN> obey"
+	next1 "            :"
+	next1 "Nuzlocke mode"
+	next1 "            :"
+	done
 
 GetInitialOptionPointer:
 	call StandardStackJumpTable
@@ -165,12 +200,12 @@ GetInitialOptionPointer:
 	dw InitialOptions_Natures
 	dw InitialOptions_Abilities
 	dw InitialOptions_PSS
+	dw InitialOptions_EVs
 	dw InitialOptions_ExpScaling
 	dw InitialOptions_ColorVariation
 	dw InitialOptions_PerfectIVs
 	dw InitialOptions_TradedMon
 	dw InitialOptions_NuzlockeMode
-	dw InitialOptions_Done
 
 InitialOptions_Natures:
 	ld hl, wInitialOptions
@@ -244,6 +279,47 @@ InitialOptions_PSS:
 	and a
 	ret
 
+InitialOptions_EVs:
+	ld hl, wInitialOptions2
+	push bc
+	ld b, EV_OPTMASK
+	ldh a, [hJoyPressed]
+	ld c, a
+	and D_LEFT | D_RIGHT | A_BUTTON
+	jr z, .input_done
+	ld a, [hl]
+.redo
+	inc a
+	bit D_LEFT_F, c
+	jr z, .finish_change
+	dec a
+	dec a
+.finish_change
+	and b
+	cp b
+	jr z, .redo
+	ld c, a
+	ld a, [hl]
+	and b
+	xor [hl]
+	or c
+	ld [hl], a
+.input_done
+	pop bc
+	ld a, [hl]
+	ld de, AllString
+	rrca
+	jr c, .Display
+	rrca
+	ld de, ModernString
+	jr c, .Display
+	ld de, NoString
+.Display:
+	hlcoord 15, 7
+	rst PlaceString
+	and a
+	ret
+
 InitialOptions_ExpScaling:
 	ld hl, wInitialOptions
 	ldh a, [hJoyPressed]
@@ -263,7 +339,7 @@ InitialOptions_ExpScaling:
 	set SCALED_EXP, [hl]
 	ld de, YesString
 .Display:
-	hlcoord 15, 7
+	hlcoord 15, 9
 	rst PlaceString
 	and a
 	ret
@@ -287,7 +363,7 @@ InitialOptions_ColorVariation:
 	set COLOR_VARY_OPT, [hl]
 	ld de, YesString
 .Display:
-	hlcoord 15, 9
+	hlcoord 15, 11
 	rst PlaceString
 	and a
 	ret
@@ -311,7 +387,7 @@ InitialOptions_PerfectIVs:
 	set PERFECT_IVS_OPT, [hl]
 	ld de, YesString
 .Display:
-	hlcoord 15, 11
+	hlcoord 15, 13
 	rst PlaceString
 	and a
 	ret
@@ -335,7 +411,7 @@ InitialOptions_TradedMon:
 	set TRADED_AS_OT_OPT, [hl]
 	ld de, YesString
 .Display:
-	hlcoord 15, 14
+	hlcoord 15, 15
 	rst PlaceString
 	and a
 	ret
@@ -359,28 +435,19 @@ InitialOptions_NuzlockeMode:
 	set NUZLOCKE_MODE, [hl]
 	ld de, YesString
 .Display:
-	hlcoord 15, 16
+	hlcoord 15, 17
 	rst PlaceString
 	and a
-	ret
-
-InitialOptions_Done:
-	ld hl, wInitialOptions2
-	res RESET_INIT_OPTS, [hl]
-	ldh a, [hJoyPressed]
-	and A_BUTTON
-	jr nz, .Exit
-	and a
-	ret
-
-.Exit:
-	scf
 	ret
 
 NoString:
 	db "No @"
 YesString:
 	db "Yes@"
+AllString:
+	db "All@"
+ModernString:
+	db "{-3d:MODERN_EV_LIMIT}@"
 
 InitialOptionsControl:
 	ld hl, wJumptableIndex
@@ -394,7 +461,7 @@ InitialOptionsControl:
 
 .DownPressed:
 	ld a, [hl] ; load the cursor position to a
-	cp NUM_INITIAL_OPTIONS
+	cp NUM_INITIAL_OPTIONS - 1
 	jr nz, .Increase
 	ld [hl], -1
 .Increase:
@@ -406,7 +473,7 @@ InitialOptionsControl:
 	ld a, [hl]
 	and a
 	jr nz, .Decrease
-	ld [hl], NUM_INITIAL_OPTIONS + 1
+	ld [hl], NUM_INITIAL_OPTIONS
 .Decrease:
 	dec [hl]
 	scf
@@ -415,25 +482,20 @@ InitialOptionsControl:
 InitialOptions_UpdateCursorPosition:
 	hlcoord 1, 0
 	ld de, SCREEN_WIDTH
-	ld c, SCREEN_HEIGHT
+	ld c, SCREEN_HEIGHT - 1
 .loop
 	ld [hl], " "
 	add hl, de
 	dec c
 	jr nz, .loop
-	ld hl, .InitialOptions_CursorPositions
+	; hlcoord 1, [wJumptableIndex] * 2
 	ld a, [wJumptableIndex]
-	ld c, a
-	ld b, 0
-	add hl, bc
-	ld a, [hl]
-	; hlcoord 1, a
-	ld hl, wTileMap
+	add a
+	ld hl, wTilemap
 	ld bc, SCREEN_WIDTH
 	rst AddNTimes
 	inc hl
 	ld [hl], "▶"
 	ret
 
-.InitialOptions_CursorPositions:
-	db 0, 2, 4, 6, 8, 10, 12, 15, 17
+INCLUDE "data/options/descriptions.asm"

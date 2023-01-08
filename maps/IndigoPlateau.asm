@@ -24,11 +24,9 @@ IndigoPlateau_MapScriptHeader:
 	const INDIGO_PLATEAU_KATE
 	const INDIGO_PLATEAU_TRIP
 	const INDIGO_PLATEAU_FEDMAE
-	
+
 IndigoPlateauFlyPoint:
 	setflag ENGINE_FLYPOINT_INDIGO_PLATEAU
-	checkflag ENGINE_DAILY_ELITE_FAUX_RESET
-	iffalse .RematchAvailable
 	endcallback
 
 .RematchAvailable:
@@ -38,6 +36,7 @@ IndigoPlateauFlyPoint:
 	clearevent EVENT_BEAT_TRIP
 	setflag ENGINE_DAILY_ELITE_FAUX_RESET
 	endcallback
+
 
 IndigoPlateauSignText:
 	text "Indigo Plateau"
@@ -52,9 +51,9 @@ IndigoPlateauAshScript:
 	faceplayer
 	opentext
 	checkevent EVENT_BEAT_ASH
-	iftrue .AlreadyBeatAsh
+	iftruefwd .AlreadyBeatAsh
 	checkevent EVENT_LISTENED_TO_ASH
-	iftrue .BattleAsh
+	iftruefwd .BattleAsh
 	writetext .IntroAshText
 	waitbutton
 	setevent EVENT_LISTENED_TO_ASH
@@ -65,7 +64,7 @@ IndigoPlateauAshScript:
 	faceplayer
 	opentext
 	checkevent EVENT_INITIAL_BATTLE_ASH
-	iftrue .RematchAsh
+	iftruefwd .RematchAsh
 	writetext .BattleAshText
 	yesorno
 	iffalse_jumpopenedtext .RefusedAshText
@@ -73,9 +72,9 @@ IndigoPlateauAshScript:
 	waitbutton
 	closetext
 	checkevent EVENT_BEAT_ELITE_FOUR_AGAIN
-	iftrue .Ash3
+	iftruefwd .Ash3
 	checkevent EVENT_BEAT_ELITE_FOUR
-	iftrue .Ash2
+	iftruefwd .Ash2
 	winlosstext .BeatenAshText, 0
 	setlasttalked INDIGO_PLATEAU_ASH
 	loadtrainer ASH, 1
@@ -97,9 +96,9 @@ IndigoPlateauAshScript:
 	waitbutton
 	closetext
 	checkevent EVENT_BEAT_ELITE_FOUR_AGAIN
-	iftrue .Ash3
+	iftruefwd .Ash3
 	checkevent EVENT_BEAT_ELITE_FOUR
-	iftrue .Ash2
+	iftruefwd .Ash2
 	winlosstext .BeatenAshText, 0
 	setlasttalked INDIGO_PLATEAU_ASH
 	loadtrainer ASH, 1
@@ -230,9 +229,9 @@ IndigoPlateauKateScript:
 	faceplayer
 	opentext
 	checkevent EVENT_BEAT_KATE
-	iftrue .AlreadyBeatKate
+	iftruefwd .AlreadyBeatKate
 	checkevent EVENT_LISTENED_TO_KATE
-	iftrue .BattleKate
+	iftruefwd .BattleKate
 	writetext .IntroKateText
 	waitbutton
 	setevent EVENT_LISTENED_TO_KATE
@@ -243,7 +242,7 @@ IndigoPlateauKateScript:
 	faceplayer
 	opentext
 	checkevent EVENT_INITIAL_BATTLE_KATE
-	iftrue .RematchKate
+	iftruefwd .RematchKate
 	writetext .BattleKateText
 	yesorno
 	iffalse_jumpopenedtext .RefusedKateText
@@ -251,9 +250,9 @@ IndigoPlateauKateScript:
 	waitbutton
 	closetext
 	checkevent EVENT_BEAT_ELITE_FOUR_AGAIN
-	iftrue .Kate3
+	iftruefwd .Kate3
 	checkevent EVENT_BEAT_ELITE_FOUR
-	iftrue .Kate2
+	iftruefwd .Kate2
 	winlosstext .BeatenKateText, 0
 	setlasttalked INDIGO_PLATEAU_KATE
 	loadtrainer KATE, 1
@@ -275,9 +274,9 @@ IndigoPlateauKateScript:
 	waitbutton
 	closetext
 	checkevent EVENT_BEAT_ELITE_FOUR_AGAIN
-	iftrue .Kate3
+	iftruefwd .Kate3
 	checkevent EVENT_BEAT_ELITE_FOUR
-	iftrue .Kate2
+	iftruefwd .Kate2
 	winlosstext .BeatenKateText, 0
 	setlasttalked INDIGO_PLATEAU_KATE
 	loadtrainer KATE, 1
@@ -454,11 +453,11 @@ IndigoPlateauTripScript:
 	checkevent EVENT_BEAT_TRIP
 	iftrue .AlreadyBeatTrip
 	checkevent EVENT_LISTENED_TO_TRIP
-	iftrue .BattleTrip
+	iftruefwd .BattleTrip
 	checkevent EVENT_INITIAL_BATTLE_KATE
-	iftrue .FoughtKateFirst
+	iftruefwd .FoughtKateFirst
 	checkevent EVENT_LISTENED_TO_KATE
-	iftrue .TalkedToKateAtLeast
+	iftruefwd .TalkedToKateAtLeast
 	writetext .IntroTripText
 	waitbutton
 	setevent EVENT_LISTENED_TO_TRIP
@@ -483,11 +482,11 @@ IndigoPlateauTripScript:
 	faceplayer
 	opentext
 	checkevent EVENT_INITIAL_BATTLE_TRIP
-	iftrue .RematchTrip
+	iftruefwd .RematchTrip
 	checkevent EVENT_BEAT_ELITE_FOUR_AGAIN
-	iftrue .Trip3
+	iftruefwd .Trip3
 	checkevent EVENT_BEAT_ELITE_FOUR
-	iftrue .Trip2
+	iftruefwd .Trip2
 	writetext .BattleTripText
 	yesorno
 	iffalse_jumpopenedtext .RefusedTripText
@@ -509,9 +508,9 @@ IndigoPlateauTripScript:
 
 .RematchTrip
 	checkevent EVENT_BEAT_ELITE_FOUR_AGAIN
-	iftrue .RematchTrip3
+	iftruefwd .RematchTrip3
 	checkevent EVENT_BEAT_ELITE_FOUR
-	iftrue .RematchTrip2
+	iftruefwd .RematchTrip2
 	writetext .RematchTripText
 	yesorno
 	iffalse_jumpopenedtext .RefusedTripText
@@ -765,12 +764,12 @@ IndigoPlateauTripScript:
 	cont "sister is more"
 	cont "of a braggart…"
 	
-	para "I have managed to"
-	line "break even the"
+	para "My own party"
+	line "have reached the"
 	cont "final limit of"
 	cont "#mon…"
 	
-	para "I have gone beyond"
+	para "Yes, they are all"
 	line "Level 100…"
 	
 	para "Are you ready?"
@@ -813,12 +812,12 @@ IndigoPlateauTripScript:
 	para "Ready for another"
 	line "great battle?"
 	
-	para "I have managed to"
-	line "break even the"
+	para "My own party"
+	line "have reached the"
 	cont "final limit of"
 	cont "#mon…"
 	
-	para "I have gone beyond"
+	para "Yes, they are all"
 	line "Level 100…"
 	
 	para "Are you ready?"
@@ -903,9 +902,9 @@ IndigoPlateauFedmaeScript:
 	faceplayer
 	opentext
 	checkevent EVENT_BEAT_FEDMAE
-	iftrue .AlreadyBeatFedmae
+	iftruefwd .AlreadyBeatFedmae
 	checkevent EVENT_LISTENED_TO_FEDMAE
-	iftrue .BattleFedmae
+	iftruefwd .BattleFedmae
 	writetext .IntroFedmaeText
 	waitbutton
 	setevent EVENT_LISTENED_TO_FEDMAE
@@ -916,7 +915,7 @@ IndigoPlateauFedmaeScript:
 	faceplayer
 	opentext
 	checkevent EVENT_INITIAL_BATTLE_FEDMAE
-	iftrue .RematchFedmae
+	iftruefwd .RematchFedmae
 	writetext .BattleFedmaeText
 	yesorno
 	iffalse_jumpopenedtext .RefusedFedmaeText
@@ -924,9 +923,9 @@ IndigoPlateauFedmaeScript:
 	waitbutton
 	closetext
 	checkevent EVENT_BEAT_ELITE_FOUR_AGAIN
-	iftrue .Fedmae3
+	iftruefwd .Fedmae3
 	checkevent EVENT_BEAT_ELITE_FOUR
-	iftrue .Fedmae2
+	iftruefwd .Fedmae2
 	winlosstext .BeatenFedmaeText, 0
 	setlasttalked INDIGO_PLATEAU_FEDMAE
 	loadtrainer FEDMAE, 1
@@ -948,9 +947,9 @@ IndigoPlateauFedmaeScript:
 	waitbutton
 	closetext
 	checkevent EVENT_BEAT_ELITE_FOUR_AGAIN
-	iftrue .Fedmae3
+	iftruefwd .Fedmae3
 	checkevent EVENT_BEAT_ELITE_FOUR
-	iftrue .Fedmae2
+	iftruefwd .Fedmae2
 	winlosstext .BeatenFedmaeRematchText, 0
 	setlasttalked INDIGO_PLATEAU_FEDMAE
 	loadtrainer FEDMAE, 1
@@ -1093,3 +1092,4 @@ IndigoPlateauFedmaeScript:
 	
 	para "……… ………go away."
 	done
+

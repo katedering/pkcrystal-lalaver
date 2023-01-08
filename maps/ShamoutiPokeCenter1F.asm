@@ -2,7 +2,6 @@ ShamoutiPokeCenter1F_MapScriptHeader:
 	def_scene_scripts
 
 	def_callbacks
-	callback MAPCALLBACK_TILES, ShamoutiPokeCenter1FFixStairScript
 
 	def_warp_events
 	warp_event  5,  7, SHAMOUTI_ISLAND, 1
@@ -20,10 +19,6 @@ ShamoutiPokeCenter1F_MapScriptHeader:
 
 	object_const_def
 	const SHAMOUTIPOKECENTER1F_IVY
-
-ShamoutiPokeCenter1FFixStairScript:
-	changeblock 0, 6, $39
-	endcallback
 
 PokemonJournalLoreleiScript:
 	setflag ENGINE_READ_LORELEI_JOURNAL
@@ -45,7 +40,7 @@ ShamoutiPokeCenter1FIvyScript:
 	faceplayer
 	opentext
 	checkevent EVENT_LISTENED_TO_IVY_INTRO
-	iftrue .HeardIntro
+	iftruefwd .HeardIntro
 	writetext .GreetingText
 	waitbutton
 	setevent EVENT_LISTENED_TO_IVY_INTRO
@@ -54,9 +49,9 @@ ShamoutiPokeCenter1FIvyScript:
 	loadmenu .KantoStarterMenuData
 	verticalmenu
 	closewindow
-	ifequal $1, .Bulbasaur
-	ifequal $2, .Charmander
-	ifequal $3, .Squirtle
+	ifequalfwd $1, .Bulbasaur
+	ifequalfwd $2, .Charmander
+	ifequalfwd $3, .Squirtle
 	jumpthisopenedtext
 
 	text "Ivy: Hm, I thought"
@@ -70,26 +65,29 @@ ShamoutiPokeCenter1FIvyScript:
 	writetext .ChoseKantoStarterText
 	promptbutton
 	waitsfx
-	givepoke BULBASAUR, NO_FORM, 10, SITRUS_BERRY
+	givepoke BULBASAUR, PLAIN_FORM, 10, SITRUS_BERRY
 	iffalse_jumpopenedtext .NoRoomText
+	getmonname BULBASAUR, STRING_BUFFER_3
 	setevent EVENT_GOT_BULBASAUR_FROM_IVY
-	sjump .Finish
+	sjumpfwd .Finish
 
 .Charmander:
 	writetext .ChoseKantoStarterText
 	promptbutton
 	waitsfx
-	givepoke CHARMANDER, NO_FORM, 10, SITRUS_BERRY
+	givepoke CHARMANDER, PLAIN_FORM, 10, SITRUS_BERRY
 	iffalse_jumpopenedtext .NoRoomText
+	getmonname CHARMANDER, STRING_BUFFER_3
 	setevent EVENT_GOT_CHARMANDER_FROM_IVY
-	sjump .Finish
+	sjumpfwd .Finish
 
 .Squirtle:
 	writetext .ChoseKantoStarterText
 	promptbutton
 	waitsfx
-	givepoke SQUIRTLE, NO_FORM, 10, SITRUS_BERRY
+	givepoke SQUIRTLE, PLAIN_FORM, 10, SITRUS_BERRY
 	iffalse_jumpopenedtext .NoRoomText
+	getmonname SQUIRTLE, STRING_BUFFER_3
 	setevent EVENT_GOT_SQUIRTLE_FROM_IVY
 .Finish:
 	writetext .GoodbyeText
@@ -105,7 +103,7 @@ ShamoutiPokeCenter1FIvyScript:
 	disappear SHAMOUTIPOKECENTER1F_IVY
 	setevent EVENT_GOT_A_POKEMON_FROM_IVY
 	checkevent EVENT_BEAT_YELLOW
-	iffalse .skip
+	iffalsefwd .skip
 	clearevent EVENT_INDIGO_PLATEAU_POKECENTER_YELLOW
 .skip
 	waitsfx
@@ -115,7 +113,7 @@ ShamoutiPokeCenter1FIvyScript:
 	text "Alas, it seems"
 	line "there's no room in"
 	cont "either your party"
-	cont "or your box…"
+	cont "or your Box…"
 	done
 
 .GreetingText:
@@ -204,9 +202,8 @@ ShamoutiPokeCenter1FIvyScript:
 	step_end
 
 .KantoStarterMenuData:
-	db $40 ; flags
-	db 02, 00 ; start coords
-	db 11, 13 ; end coords
+	db MENU_BACKUP_TILES
+	menu_coords 0, 2, 13, 11
 	dw .MenuData2
 	db 1 ; default option
 

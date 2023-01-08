@@ -15,7 +15,7 @@ Special_CelebiShrineEvent:
 
 	depixel 0, 10, 7, 0
 	ld a, SPRITE_ANIM_INDEX_CELEBI
-	call _InitSpriteAnimStruct
+	call InitSpriteAnimStruct
 	ld hl, SPRITEANIMSTRUCT_TILE_ID
 	add hl, bc
 	ld [hl], $84
@@ -50,7 +50,7 @@ Special_CelebiShrineEvent:
 	pop af
 	ld [wVramState], a
 
-	ld hl, wVirtualOAM + 2
+	ld hl, wShadowOAM + 2
 	xor a
 	ld c, $4
 .OAMloop:
@@ -61,7 +61,7 @@ Special_CelebiShrineEvent:
 	inc a
 	dec c
 	jr nz, .OAMloop
-	ld hl, wVirtualOAM + 4 * 4
+	ld hl, wShadowOAM + 4 * 4
 	ld bc, 36 * 4
 	xor a
 	rst ByteFill
@@ -221,17 +221,3 @@ GetCelebiSpriteTile:
 	pop bc
 	pop hl
 	ret
-
-CheckCaughtCelebi:
-	ld a, [wBattleResult]
-	bit 6, a
-	jr z, .false
-	ld a, $1
-	ldh [hScriptVar], a
-	ret
-
-.false
-	xor a
-	ldh [hScriptVar], a
-	ret
-

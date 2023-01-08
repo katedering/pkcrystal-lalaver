@@ -18,9 +18,8 @@ MonSubmenu:
 	jmp ExitMenu
 
 .MenuDataHeader:
-	db $40 ; tile backup
-	db 00, 06 ; start coords
-	db 17, 19 ; end coords
+	db MENU_BACKUP_TILES
+	menu_coords 6, 0, 19, 17
 	dw 0
 	db 1 ; default option
 
@@ -112,14 +111,14 @@ GetMonMenuString:
 GetMonSubmenuItems:
 	call ResetMonSubmenu
 	ld a, MON_IS_EGG
-	call GetPartyParamLocation
-	bit MON_IS_EGG_F, [hl]
+	call GetPartyParamLocationAndValue
+	bit MON_IS_EGG_F, a
 	jr nz, .egg
 	ld a, [wLinkMode]
 	and a
 	jr nz, .skip_moves
 	ld a, MON_MOVES
-	call GetPartyParamLocation
+	call GetPartyParamLocationAndValue
 	ld d, h
 	ld e, l
 	ld c, NUM_MOVES
@@ -152,8 +151,8 @@ GetMonSubmenuItems:
 	jr nz, .skip2
 	push hl
 	ld a, MON_ITEM
-	call GetPartyParamLocation
-	ld d, [hl]
+	call GetPartyParamLocationAndValue
+	ld d, a
 	call ItemIsMail ; set carry if mail
 	pop hl
 	; a = carry ? MONMENUITEM_MAIL : MONMENUITEM_ITEM

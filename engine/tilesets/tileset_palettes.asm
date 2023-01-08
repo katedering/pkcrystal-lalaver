@@ -43,9 +43,9 @@ LoadSpecialMapPalette:
 
 	ld a, b
 	dec a ; PAL_SINGLE?
-	jr z, LoadEightBGPalettes
+	jr z, LoadSevenBGPalettes
 	dec a ; PAL_TIMEOFDAY?
-	jr z, LoadEightTimeOfDayBGPalettes
+	jr z, LoadSevenTimeOfDayBGPalettes
 	; PAL_SPECIAL
 	jp hl
 
@@ -59,40 +59,49 @@ endr
 	and a
 	ret
 
-LoadEightTimeOfDayBGPalettes:
+; don't copy the eighth palette, it's loaded based on the map's sign
+LoadSevenTimeOfDayBGPalettes:
 	ld a, [wTimeOfDayPal]
 	and 3
 	ld bc, 8 palettes
 	rst AddNTimes
-LoadEightBGPalettes:
+LoadSevenBGPalettes:
 	ld de, wBGPals1
-	ld bc, 8 palettes
+	ld bc, 7 palettes
 	call FarCopyColorWRAM
 	scf
 	ret
 
 PokeCenterSpecialCase:
-	ld hl, wMapGroup
-	call .check_shamouti_pokecenter
-	jr z, LoadEightBGPalettes
-	ld hl, wBackupMapGroup
-	call .check_shamouti_pokecenter
-	jr z, LoadEightBGPalettes
 	ld hl, PokeCenterPalette
-	jr LoadEightBGPalettes
-
-.check_shamouti_pokecenter
-	ld a, [hli]
-	cp GROUP_SHAMOUTI_POKECENTER_1F
-	ret nz
-	ld a, [hl]
-	cp MAP_SHAMOUTI_POKECENTER_1F
-	ld hl, ShamoutiPokeCenterPalette
+	call LoadSevenBGPalettes
+	; Shamouti has the default orange floors
+	call RegionCheck
+	ld a, e
+	cp ORANGE_REGION
+	jr z, .done
+	; Kanto has blue floors
+	ld hl, wBGPals1 palette PAL_BG_WATER
+	dec e ; KANTO_REGION?
+	jr z, .got_roof_pal
+	; Snowtop Mountain has brown floors
+	call GetWorldMapLocation
+	cp SNOWTOP_MOUNTAIN
+	ld hl, wBGPals1 palette PAL_BG_BROWN
+	jr z, .got_roof_pal
+	; Johto has red floors
+	ld hl, wBGPals1 palette PAL_BG_RED
+.got_roof_pal
+	ld de, wBGPals1 palette PAL_BG_ROOF
+	ld bc, 1 palettes
+	call FarCopyColorWRAM
+.done
+	scf
 	ret
 
 MartSpecialCase:
 	ld hl, MartPalette
-	call LoadEightBGPalettes
+	call LoadSevenBGPalettes
 	ld hl, wMapBlocksBank
 	ld a, [hli]
 	cp BANK(GenericMart_BlockData)
@@ -203,7 +212,7 @@ CheckIfSpecialPaletteApplies:
 	dec a ; PAL_FOR_OVERCAST?
 	jr nz, .not_overcast
 	push hl
-	call GetOvercastIndex
+	farcall GetOvercastIndex
 	pop hl
 	; invert z
 	sub 1 ; no-optimize a++|a-- (dec a can't set carry)
@@ -216,8 +225,8 @@ CheckIfSpecialPaletteApplies:
 	call GetMapTimeOfDay
 	pop de
 	pop hl
-	and IN_DARKNESS
-	cp IN_DARKNESS
+	or ~IN_DARKNESS
+	inc a
 	ret nz
 	ld a, [wStatusFlags]
 	bit 2, a ; Flash

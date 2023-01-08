@@ -5,6 +5,7 @@ TrainerGroups:
 	table_width 3, TrainerGroups
 	dba CarrieGroup
 	dba CalGroup
+	dba JackyGroup
 	dba FalknerGroup
 	dba BugsyGroup
 	dba WhitneyGroup
@@ -68,6 +69,9 @@ TrainerGroups:
 	dba KimonoGirl3Group
 	dba KimonoGirl4Group
 	dba KimonoGirl5Group
+	dba KimonoGirl6Group
+	dba KimonoGirl7Group
+	dba KimonoGirl8Group
 	dba ElderGroup
 	dba SrAndJrGroup
 	dba CoupleGroup
@@ -98,6 +102,7 @@ TrainerGroups:
 	dba TamerGroup
 	dba ArtistGroup
 	dba AromaLadyGroup
+	dba SoldierGroup
 	dba WaiterGroup
 	dba WaitressGroup
 	dba SightseerMGroup
@@ -119,12 +124,13 @@ TrainerGroups:
 	dba MysticalmanGroup
 	dba KarateKingGroup
 	dba TowerTycoonGroup
+	dba FactoryHeadGroup
 	dba JessieJamesGroup
 	dba LoreleiGroup
 	dba AgathaGroup
 	dba StevenGroup
 	dba CynthiaGroup
-	dba InverGroup
+	dbw BANK(@), wInverGroup
 	dba CherylGroup
 	dba RileyGroup
 	dba BuckGroup
@@ -138,9 +144,11 @@ TrainerGroups:
 	dba SparkGroup
 	dba FlanneryGroup
 	dba MayleneGroup
-	dba SkylaGroup
+	dba MarlonGroup
 	dba ValerieGroup
 	dba KukuiGroup
+	dba PiersGroup
+	dba KatyGroup
 	dba VictorGroup
 	dba BillGroup
 	dba YellowGroup

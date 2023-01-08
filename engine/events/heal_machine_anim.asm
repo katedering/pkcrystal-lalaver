@@ -60,14 +60,14 @@ HealMachineAnim:
 	dw .HOF_PlaySFX
 
 .PC_LoadBallsOntoMachine:
-	ld hl, wVirtualOAM + $80
+	ld hl, wShadowOAM + $80
 	ld de, .PC_ElmsLab_OAM
 	call .PlaceHealingMachineTile
 	call .PlaceHealingMachineTile
 	jr .LoadBallsOntoMachine
 
 .HOF_LoadBallsOntoMachine:
-	ld hl, wVirtualOAM + $80
+	ld hl, wShadowOAM + $80
 	ld de, .HOF_OAM
 
 .LoadBallsOntoMachine:
@@ -205,11 +205,4 @@ HealMachineAnim:
 	dsprite   7, 1,  11, 5, $79, PAL_OW_TREE
 
 .palettes
-if !DEF(MONOCHROME)
-	RGB 31, 31, 31
-	RGB 31, 19, 10
-	RGB 31, 07, 01
-	RGB 00, 00, 00
-else
-	MONOCHROME_RGB_FOUR
-endc
+INCLUDE "gfx/overworld/heal_machine.pal"

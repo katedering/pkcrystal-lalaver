@@ -55,14 +55,7 @@ SSAquaGranddaughterBefore:
 	showemote EMOTE_SHOCK, FASTSHIPCABINS_SE_SSE_CAPTAINSCABIN_GENTLEMAN, 15
 	applymovement FASTSHIPCABINS_SE_SSE_CAPTAINSCABIN_TWIN1, SSAquaGranddaughterEntersCabinMovement
 	turnobject FASTSHIPCABINS_SE_SSE_CAPTAINSCABIN_GENTLEMAN, RIGHT
-	checkflag ENGINE_PLAYER_IS_FEMALE
-	iftrue UnknownScript_0x75f03
-	showtext SSAquaGranddaughterWasPlayingMText
-	sjump UnknownScript_0x75f09
-
-UnknownScript_0x75f03:
-	showtext SSAquaGranddaughterWasPlayingFText
-UnknownScript_0x75f09:
+	showtext SSAquaGranddaughterWasPlayingText
 	turnobject FASTSHIPCABINS_SE_SSE_CAPTAINSCABIN_TWIN2, DOWN
 	applyonemovement FASTSHIPCABINS_SE_SSE_CAPTAINSCABIN_GENTLEMAN, step_down
 	opentext
@@ -70,7 +63,7 @@ UnknownScript_0x75f09:
 	promptbutton
 	setevent EVENT_VERMILION_PORT_SAILOR_AT_GANGWAY
 	setmapscene FAST_SHIP_1F, $0
-	sjump SSAquaMetalCoatAndDocking
+	sjumpfwd SSAquaMetalCoatAndDocking
 
 SSAquaGrandpa:
 	checkevent EVENT_GOT_MACHO_BRACE_FROM_GRANDPA_ON_SS_AQUA
@@ -78,7 +71,7 @@ SSAquaGrandpa:
 	faceplayer
 	opentext
 	checkevent EVENT_FAST_SHIP_CABINS_SE_SSE_CAPTAINS_CABIN_TWIN_2
-	iftrue SSAquaFoundGranddaughter
+	iftruefwd SSAquaFoundGranddaughter
 	writetext SSAquaCantFindGranddaughterText
 	waitbutton
 	closetext
@@ -260,20 +253,12 @@ SSAquaGranddaughterHasToFindGrandpaText:
 	line "Grandpa!"
 	done
 
-SSAquaGranddaughterWasPlayingMText:
+SSAquaGranddaughterWasPlayingText:
 	text "Grandpa, here I"
 	line "am! I was playing"
 
 	para "with the Captain"
-	line "and this guy!"
-	done
-
-SSAquaGranddaughterWasPlayingFText:
-	text "Grandpa, here I"
-	line "am! I was playing"
-
-	para "with the Captain"
-	line "and this big girl!"
+	line "and this big kid!"
 	done
 
 SSAquaGranddaughterHadFunText:

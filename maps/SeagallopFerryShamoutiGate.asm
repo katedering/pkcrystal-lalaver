@@ -20,7 +20,7 @@ SeagallopFerryShamoutiGate_MapScriptHeader:
 	const SEAGALLOPFERRYSHAMOUTIGATE_SAILOR
 
 SeagallopFerryShamoutiGateTrigger1:
-	prioritysjump SeagallopFerryShamoutiGate_PlayerArrives
+	sdefer SeagallopFerryShamoutiGate_PlayerArrives
 SeagallopFerryShamoutiGateTrigger0:
 	end
 
@@ -37,19 +37,19 @@ SeagallopFerryShamoutiGateSailorScript:
 	faceplayer
 	opentext
 	checkevent EVENT_GOT_A_POKEMON_FROM_IVY
-	iffalse .OnlyVermilion
+	iffalsefwd .OnlyVermilion
 	writetext SeagallopFerryShamoutiWhichIslandText
 	loadmenu VermilionValenciaMenuDataHeader
 	verticalmenu
 	closewindow
-	ifequal $1, .ToVermilion
-	ifequal $2, .ToValencia
-	sjump .RefuseFerry
+	ifequalfwd $1, .ToVermilion
+	ifequalfwd $2, .ToValencia
+	sjumpfwd .RefuseFerry
 
 .OnlyVermilion
 	writetext SeagallopFerryShamoutiToVermilionQuestionText
 	yesorno
-	iffalse .RefuseFerry
+	iffalsefwd .RefuseFerry
 .ToVermilion
 	scall SeagallopFerryShamoutiDepartureScript
 	setmapscene SEAGALLOP_FERRY_VERMILION_GATE, $1
@@ -82,9 +82,8 @@ SeagallopFerryShamoutiDepartureScript:
 	end
 
 VermilionValenciaMenuDataHeader:
-	db $40 ; flags
-	db 04, 00 ; start coords
-	db 11, 18 ; end coords
+	db MENU_BACKUP_TILES
+	menu_coords 0, 4, 18, 11
 	dw .MenuData2
 	db 1 ; default option
 

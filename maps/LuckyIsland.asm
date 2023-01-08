@@ -19,14 +19,17 @@ LuckyIsland_MapScriptHeader:
 	object_event 36, 16, SPRITE_ARTIST, SPRITEMOVEDATA_STANDING_LEFT, 0, 0, -1, -1, 0, OBJECTTYPE_GENERICTRAINER, 4, GenericTrainerArtistAlina, EVENT_LUCKY_ISLAND_CIVILIANS
 	object_event 23, 11, SPRITE_SIGHTSEER_M, SPRITEMOVEDATA_STANDING_RIGHT, 0, 0, -1, -1, PAL_NPC_PURPLE, OBJECTTYPE_GENERICTRAINER, 1, GenericTrainerSightseersLiandsu1, EVENT_LUCKY_ISLAND_CIVILIANS
 	object_event 23, 12, SPRITE_LADY, SPRITEMOVEDATA_STANDING_RIGHT, 0, 0, -1, -1, PAL_NPC_PURPLE, OBJECTTYPE_GENERICTRAINER, 1, GenericTrainerSightseersLiandsu2, EVENT_LUCKY_ISLAND_CIVILIANS
-	fruittree_event 25, 16, FRUITTREE_LUCKY_ISLAND, LIECHI_BERRY, PAL_NPC_RED, EVENT_LUCKY_ISLAND_CIVILIANS
+	fruittree_event 25, 16, FRUITTREE_LUCKY_ISLAND, JABOCA_BERRY, PAL_NPC_BROWN, MORN, EVENT_LUCKY_ISLAND_CIVILIANS
+	fruittree_event 25, 16, FRUITTREE_LUCKY_ISLAND, ROWAP_BERRY, PAL_NPC_BLUE, DAY, EVENT_LUCKY_ISLAND_CIVILIANS
+	fruittree_event 25, 16, FRUITTREE_LUCKY_ISLAND, KEE_BERRY, PAL_NPC_RED, EVE, EVENT_LUCKY_ISLAND_CIVILIANS
+	fruittree_event 25, 16, FRUITTREE_LUCKY_ISLAND, MARANGABERRY, PAL_NPC_GREEN, NITE, EVENT_LUCKY_ISLAND_CIVILIANS
 
 	object_const_def
 	const LUCKYISLAND_POKE_BALL
 
 Script_ChangeLuckyIslandMap:
 	special CheckIfTrendyPhraseIsLucky
-	iftrue .show
+	iftruefwd .show
 	changemapblocks LuckyIslandHidden_BlockData
 	setevent EVENT_LUCKY_ISLAND_CIVILIANS
 .hide_poke_ball
@@ -181,11 +184,12 @@ GenericTrainerSightseersLiandsu2:
 
 LuckyIslandLuckyEgg:
 	giveitem LUCKY_EGG
-	iffalse .NoRoom
+	iffalsefwd .NoRoom
 	disappear LUCKYISLAND_POKE_BALL
 	setevent EVENT_GOT_LUCKY_EGG_FROM_LUCKY_ISLAND
 	opentext
 	writetext .Text
+	special ShowItemIcon
 	playsound SFX_ITEM
 	pause 60
 	itemnotify

@@ -77,8 +77,7 @@ ScrollingMenuJoyAction:
 	ld a, [wMenuFlags]
 	bit 5, a
 	jr z, .dontCheckForCancel
-	ld a, [wMenuSelection]
-	inc a
+	call ScrollingMenu_GetMenuSelection
 	jmp nz, .unsetZeroFlag
 .dontCheckForCancel
 	call PlaceHollowCursor
@@ -97,8 +96,7 @@ ScrollingMenuJoyAction:
 	ld [wBattleMenuFlags], a
 
 	; if Cancel is preselected, just fallback to regular bag function
-	ld a, [wMenuSelection]
-	inc a
+	call ScrollingMenu_GetMenuSelection
 	jr z, ScrollingMenuJoyAction
 
 	; same with unusable items
@@ -108,8 +106,7 @@ ScrollingMenuJoyAction:
 	jr z, ScrollingMenuJoyAction
 
 .not_quick_pack
-	ld a, [wMenuSelection]
-	inc a
+	call ScrollingMenu_GetMenuSelection
 	jr z, .b_button
 	ld a, A_BUTTON
 	scf
@@ -127,8 +124,7 @@ ScrollingMenuJoyAction:
 	ld a, [wMenuCursorY]
 	dec a
 	call ScrollingMenu_GetListItemCoordAndFunctionArgs
-	ld a, [wMenuSelection]
-	cp -1
+	call ScrollingMenu_GetMenuSelection
 	jr z, .unsetZeroFlag
 	call ScrollingMenu_GetCursorPosition
 	dec a
@@ -222,12 +218,45 @@ ScrollingMenu_ClearLeftColumn:
 	ret
 
 InitScrollingMenuCursor:
+	; First, determine how large the menu should be.
 	ld hl, wMenuData_ItemsPointerAddr
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
+
+	; If we are dealing with the key item table, there is no
+	; "key item amount", and we need to figure out menu size dynamically.
+	ld a, [wMenuData_ScrollingMenuSpacing]
+	cp SCROLLINGMENU_ITEMS_KEY
+	jr nz, .not_key_items
+
+	push hl
+	ld c, -1
+.find_terminator
+	inc c
+	call GetFarByte
+	inc hl
+	and a
+	jr nz, .find_terminator
+	pop hl
+
+	; While we're at it, decrement the item pointer addr by 1. The reason we do
+	; this is because this simplifies grabbing the relevant item data, given
+	; that the other item formats start with an amount.
+	dec hl
+	ld a, l
+	ld [wMenuData_ItemsPointerAddr], a
+	ld a, h
+	ld [wMenuData_ItemsPointerAddr + 1], a
+	ld a, c
+	jr .got_amount
+
+.not_key_items
+	; The first byte in the menu buffer contains size.
 	ld a, [wMenuData_ItemsPointerBank]
 	call GetFarByte
+
+.got_amount
 	ld [wScrollingMenuListSize], a
 	ld a, [wMenuData_ScrollingMenuHeight]
 	ld c, a
@@ -395,27 +424,17 @@ ScrollingMenu_UpdateDisplay:
 	ld [wScrollingMenuCursorPosition], a
 	ld a, c
 	call ScrollingMenu_GetListItemCoordAndFunctionArgs
-	ld a, [wMenuSelection]
-	cp -1
+	call ScrollingMenu_GetMenuSelection
 	jr z, .cancel
-	push hl
 	push bc
 	ld a, [wMenuScrollPosition]
 	ld b, a
 	ld a, [wScrollingMenuCursorPosition]
 	sub b
 	ld b, a
-	ld hl, wMenuData_ItemsPointerBank
-	ld a, [hli]
-	ld c, a
-	ld a, [hli]
-	ld h, [hl]
-	ld l, a
-	ld a, c
-	call GetFarByte
+	ld a, [wScrollingMenuListSize]
 	cp b
 	pop bc
-	pop hl
 	ret c
 	push bc
 	push hl
@@ -452,6 +471,25 @@ ScrollingMenu_UpdateDisplay:
 	ld e, l
 	ld hl, wMenuData_ScrollingMenuFunction1
 	jmp FarPointerCall
+
+ScrollingMenu_GetMenuSelection:
+; Returns z if the selection is the terminator (usually -1).
+	ld a, [wMenuSelection]
+	; fallthrough
+ScrollingMenu_IsTerminator:
+; Returns z if a is the terminator (usually -1).
+	push bc
+	push af
+	ld a, [wMenuData_ScrollingMenuSpacing]
+	sub SCROLLINGMENU_ITEMS_KEY
+	ld c, a
+	jr z, .got_terminator
+	ld c, -1
+.got_terminator
+	pop af
+	cp c
+	pop bc
+	ret
 
 ScrollingMenu_CancelString:
 	db "Cancel@"
@@ -557,12 +595,13 @@ ScrollingMenu_GetAddressOfMenu_UseScrollingMenuCursorPosition:
 	ld b, a
 	ld a, [wScrollingMenuCursorPosition]
 	sub b
-
-; fallthrough
+	; fallthrough
 ScrollingMenu_GetAddressOfCurListPosition:
 	ld c, a
 	ld a, [wMenuScrollPosition]
 	add c
+	; fallthrough
+ScrollingMenu_GetNthItem:
 	ld c, a
 	ld b, 0
 	ld hl, wMenuData_ItemsPointerAddr
@@ -571,5 +610,14 @@ ScrollingMenu_GetAddressOfCurListPosition:
 	ld l, a
 	inc hl ; items
 	ld a, [wMenuData_ScrollingMenuSpacing]
+
+	; If quantity is included, each item is 2 bytes.
+	assert SCROLLINGMENU_ITEMS_QUANTITY == 2
+	cp SCROLLINGMENU_ITEMS_QUANTITY
+	jr z, .got_byte_amount
+
+	; Otherwise, there's 1 byte per menu item.
+	ld a, 1
+.got_byte_amount
 	rst AddNTimes
 	ret

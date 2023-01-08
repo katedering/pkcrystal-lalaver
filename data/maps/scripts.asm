@@ -39,6 +39,11 @@ INCLUDE "maps/GoldenrodPokecomCenter1F.asm"
 INCLUDE "maps/GoldenrodPokecomCenterOffice.asm"
 
 
+SECTION "Pokemon Center Scripts 5", ROMX
+
+INCLUDE "maps/SnowtopPokeCenter1F.asm"
+
+
 SECTION "Special Map Scripts", ROMX
 
 INCLUDE "maps/PokeCenter2F.asm"
@@ -209,7 +214,7 @@ SECTION "Goldenrod Scripts 2", ROMX
 INCLUDE "maps/GoldenrodBikeShop.asm"
 INCLUDE "maps/GoldenrodBillsHouse.asm"
 INCLUDE "maps/GoldenrodFlowerShop.asm"
-INCLUDE "maps/GoldenrodHPUpHouse.asm"
+INCLUDE "maps/GoldenrodHoneyHouse.asm"
 INCLUDE "maps/GoldenrodHappinessRater.asm"
 INCLUDE "maps/GoldenrodMagnetTrainStation.asm"
 INCLUDE "maps/GoldenrodNameRater.asm"
@@ -307,6 +312,15 @@ INCLUDE "maps/BurnedTower1F.asm"
 INCLUDE "maps/BurnedTowerB1F.asm"
 
 
+SECTION "Rugged Road + Snowtop Mountain Scripts", ROMX
+
+INCLUDE "maps/RuggedRoadNorth.asm"
+INCLUDE "maps/RuggedRoadSouth.asm"
+INCLUDE "maps/SnowtopMountainInside.asm"
+INCLUDE "maps/SnowtopMountainOutside.asm"
+INCLUDE "maps/Route39RuggedRoadGate.asm"
+
+
 SECTION "Olivine Scripts", ROMX
 
 INCLUDE "maps/OlivineCity.asm"
@@ -315,9 +329,9 @@ INCLUDE "maps/OlivineGym.asm"
 INCLUDE "maps/OlivineCafe.asm"
 INCLUDE "maps/OlivineGoodRodHouse.asm"
 INCLUDE "maps/OlivinePort.asm"
-INCLUDE "maps/OlivinePortPassage.asm"
 INCLUDE "maps/OlivinePunishmentSpeechHouse.asm"
 INCLUDE "maps/OlivineTimsHouse.asm"
+INCLUDE "maps/OlivineCityRoute35CoastDual.asm"
 
 
 SECTION "Olivine Lighthouse Scripts", ROMX
@@ -328,7 +342,6 @@ INCLUDE "maps/OlivineLighthouse3F.asm"
 INCLUDE "maps/OlivineLighthouse4F.asm"
 INCLUDE "maps/OlivineLighthouse5F.asm"
 INCLUDE "maps/OlivineLighthouse6F.asm"
-INCLUDE "maps/OlivineLighthouseRoof.asm"
 
 
 SECTION "Whirl Island Scripts", ROMX
@@ -682,6 +695,7 @@ INCLUDE "maps/CeladonUniversityLounge.asm"
 INCLUDE "maps/CeladonUniversityPool.asm"
 INCLUDE "maps/CeladonUniversityWestwoodsOffice.asm"
 INCLUDE "maps/CeladonUniversityWillowsOffice.asm"
+INCLUDE "maps/CeladonUniversityNursesOffice.asm"
 
 
 SECTION "Celadon University Classroom Scripts", ROMX
@@ -697,11 +711,6 @@ SECTION "Celadon University Library Scripts", ROMX
 
 INCLUDE "maps/CeladonUniversityLibrary1F.asm"
 INCLUDE "maps/CeladonUniversityLibrary2F.asm" ; shares text with CeladonUniversityLibrary1F.asm
-
-
-SECTION "Celadon Outskirts Scripts", ROMX
-
-INCLUDE "maps/CeladonOutskirts.asm"
 
 
 SECTION "Saffron Scripts", ROMX
@@ -1010,7 +1019,8 @@ SECTION "Routes 33-35 Scripts", ROMX
 INCLUDE "maps/Route33.asm"
 INCLUDE "maps/Route34.asm"
 INCLUDE "maps/Route35.asm"
-INCLUDE "maps/Route35Coast.asm"
+INCLUDE "maps/Route35CoastNorth.asm"
+INCLUDE "maps/Route35CoastSouth.asm"
 INCLUDE "maps/Route35GoldenrodGate.asm"
 INCLUDE "maps/Route35NationalParkGate.asm"
 INCLUDE "maps/Route36NationalParkGate.asm" ; shares text with Route35NationalParkGate.asm

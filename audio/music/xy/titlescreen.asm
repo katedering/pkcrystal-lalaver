@@ -13,6 +13,7 @@ Music_TitleScreenXY_Ch1:
 	volume $77
 	stereopanning $f
 	vibrato $10, $33
+	soundinput $0
 Music_TitleScreenXY_Ch1_b0:
 	dutycycle $0
 	notetype $8, $87
@@ -243,7 +244,7 @@ Music_TitleScreenXY_Ch1_b3:
 	note D#, 12
 	note __, 16
 	note __, 16
-	loopchannel 0, Music_TitleScreenXY_Ch1_b0
+	jumpchannel Music_TitleScreenXY_Ch1_b0
 
 Music_TitleScreenXY_Ch1_b5:
 	octave 3
@@ -470,7 +471,7 @@ Music_TitleScreenXY_Ch2_b3:
 	note __, 1
 	note C_, 1
 	note __, 1
-	octave 4 
+	octave 4
 	note B_, 1
 	note __, 1
 	notetype $c, $C7 ; measure 32
@@ -527,7 +528,7 @@ Music_TitleScreenXY_Ch2_b4:
 	note __, 10
 	note __, 16
 	note __, 16
-	loopchannel 0, Music_TitleScreenXY_Ch2_b0
+	jumpchannel Music_TitleScreenXY_Ch2_b0
 
 Music_TitleScreenXY_Ch3:
 	stereopanning $ff
@@ -815,7 +816,7 @@ Music_TitleScreenXY_Ch3_b1:
 	note __, 10
 	note __, 16
 	note __, 16
-	loopchannel 0, Music_TitleScreenXY_Ch3_b0
+	jumpchannel Music_TitleScreenXY_Ch3_b0
 
 Music_TitleScreenXY_Ch3_b2:
 	octave 2
@@ -856,8 +857,8 @@ Music_TitleScreenXY_Ch3_b3:
 	note A#, 2
 	endchannel
 
-SNARE EQU 3
-SNARE2 EQU 3
+DEF SNARE EQU 3
+DEF SNARE2 EQU 3
 
 Music_TitleScreenXY_Ch4:
 	togglenoise $3
@@ -955,7 +956,7 @@ Music_TitleScreenXY_Ch4_b1:
 	note __, 12
 	note __, 16
 	note __, 16
-	loopchannel 0, Music_TitleScreenXY_Ch4_b0
+	jumpchannel Music_TitleScreenXY_Ch4_b0
 
 Music_TitleScreenXY_Ch4_b2:
 	note SNARE2, 8

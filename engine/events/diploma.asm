@@ -8,8 +8,7 @@ _Diploma:
 	call Decompress
 	ld hl, DiplomaPage1Tilemap
 	decoord 0, 0
-	ld bc, SCREEN_WIDTH * SCREEN_HEIGHT
-	rst CopyBytes
+	call Decompress
 	ld de, .PlayerString
 	hlcoord 2, 5
 	rst PlaceString
@@ -21,7 +20,7 @@ _Diploma:
 	rst PlaceString
 	call EnableLCD
 	call ApplyTilemapInVBlank
-	ld a, CGB_DIPLOMA
+	ld a, CGB_NEW_DIPLOMA
 	call GetCGBLayout
 	call SetPalettes
 	call DelayFrame
@@ -31,10 +30,10 @@ _Diploma:
 	ld bc, SCREEN_WIDTH * SCREEN_HEIGHT
 	ld a, $7f
 	rst ByteFill
+
 	ld hl, DiplomaPage2Tilemap
 	decoord 0, 0
-	ld bc, SCREEN_WIDTH * SCREEN_HEIGHT
-	rst CopyBytes
+	call Decompress
 	ld de, .PolishedCrystal
 	hlcoord 2, 1
 	rst PlaceString
@@ -53,26 +52,30 @@ _Diploma:
 	jmp WaitPressAorB_BlinkCursor
 
 .PlayerString:
-	db "Player@"
+	text "Player"
+	done
 
 .DiplomaString:
-	db   "This certifies"
+	text "This certifies"
 	next "that you have"
 	next "completed the"
-	next "new #dex."
-	next "Congratulations!@"
+	next "National #dex."
+	next "Congratulations!"
+	done
 
 .PlayTime:
-	db "Play Time@"
+	text "Play Time"
+	done
 
 .PolishedCrystal:
-	db "Polished Crystal@"
+	text "Polished Crystal"
+	done
 
 DiplomaGFX:
 INCBIN "gfx/diploma/diploma.2bpp.lz"
 
 DiplomaPage1Tilemap:
-INCBIN "gfx/diploma/page1.tilemap"
+INCBIN "gfx/diploma/page1.tilemap.lz"
 
 DiplomaPage2Tilemap:
-INCBIN "gfx/diploma/page2.tilemap"
+INCBIN "gfx/diploma/page2.tilemap.lz"

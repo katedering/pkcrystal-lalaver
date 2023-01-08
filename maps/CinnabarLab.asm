@@ -17,7 +17,7 @@ CinnabarLab_MapScriptHeader:
 	bg_event 24, 14, BGEVENT_JUMPTEXT, CinnabarLabRoom3SignText
 	bg_event 25, 14, BGEVENT_JUMPTEXT, CinnabarLabLockedDoorText
 	bg_event  3,  6, BGEVENT_JUMPTEXT, CinnabarLabRoom4SignText
-	bg_event  3,  6, BGEVENT_ITEM + BERSERK_GENE, EVENT_CINNABAR_LAB_HIDDEN_BERSERK_GENE
+	bg_event  3, 11, BGEVENT_ITEM + BERSERK_GENE, EVENT_CINNABAR_LAB_HIDDEN_BERSERK_GENE
 
 	def_object_events
 	object_event 15,  6, SPRITE_GIOVANNI, SPRITEMOVEDATA_STANDING_UP, 0, 0, -1, -1, 0, OBJECTTYPE_SCRIPT, 0, ObjectEvent, -1
@@ -25,10 +25,11 @@ CinnabarLab_MapScriptHeader:
 	object_event 11,  6, SPRITE_SCIENTIST, SPRITEMOVEDATA_STANDING_LEFT, 0, 0, -1, -1, 0, OBJECTTYPE_SCRIPT, 0, ObjectEvent, -1
 	object_event 20,  5, SPRITE_SCIENTIST, SPRITEMOVEDATA_STANDING_RIGHT, 0, 0, -1, -1, 0, OBJECTTYPE_SCRIPT, 0, ObjectEvent, EVENT_CINNABAR_LAB_SCIENTIST1
 	object_event 11,  4, SPRITE_SCIENTIST, SPRITEMOVEDATA_STANDING_UP, 0, 0, -1, -1, 0, OBJECTTYPE_SCRIPT, 0, ObjectEvent, EVENT_CINNABAR_LAB_SCIENTIST2
-	object_event 15,  7, SPRITE_MON_ICON, SPRITEMOVEDATA_STILL, 0, MEWTWO, -1, -1, PAL_NPC_PURPLE, OBJECTTYPE_SCRIPT, 0, ObjectEvent, EVENT_CINNABAR_LAB_MEWTWO
+	pokemon_event 15,  7, MEWTWO, SPRITEMOVEDATA_STILL, -1, -1, PAL_NPC_PURPLE, ClearText, EVENT_CINNABAR_LAB_MEWTWO
 	object_event 14,  8, SPRITE_CELEBI, SPRITEMOVEDATA_STANDING_RIGHT, 0, 0, -1, -1, 0, OBJECTTYPE_SCRIPT, 0, ObjectEvent, EVENT_CINNABAR_LAB_CELEBI
 	object_event 15,  8, SPRITE_CHRIS, SPRITEMOVEDATA_STANDING_UP, 0, 0, -1, -1, 0, OBJECTTYPE_SCRIPT, 0, ObjectEvent, EVENT_CINNABAR_LAB_CHRIS
 	object_event 15,  8, SPRITE_KRIS, SPRITEMOVEDATA_STANDING_UP, 0, 0, -1, -1, 0, OBJECTTYPE_SCRIPT, 0, ObjectEvent, EVENT_CINNABAR_LAB_KRIS
+	object_event 15,  8, SPRITE_CRYS, SPRITEMOVEDATA_STANDING_UP, 0, 0, -1, -1, 0, OBJECTTYPE_SCRIPT, 0, ObjectEvent, EVENT_CINNABAR_LAB_CRYS
 
 	object_const_def
 	const CINNABARLAB_GIOVANNI
@@ -40,9 +41,10 @@ CinnabarLab_MapScriptHeader:
 	const CINNABARLAB_CELEBI
 	const CINNABARLAB_CHRIS
 	const CINNABARLAB_KRIS
+	const CINNABARLAB_CRYS
 
 CinnabarLabTrigger0:
-	prioritysjump CinnabarLabStepDownScript
+	sdefer CinnabarLabStepDownScript
 	end
 
 CinnabarLabStepDownScript:
@@ -63,6 +65,7 @@ CinnabarLabCelebiEventScript:
 	setevent EVENT_CINNABAR_LAB_MEWTWO
 	setevent EVENT_CINNABAR_LAB_CHRIS
 	setevent EVENT_CINNABAR_LAB_KRIS
+	setevent EVENT_CINNABAR_LAB_CRYS
 	clearevent EVENT_CINNABAR_LAB_SCIENTIST1
 	setevent EVENT_CINNABAR_LAB_SCIENTIST2
 	setscene $0
@@ -70,12 +73,17 @@ CinnabarLabCelebiEventScript:
 	special Special_FadeOutMusic
 	pause 30
 	showtext CinnabarLabContinueTestingText
+	applyonemovement PLAYER, slow_step_up
 	showemote EMOTE_SHOCK, CINNABARLAB_GIOVANNI, 15
 	playmusic MUSIC_ROCKET_OVERTURE
 	turnobject CINNABARLAB_GIOVANNI, DOWN
 	showtext CinnabarLabGiovanniWhoAreYouText
 	applymovement CINNABARLAB_GIOVANNI, CinnabarLabGiovanniStepAsideMovementData
-	applymovement PLAYER, CinnabarLabPlayerStepsUpMovementData
+	showemote EMOTE_SHOCK, PLAYER, 15
+	scall CinnabarLabHidePlayer
+	applymovement PLAYER, CinnabarLabPanUpAndDownMovementData
+	scall CinnabarLabShowPlayer
+	applyonemovement PLAYER, slow_step_up
 	opentext
 	writetext CinnabarLabGiovanniAttackText
 	cry MEWTWO
@@ -119,14 +127,7 @@ CinnabarLabCelebiEventScript:
 	applymovement CINNABARLAB_ARMORED_MEWTWO, CinnabarLabMewtwoFloatsDownMovementData
 	applymovement PLAYER, CinnabarLabPlayerStepsBackMovementData
 	pause 15
-	checkflag ENGINE_PLAYER_IS_FEMALE
-	iftrue .Female
-	appear CINNABARLAB_CHRIS
-	sjump .Continue
-.Female
-	appear CINNABARLAB_KRIS
-.Continue
-	applyonemovement PLAYER, hide_object
+	scall CinnabarLabHidePlayer
 	waitsfx
 	showemote EMOTE_SHOCK, CINNABARLAB_GIOVANNI, 10
 	cry MEWTWO
@@ -163,8 +164,7 @@ CinnabarLabCelebiEventScript:
 	applyonemovement CINNABARLAB_GIOVANNI, jump_step_up
 	waitsfx
 	applymovement PLAYER, CinnabarLabPan4MovementData
-	disappear CINNABARLAB_CHRIS
-	disappear CINNABARLAB_KRIS
+	scall CinnabarLabShowPlayer
 	turnobject CINNABARLAB_ARMORED_MEWTWO, DOWN
 	pause 30
 	applyonemovement CINNABARLAB_ARMORED_MEWTWO, slow_step_down
@@ -207,15 +207,50 @@ CinnabarLabCelebiEventScript:
 	warp ILEX_FOREST, 10, 26
 	end
 
+CinnabarLabHidePlayer:
+	readvar VAR_PLAYERGENDER
+	scalltable .Appear
+	applyonemovement PLAYER, hide_object
+	end
+.Appear:
+	dw .Male
+	dw .Female
+	dw .Enby
+.Male:
+	appear CINNABARLAB_CHRIS
+	end
+.Female:
+	appear CINNABARLAB_KRIS
+	end
+.Enby:
+	appear CINNABARLAB_CRYS
+	end
+
+CinnabarLabShowPlayer:
+	applyonemovement PLAYER, show_object
+	disappear CINNABARLAB_CHRIS
+	disappear CINNABARLAB_KRIS
+	disappear CINNABARLAB_CRYS
+	end
+
 CinnabarLabGiovanniStepAsideMovementData:
 	slow_step_right
 	slow_step_right
 	turn_head_left
 	step_end
 
-CinnabarLabPlayerStepsUpMovementData:
+CinnabarLabPanUpAndDownMovementData:
 	slow_step_up
 	slow_step_up
+	slow_step_up
+	slow_step_up
+	step_sleep 32
+	slow_step_down
+	slow_step_down
+	slow_step_down
+	slow_step_down
+	step_sleep 32
+	turn_head_up
 	step_end
 
 CinnabarLabMewtwoFloatsDownMovementData:
@@ -303,7 +338,6 @@ CinnabarLabPan4MovementData:
 	step_down
 	step_down
 	turn_head_up
-	show_object
 	step_end
 
 CinnabarLabCelebiFloatsMovementData:

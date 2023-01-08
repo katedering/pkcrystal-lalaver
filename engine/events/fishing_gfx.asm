@@ -4,12 +4,23 @@ LoadFishingGFX:
 	xor a
 	ldh [rVBK], a
 
-	ld de, FishingGFX
+	ld a, [wPlayerState]
+	cp PLAYER_SURF
+	ld hl, .FishingGFXTable
+	jr nz, .got_table
+	ld hl, .SurfFishingGFXTable
+.got_table
+	; de = [hl + [wPlayerGender] * 2]
 	ld a, [wPlayerGender]
-	bit 0, a
-	jr z, .got_gender
-	ld de, KrisFishingGFX
-.got_gender
+	add a
+	add l
+	ld l, a
+	adc h
+	sub l
+	ld h, a
+	ld a, [hli]
+	ld d, [hl]
+	ld e, a
 
 	ld hl, vTiles0 tile $02
 	call .LoadGFX
@@ -23,7 +34,7 @@ LoadFishingGFX:
 	ret
 
 .LoadGFX:
-	lb bc, BANK(FishingGFX), 2
+	lb bc, BANK("Fishing Graphics"), 2
 	push de
 	call Get2bpp
 	pop de
@@ -33,8 +44,12 @@ LoadFishingGFX:
 	ld e, l
 	ret
 
-FishingGFX:
-INCBIN "gfx/overworld/chris_fish.2bpp"
+.FishingGFXTable:
+	dw ChrisFishingGFX
+	dw KrisFishingGFX
+	dw CrysFishingGFX
 
-KrisFishingGFX:
-INCBIN "gfx/overworld/kris_fish.2bpp"
+.SurfFishingGFXTable:
+	dw ChrisSurfFishingGFX
+	dw KrisSurfFishingGFX
+	dw CrysSurfFishingGFX

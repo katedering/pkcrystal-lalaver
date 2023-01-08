@@ -11,16 +11,21 @@ BlindingFlash::
 
 ShakeHeadbuttTree:
 	call ClearSpriteAnims
+	call GetCurrentLandmark
+	cp NOISY_FOREST
+	ld hl, HeadbuttTree2GFX
+	jr z, .got_gfx
 	ld hl, HeadbuttTreeGFX
-	ld de, vTiles0 tile $64
-	lb bc, BANK(HeadbuttTreeGFX), 8
+.got_gfx
+	ld de, vTiles0 tile $63
+	lb bc, BANK("Overworld Effect Graphics"), 12
 	call DecompressRequest2bpp
 	call Cut_Headbutt_GetPixelFacing
 	ld a, SPRITE_ANIM_INDEX_HEADBUTT
-	call _InitSpriteAnimStruct
+	call InitSpriteAnimStruct
 	ld hl, SPRITEANIMSTRUCT_TILE_ID
 	add hl, bc
-	ld [hl], $64
+	ld [hl], $63
 	ld a, 36 * 4
 	ld [wCurSpriteOAMAddr], a
 	call DoNextFrameForAllSprites
@@ -48,15 +53,12 @@ ShakeHeadbuttTree:
 	xor a
 	ldh [hBGMapMode], a
 	call ClearSpriteAnims
-	ld hl, wVirtualOAM + 36 * 4
-	ld bc, wVirtualOAMEnd - (wVirtualOAM + 36 * 4)
+	ld hl, wShadowOAM + 36 * 4
+	ld bc, wShadowOAMEnd - (wShadowOAM + 36 * 4)
 	xor a
 	rst ByteFill
 	call DelayFrame
 	jmp UpdatePlayerSprite
-
-HeadbuttTreeGFX:
-INCBIN "gfx/overworld/headbutt_tree.2bpp.lz"
 
 HideHeadbuttTree:
 	xor a
@@ -72,7 +74,7 @@ HideHeadbuttTree:
 	ld h, [hl]
 	ld l, a
 
-	ld a, $2 ; grass tile
+	ld a, " "
 	ld [hli], a
 	ld [hld], a
 	ld bc, SCREEN_WIDTH
@@ -122,7 +124,7 @@ OWCutJumptable:
 Cut_SpawnAnimateTree:
 	call Cut_Headbutt_GetPixelFacing
 	ld a, SPRITE_ANIM_INDEX_CUT_TREE ; cut tree
-	call _InitSpriteAnimStruct
+	call InitSpriteAnimStruct
 	ld hl, SPRITEANIMSTRUCT_TILE_ID
 	add hl, bc
 	ld [hl], $74
@@ -175,7 +177,7 @@ Cut_SpawnLeaf:
 	push de
 	push af
 	ld a, SPRITE_ANIM_INDEX_LEAF ; leaf
-	call _InitSpriteAnimStruct
+	call InitSpriteAnimStruct
 	ld hl, SPRITEANIMSTRUCT_TILE_ID
 	add hl, bc
 	ld [hl], $70
@@ -262,7 +264,7 @@ FlyFromAnim:
 	call FlyFunction_InitGFX
 	depixel 10, 10, 4, 0
 	ld a, SPRITE_ANIM_INDEX_RED_WALK
-	call _InitSpriteAnimStruct
+	call InitSpriteAnimStruct
 	ld hl, SPRITEANIMSTRUCT_TILE_ID
 	add hl, bc
 	ld [hl], $64
@@ -296,7 +298,7 @@ FlyToAnim:
 	call FlyFunction_InitGFX
 	depixel 31, 10, 4, 0
 	ld a, SPRITE_ANIM_INDEX_RED_WALK
-	call _InitSpriteAnimStruct
+	call InitSpriteAnimStruct
 	ld hl, SPRITEANIMSTRUCT_TILE_ID
 	add hl, bc
 	ld [hl], $64
@@ -322,7 +324,7 @@ FlyToAnim:
 .exit
 	pop af
 	ld [wVramState], a
-	ld hl, wVirtualOAM + 2 ; Tile ID
+	ld hl, wShadowOAM + 2 ; Tile ID
 	xor a
 	ld c, $4
 .loop2
@@ -333,8 +335,8 @@ FlyToAnim:
 	inc a
 	dec c
 	jr nz, .loop2
-	ld hl, wVirtualOAM + 4 * 4
-	ld bc, wVirtualOAMEnd - (wVirtualOAM + 4 * 4)
+	ld hl, wShadowOAM + 4 * 4
+	ld bc, wShadowOAMEnd - (wShadowOAM + 4 * 4)
 	xor a
 	rst ByteFill
 	ret
@@ -379,7 +381,7 @@ FlyFunction_FrameTimer:
 	ld d, a
 	ld e, $0
 	ld a, SPRITE_ANIM_INDEX_FLY_LEAF ; fly land
-	call _InitSpriteAnimStruct
+	call InitSpriteAnimStruct
 	ld hl, SPRITEANIMSTRUCT_TILE_ID
 	add hl, bc
 	ld [hl], $70

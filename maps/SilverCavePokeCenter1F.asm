@@ -42,16 +42,17 @@ SilverCavePokeCenterGrampsScript:
 	writetext .GreetingText
 	waitbutton
 	readvar VAR_PKMN_JOURNALS
-	ifequal 0, .ReadNone
-	ifequal NUM_POKEMON_JOURNALS, .ReadThemAll
+	ifequalfwd 0, .ReadNone
+	ifequalfwd NUM_POKEMON_JOURNALS, .ReadThemAll
 	jumpthisopenedtext
 
 	text "Oh, you've read "
 	text_decimal hScriptVar, 1, 2
+	text ""
 	line "of them?"
 
 	para "Not bad, but I've"
-	line "read all 33!"
+	line "read all {d:NUM_POKEMON_JOURNALS}!"
 	done
 
 .ReadNone:

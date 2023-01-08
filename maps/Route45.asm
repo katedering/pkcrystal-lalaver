@@ -5,12 +5,14 @@ Route45_MapScriptHeader:
 
 	def_warp_events
 	warp_event  4,  5, DARK_CAVE_BLACKTHORN_ENTRANCE, 1
+	warp_event 16, 22, HIDDEN_CAVE_GROTTO, 1
 
 	def_coord_events
 
 	def_bg_events
 	bg_event 17,  5, BGEVENT_JUMPTEXT, Route45SignText
 	bg_event 17, 78, BGEVENT_ITEM + PP_UP, EVENT_ROUTE_45_HIDDEN_PP_UP
+	bg_event 16, 21, BGEVENT_JUMPSTD, cavegrotto, HIDDENGROTTO_ROUTE_45
 
 	def_object_events
 	object_event 19, 75, SPRITE_DRAGON_TAMER, SPRITEMOVEDATA_WALK_LEFT_RIGHT, 0, 2, -1, -1, 0, OBJECTTYPE_SCRIPT, 0, Route45Dragon_tamerScript, -1
@@ -37,7 +39,7 @@ Route45Dragon_tamerScript:
 	iftrue_jumptextfaceplayer .AfterText2
 	faceplayer
 	checkevent EVENT_BEAT_DRAGON_TAMER_AEGON
-	iftrue .Beaten
+	iftruefwd .Beaten
 	checkevent EVENT_BEAT_BATTLE_GIRL_NOZOMI
 	iffalse_jumptext .IntroText
 	checkevent EVENT_BEAT_BLACKBELT_KENJI
@@ -159,41 +161,41 @@ BlackbeltKenji1Script:
 	loadvar VAR_CALLERID, PHONE_BLACKBELT_KENJI
 	opentext
 	checkcellnum PHONE_BLACKBELT_KENJI
-	iftrue UnknownScript_0x19e0e4
+	iftruefwd UnknownScript_0x19e0e4
 	checkevent EVENT_KENJI_ASKED_FOR_PHONE_NUMBER
-	iftrue UnknownScript_0x19e0cd
+	iftruefwd UnknownScript_0x19e0cd
 	special Special_SampleKenjiBreakCountdown
 	writetext BlackbeltKenjiAfterBattleText
 	waitbutton
 	setevent EVENT_KENJI_ASKED_FOR_PHONE_NUMBER
 	scall Route45AskNumber1M
-	sjump UnknownScript_0x19e0d0
+	sjumpfwd UnknownScript_0x19e0d0
 
 UnknownScript_0x19e0cd:
 	scall Route45AskNumber2M
 UnknownScript_0x19e0d0:
 	askforphonenumber PHONE_BLACKBELT_KENJI
-	ifequal $1, Route45PhoneFullM
-	ifequal $2, Route45NumberDeclinedM
+	ifequalfwd $1, Route45PhoneFullM
+	ifequalfwd $2, Route45NumberDeclinedM
 	gettrainername BLACKBELT_T, KENJI1, $0
 	scall Route45RegisteredNumberM
-	sjump Route45NumberAcceptedM
+	sjumpfwd Route45NumberAcceptedM
 
 UnknownScript_0x19e0e4:
 	readvar VAR_KENJI_BREAK
 	ifnotequal $1, Route45NumberAcceptedM
 	checktime 1 << MORN
-	iftrue UnknownScript_0x19e10c
+	iftruefwd UnknownScript_0x19e10c
 	checktime (1 << EVE) | (1 << NITE)
-	iftrue UnknownScript_0x19e112
+	iftruefwd UnknownScript_0x19e112
 	checkevent EVENT_KENJI_ON_BREAK
-	iffalse Route45NumberAcceptedM
+	iffalsefwd Route45NumberAcceptedM
 	scall Route45GiftM
 	verbosegiveitem PP_UP
-	iffalse UnknownScript_0x19e118
+	iffalsefwd UnknownScript_0x19e118
 	clearevent EVENT_KENJI_ON_BREAK
 	special Special_SampleKenjiBreakCountdown
-	sjump Route45NumberAcceptedM
+	sjumpfwd Route45NumberAcceptedM
 
 UnknownScript_0x19e10c:
 	jumpopenedtext BlackbeltKenjiMorningText
@@ -202,7 +204,7 @@ UnknownScript_0x19e112:
 	jumpopenedtext BlackbeltKenjiNightText
 
 UnknownScript_0x19e118:
-	sjump Route45PackFullM
+	sjumpfwd Route45PackFullM
 
 Route45AskNumber1M:
 	jumpstd asknumber1m
@@ -268,16 +270,16 @@ HikerParry1Script:
 	loadvar VAR_CALLERID, PHONE_HIKER_PARRY
 	opentext
 	checkflag ENGINE_PARRY_READY_FOR_REMATCH
-	iftrue UnknownScript_0x19e1b8
+	iftruefwd UnknownScript_0x19e1b8
 	checkcellnum PHONE_HIKER_PARRY
 	iftrue Route45NumberAcceptedM
 	checkevent EVENT_PARRY_ASKED_FOR_PHONE_NUMBER
-	iftrue UnknownScript_0x19e1a1
+	iftruefwd UnknownScript_0x19e1a1
 	writetext HikerParryAfterBattleText
 	promptbutton
 	setevent EVENT_PARRY_ASKED_FOR_PHONE_NUMBER
 	scall Route45AskNumber1M
-	sjump UnknownScript_0x19e1a4
+	sjumpfwd UnknownScript_0x19e1a4
 
 UnknownScript_0x19e1a1:
 	scall Route45AskNumber2M
@@ -293,15 +295,15 @@ UnknownScript_0x19e1b8:
 	scall Route45RematchM
 	winlosstext HikerParry1BeatenText, 0
 	readmem wParryFightCount
-	ifequal 2, .Fight2
-	ifequal 1, .Fight1
-	ifequal 0, .LoadFight0
+	ifequalfwd 2, .Fight2
+	ifequalfwd 1, .Fight1
+	ifequalfwd 0, .LoadFight0
 .Fight2:
 	checkevent EVENT_RESTORED_POWER_TO_KANTO
-	iftrue .LoadFight2
+	iftruefwd .LoadFight2
 .Fight1:
 	checkevent EVENT_BEAT_ELITE_FOUR
-	iftrue .LoadFight1
+	iftruefwd .LoadFight1
 .LoadFight0:
 	loadtrainer HIKER, PARRY1
 	startbattle
@@ -324,9 +326,9 @@ UnknownScript_0x19e1b8:
 	reloadmapafterbattle
 	clearflag ENGINE_PARRY_READY_FOR_REMATCH
 	checkevent EVENT_PARRY_IRON
-	iftrue UnknownScript_0x19e219
+	iftruefwd UnknownScript_0x19e219
 	checkevent EVENT_GOT_IRON_FROM_PARRY
-	iftrue UnknownScript_0x19e218
+	iftruefwd UnknownScript_0x19e218
 	scall Route45RematchGiftM
 	verbosegiveitem IRON
 	iffalse HikerParryHasIron

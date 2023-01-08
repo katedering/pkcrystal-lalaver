@@ -14,10 +14,14 @@ BattleFactory1F_MapScriptHeader:
 	def_bg_events
 	bg_event 14,  5, BGEVENT_READ, BattleFactory1FRulesScript
 	bg_event 10,  5, BGEVENT_JUMPTEXT, BattleFactory1FStreakText
+	bg_event 25,  6, BGEVENT_READ, PokemonJournalThortonScript
 
 	def_object_events
 	object_event 12,  5, SPRITE_SCIENTIST, SPRITEMOVEDATA_STANDING_DOWN, 0, 0, -1, -1, PAL_NPC_BLUE, OBJECTTYPE_SCRIPT, 0, BattleFactory1FReceptionistScript, -1
 	pc_nurse_event  6,  6
+	object_event 18,  6, SPRITE_CLERK, SPRITEMOVEDATA_STANDING_DOWN, 0, 0, -1, -1, PAL_NPC_RED, OBJECTTYPE_COMMAND, pokemart, MARTTYPE_BP, MART_BATTLEFACTORY_1, -1
+	object_event 20,  6, SPRITE_CLERK, SPRITEMOVEDATA_STANDING_DOWN, 0, 0, -1, -1, PAL_NPC_GREEN, OBJECTTYPE_COMMAND, pokemart, MARTTYPE_BP, MART_BATTLEFACTORY_2, -1
+	object_event 22,  6, SPRITE_CLERK, SPRITEMOVEDATA_STANDING_DOWN, 0, 0, -1, -1, PAL_NPC_BLUE, OBJECTTYPE_COMMAND, pokemart, MARTTYPE_BP, MART_BATTLEFACTORY_3, -1
 
 	object_const_def
 	const BATTLEFACTORY1F_RECEPTIONIST
@@ -29,10 +33,10 @@ BattleFactory1FContinueChallenge:
 
 	; Check current battle status to see if we need to resume or reset winstreak
 	special Special_BattleTower_GetChallengeState
-	ifequal BATTLETOWER_CHALLENGE_IN_PROGRESS, .LeftWithoutSaving
-	ifequal BATTLETOWER_SAVED_AND_LEFT, .ResumeChallenge
-	ifequal BATTLETOWER_LOST_CHALLENGE, .LostChallenge
-	ifequal BATTLETOWER_WON_CHALLENGE, .WonChallenge
+	ifequalfwd BATTLETOWER_CHALLENGE_IN_PROGRESS, .LeftWithoutSaving
+	ifequalfwd BATTLETOWER_SAVED_AND_LEFT, .ResumeChallenge
+	ifequalfwd BATTLETOWER_LOST_CHALLENGE, .LostChallenge
+	ifequalfwd BATTLETOWER_WON_CHALLENGE, .WonChallenge
 	end
 
 .ResumeChallenge:
@@ -43,15 +47,13 @@ BattleFactory1FContinueChallenge:
 		line "for you."
 		prompt
 
-	; Schedule script for running. This prevents odd issues that a regular jump
-	; causes for scene scripts. This is NOT a true jump, so "end" is necessary.
-	prioritysjump Script_ReturnToRentalChallenge
+	sdefer Script_ReturnToRentalChallenge
 	end
 
 .LeftWithoutSaving:
-	; The player resetted the game in the middle of a battle.
+	; The player reset the game in the middle of a battle.
 	; This counts as a battle loss, and will reset the winstreak.
-	prioritysjump .LeftWithoutSaving2
+	sdefer .LeftWithoutSaving2
 	end
 .LeftWithoutSaving2:
 	opentext
@@ -69,15 +71,15 @@ BattleFactory1FContinueChallenge:
 		line "invalid."
 		done
 	waitbutton
-	sjump Script_CommitBattleFactoryResult
+	sjumpfwd Script_CommitBattleFactoryResult
 
 .LostChallenge:
 	opentext
-	prioritysjump Script_CommitBattleFactoryResult
+	sdefer Script_CommitBattleFactoryResult
 	end
 
 .WonChallenge:
-	prioritysjump .WonChallenge2
+	sdefer .WonChallenge2
 	end
 .WonChallenge2:
 	opentext
@@ -94,8 +96,8 @@ BattleFactory1FContinueChallenge:
 	; fallthrough
 Script_CommitBattleFactoryResult:
 	special Special_BattleTower_CommitChallengeResult
-	iffalse .WeHopeToServeYouAgain
-	setevent EVENT_BEAT_PALMER
+	iffalsefwd .WeHopeToServeYouAgain
+	setevent EVENT_BEAT_THORTON
 .WeHopeToServeYouAgain:
 	writethistext
 		text "We hope to serve"
@@ -158,7 +160,7 @@ BattleFactory1FReceptionistScript:
 		done
 	promptbutton
 	checkevent EVENT_BATTLE_FACTORY_INTRO
-	iftrue .BattleFactoryMenu
+	iftruefwd .BattleFactoryMenu
 
 	; only ask once, so set the flag regardless
 	setevent EVENT_BATTLE_FACTORY_INTRO
@@ -168,7 +170,7 @@ BattleFactory1FReceptionistScript:
 		cont "facility?"
 		done
 	yesorno
-	iffalse .BattleFactoryMenu
+	iffalsefwd .BattleFactoryMenu
 
 .Explanation:
 	writethistext
@@ -210,7 +212,7 @@ BattleFactory1FReceptionistScript:
 	loadmenu MenuDataHeader_BattleInfoCancel
 	verticalmenu
 	closewindow
-	ifequal $1, .Challenge
+	ifequalfwd $1, .Challenge
 	ifequal $2, .Explanation
 	writethistext
 		text "We hope to serve"
@@ -274,3 +276,21 @@ Script_ReturnToRentalChallenge:
 	step_up
 	step_up
 	step_end
+
+PokemonJournalThortonScript:
+	setflag ENGINE_READ_PALMER_JOURNAL
+	jumpthistext
+
+	text "#mon Journal"
+
+	para "Special Feature:"
+	line "Factory Head"
+	cont "Thorton!"
+
+	para "Thorton is said to"
+	line "only believe in"
+
+	para "what he can prove"
+	line "numerically with"
+	line "his inventions."
+	done

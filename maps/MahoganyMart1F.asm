@@ -14,6 +14,7 @@ MahoganyMart1F_MapScriptHeader:
 	def_coord_events
 
 	def_bg_events
+	bg_event  7,  1, BGEVENT_READ, PokemonJournalWillScript
 
 	def_object_events
 	object_event  4,  3, SPRITE_PHARMACIST, SPRITEMOVEDATA_STANDING_DOWN, 0, 0, -1, -1, PAL_NPC_PURPLE, OBJECTTYPE_SCRIPT, 0, MahoganyMart1FPharmacistScript, EVENT_TEAM_ROCKET_BASE_POPULATION
@@ -29,13 +30,13 @@ MahoganyMart1F_MapScriptHeader:
 	const MAHOGANYMART1F_DRAGONITE
 
 MahoganyMart1FTrigger1:
-	prioritysjump MahoganyMart1FLanceUncoversStaircaseScript
+	sdefer MahoganyMart1FLanceUncoversStaircaseScript
 MahoganyMart1FTrigger0:
 	end
 
 UnknownScript_0x6c35b:
 	checkevent EVENT_UNCOVERED_STAIRCASE_IN_MAHOGANY_MART
-	iftrue UnknownScript_0x6c362
+	iftruefwd UnknownScript_0x6c362
 	endcallback
 
 UnknownScript_0x6c362:
@@ -181,4 +182,27 @@ MahoganyMart1FLanceSplitUpText:
 
 	para "check this place."
 	line "I'll go first."
+	done
+
+PokemonJournalWillScript:
+	setflag ENGINE_READ_WILL_JOURNAL
+	jumpthistext
+
+	text "#mon Journal"
+
+	para "Special Feature:"
+	line "Elite Four Will!"
+
+	para "Will does not talk"
+	line "about his past"
+
+	para "before joining the"
+	line "Elite Four."
+
+	para "Some say he worked"
+	line "for Team Rocket."
+
+	para "#mon Journal"
+	line "refuses to specu-"
+	cont "late."
 	done

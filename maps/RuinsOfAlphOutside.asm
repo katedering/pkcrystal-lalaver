@@ -19,6 +19,7 @@ RuinsOfAlphOutside_MapScriptHeader:
 	warp_event 15, 26, ROUTE_32_RUINS_OF_ALPH_GATE, 1
 	warp_event 15, 27, ROUTE_32_RUINS_OF_ALPH_GATE, 2
 	warp_event 10,  9, RUINS_OF_ALPH_SINJOH_CHAMBER, 1
+	warp_event 11, 36, HIDDEN_CAVE_GROTTO, 1
 
 	def_coord_events
 	coord_event 13, 20, 1, RuinsOfAlphOutsideScientistScene1
@@ -28,8 +29,10 @@ RuinsOfAlphOutside_MapScriptHeader:
 	bg_event 18, 14, BGEVENT_JUMPTEXT, RuinsOfAlphOutsideMysteryChamberSignText
 	bg_event 14, 22, BGEVENT_JUMPTEXT, RuinsOfAlphSignText
 	bg_event 20, 18, BGEVENT_JUMPTEXT, RuinsOfAlphResearchCenterSignText
+	bg_event  3,  9, BGEVENT_JUMPTEXT, RuinsOfAlphAdvancedTipsSignText
 	bg_event 10,  9, BGEVENT_IFNOTSET, MapRuinsofAlphOutsideSealedCaveSign
 	bg_event  4, 13, BGEVENT_ITEM + RARE_CANDY, EVENT_RUINS_OF_ALPH_OUTSIDE_HIDDEN_RARE_CANDY
+	bg_event 11, 35, BGEVENT_JUMPSTD, cavegrotto, HIDDENGROTTO_RUINS_OF_ALPH
 
 	def_object_events
 	object_event 13, 21, SPRITE_SCIENTIST, SPRITEMOVEDATA_STANDING_UP, 0, 0, -1, -1, PAL_NPC_BROWN, OBJECTTYPE_SCRIPT, 0, RuinsOfAlphOutsideScientistScript, EVENT_RUINS_OF_ALPH_OUTSIDE_SCIENTIST
@@ -52,7 +55,7 @@ RuinsOfAlphOutside_MapScriptHeader:
 
 RuinsofAlphOutsideTrigger0:
 	checkevent EVENT_DO_RUINS_OF_ALPH_CLIMAX
-	iffalse .End
+	iffalsefwd .End
 	showtext RuinsofAlphScientistClimax1Text
 	follow RUINSOFALPHOUTSIDE_SCIENTIST2, PLAYER
 	applymovement RUINSOFALPHOUTSIDE_SCIENTIST2, RuinsofAlphScientistClimaxApproachMovementData
@@ -70,22 +73,22 @@ RuinsofAlphOutsideTrigger0:
 
 RuinsofAlphOutsideTileScript:
 	checkevent EVENT_DOOR_OPENED_IN_RUINS_OF_ALPH
-	iffalse .locked
+	iffalsefwd .locked
 	changeblock 10, 8, $9f
 .locked
 	endcallback
 
 RuinsOfAlphOutsideScientistCallback:
 	checkflag ENGINE_UNOWN_DEX
-	iftrue .NoScientist
+	iftruefwd .NoScientist
 	checkevent EVENT_MADE_UNOWN_APPEAR_IN_RUINS
-	iftrue .MaybeScientist
-	sjump .NoScientist
+	iftruefwd .MaybeScientist
+	sjumpfwd .NoScientist
 
 .MaybeScientist:
 	readvar VAR_UNOWNCOUNT
 	ifgreater $0, .YesScientist
-	sjump .NoScientist
+	sjumpfwd .NoScientist
 
 .YesScientist:
 	appear RUINSOFALPHOUTSIDE_SCIENTIST1
@@ -98,9 +101,9 @@ RuinsOfAlphOutsideScientistCallback:
 	endcallback
 
 RuinsOfAlphOutsideScientistScene1:
+RuinsOfAlphOutsideScientistScript:
 	faceobject RUINSOFALPHOUTSIDE_SCIENTIST1, PLAYER
 	faceobject PLAYER, RUINSOFALPHOUTSIDE_SCIENTIST1
-RuinsOfAlphOutsideScientistScript:
 	showtext RuinsOfAlphOutsideScientistText
 	playmusic MUSIC_SHOW_ME_AROUND
 	follow RUINSOFALPHOUTSIDE_SCIENTIST1, PLAYER
@@ -256,7 +259,7 @@ PsychicNathanSeenText:
 	line "strange place."
 	done
 
-PsychicNathanBeatenText:
+PsychicNathanBeatenText: ; text > text
 	text "…"
 	done
 
@@ -276,6 +279,20 @@ RuinsOfAlphResearchCenterSignText:
 
 	para "The Authority On"
 	line "The Ruins of Alph"
+	done
+
+RuinsOfAlphAdvancedTipsSignText:
+	text "Advanced Tips!"
+
+	para "The #dex is a"
+	line "powerful tool!"
+
+	para "Its Area map shows"
+	line "a yellow icon if a"
+
+	para "#mon can be"
+	line "found right where"
+	cont "you are!"
 	done
 
 MapRuinsofAlphOutsideSealedCaveSign:

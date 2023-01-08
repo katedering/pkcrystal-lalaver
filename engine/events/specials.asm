@@ -26,34 +26,49 @@ Special_SetCopycatPalette:
 
 Special_GameCornerPrizeMonCheckDex:
 	ldh a, [hScriptVar]
-	dec a
-	call CheckCaughtMon
+	ld c, a
+	ldh a, [hScriptVar+1]
+	ld b, a
+	push bc
+	call CheckCosmeticCaughtMon
+	pop bc
 	ret nz
-	ldh a, [hScriptVar]
-	dec a
 	call SetSeenAndCaughtMon
 	call FadeToMenu
+	ld hl, wNamedObjectIndex
 	ldh a, [hScriptVar]
-	ld [wNamedObjectIndex], a
+	ld [hli], a
+	ldh a, [hScriptVar+1]
+	ld [hl], a
 	farcall NewPokedexEntry
 	jmp ExitAllMenus
 
 SpecialSeenMon:
 	ldh a, [hScriptVar]
-	dec a
+	ld c, a
+	ldh a, [hScriptVar+1]
+	ld b, a
 	jmp SetSeenMon
 
 Special_FindThatSpecies:
 	ldh a, [hScriptVar]
+	ld c, a
+	ldh a, [hScriptVar+1]
 	ld b, a
-	farcall _FindThatSpecies
+	push de ; being cautious
+	farcall FindThatSpecies
+	pop de
 	jr z, FoundNone
 	jr FoundOne
 
 Special_FindThatSpeciesYourTrainerID:
 	ldh a, [hScriptVar]
+	ld c, a
+	ldh a, [hScriptVar+1]
 	ld b, a
+	push de
 	farcall _FindThatSpeciesYourTrainerID
+	pop de
 	jr z, FoundNone
 	; fallthrough
 
@@ -139,7 +154,7 @@ BugContestJudging:
 
 .FirstPlacePrizes:
 	db MORN_HOUR, MOON_STONE
-	db DAY_HOUR,  DAWN_STONE
+	db DAY_HOUR,  SHINY_STONE
 	db EVE_HOUR,  SUN_STONE
 	db NITE_HOUR, DUSK_STONE
 	db -1,        MOON_STONE
@@ -268,9 +283,9 @@ StoreSwarmMapIndices::
 	ret
 
 Special_ResetLuckyNumberShowFlag:
-	farcall RestartLuckyNumberCountdown
+	farcall RestartDailyResetTimer
 	ld hl, wLuckyNumberShowFlag
-	res 0, [hl]
+	res LUCKYNUMBERSHOW_GAME_OVER_F, [hl]
 	farjp LoadOrRegenerateLuckyIDNumber
 
 SpecialSnorlaxAwake:
@@ -291,6 +306,9 @@ SpecialSnorlaxAwake:
 
 PlayCurMonCry:
 	ld a, [wCurPartySpecies]
+	ld c, a
+	ld a, [wCurForm]
+	ld b, a
 	jmp PlayCry
 
 Special_FadeOutMusic:
@@ -337,8 +355,9 @@ RespawnOneOffs:
 	eventflagreset EVENT_BEAT_LAWRENCE
 	eventflagreset EVENT_BEAT_FLANNERY
 	eventflagreset EVENT_BEAT_MAYLENE
-	eventflagreset EVENT_BEAT_SKYLA_AGAIN
+	eventflagreset EVENT_BEAT_MARLON_AGAIN
 	eventflagreset EVENT_BEAT_KUKUI
+	eventflagreset EVENT_BEAT_KATY
 
 	eventflagcheck EVENT_GOT_MUSCLE_BAND_FROM_STEVEN
 	jr z, .SkipSteven
@@ -354,45 +373,47 @@ RespawnOneOffs:
 	eventflagreset EVENT_BEAT_CYNTHIA
 .SkipCynthia
 
-	ld a, SUDOWOODO - 1
-	call CheckCaughtMon
+	; Set CHECK_FLAG once to be used multiple times
+	ld b, CHECK_FLAG
+	ld de, ENGINE_PLAYER_CAUGHT_SUDOWOODO
+	farcall EngineFlagAction
 	jr nz, .CaughtSudowoodo
 	eventflagreset EVENT_ROUTE_36_SUDOWOODO
 .CaughtSudowoodo
 
-	ld a, ARTICUNO - 1
-	call CheckCaughtMon
+	ld de, ENGINE_PLAYER_CAUGHT_ARTICUNO
+	farcall EngineFlagAction
 	jr nz, .CaughtArticuno
 	eventflagreset EVENT_SEAFOAM_ISLANDS_ARTICUNO
 .CaughtArticuno
 
-	ld a, ZAPDOS - 1
-	call CheckCaughtMon
+	ld de, ENGINE_PLAYER_CAUGHT_ZAPDOS
+	farcall EngineFlagAction
 	jr nz, .CaughtZapdos
 	eventflagreset EVENT_ROUTE_10_ZAPDOS
 	eventflagreset EVENT_ZAPDOS_GONE
 .CaughtZapdos
 
-	ld a, MOLTRES - 1
-	call CheckCaughtMon
+	ld de, ENGINE_PLAYER_CAUGHT_MOLTRES
+	farcall EngineFlagAction
 	jr nz, .CaughtMoltres
 	eventflagreset EVENT_CINNABAR_VOLCANO_MOLTRES
 .CaughtMoltres
 
-	ld a, MEWTWO - 1
-	call CheckCaughtMon
+	ld de, ENGINE_PLAYER_CAUGHT_MEWTWO
+	farcall EngineFlagAction
 	jr nz, .CaughtMewtwo
 	eventflagreset EVENT_CERULEAN_CAVE_MEWTWO
 .CaughtMewtwo
 
-	ld a, MEW - 1
-	call CheckCaughtMon
+	ld de, ENGINE_PLAYER_CAUGHT_MEW
+	farcall EngineFlagAction
 	jr nz, .CaughtMew
 	eventflagreset EVENT_FARAWAY_JUNGLE_MEW
 .CaughtMew
 
-	ld a, RAIKOU - 1
-	call CheckCaughtMon
+	ld de, ENGINE_PLAYER_CAUGHT_RAIKOU
+	farcall EngineFlagAction
 	jr nz, .CaughtRaikou
 	ld hl, wRoamMon1Species
 	ld a, [hl]
@@ -400,8 +421,8 @@ RespawnOneOffs:
 	call z, RespawnRoamingRaikou
 .CaughtRaikou
 
-	ld a, ENTEI - 1
-	call CheckCaughtMon
+	ld de, ENGINE_PLAYER_CAUGHT_ENTEI
+	farcall EngineFlagAction
 	jr nz, .CaughtEntei
 	ld hl, wRoamMon2Species
 	ld a, [hl]
@@ -410,28 +431,29 @@ RespawnOneOffs:
 .CaughtEntei
 
 	eventflagcheck EVENT_FOUGHT_SUICUNE
-	jr z, .CaughtSuicune
-	ld a, SUICUNE - 1
-	call CheckCaughtMon
-	jr nz, .CaughtSuicune
+	jr z, .CaughtOrNeverFoughtSuicune
+	ld de, ENGINE_PLAYER_CAUGHT_SUICUNE
+	farcall EngineFlagAction
+	jr nz, .CaughtOrNeverFoughtSuicune
 	ld hl, wRoamMon3Species
 	ld a, [hl]
 	and a
 	call z, RespawnRoamingSuicune
-.CaughtSuicune
+.CaughtOrNeverFoughtSuicune
 
-	ld a, LUGIA - 1
-	call CheckCaughtMon
+	ld de, ENGINE_PLAYER_CAUGHT_LUGIA
+	farcall EngineFlagAction
 	jr nz, .CaughtLugia
 	eventflagreset EVENT_WHIRL_ISLAND_LUGIA_CHAMBER_LUGIA
 	eventflagreset EVENT_FOUGHT_LUGIA
 .CaughtLugia
 
-	ld a, HO_OH - 1
-	call CheckCaughtMon
+	ld de, ENGINE_PLAYER_CAUGHT_HO_OH
+	farcall EngineFlagAction
 	ret nz
 	eventflagreset EVENT_TIN_TOWER_ROOF_HO_OH
 	eventflagreset EVENT_FOUGHT_HO_OH
+	eventflagreset EVENT_EUSINES_HOUSE_EUSINE
 	ret
 
 RespawnRoamingRaikou:

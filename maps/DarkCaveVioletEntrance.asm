@@ -9,13 +9,13 @@ DarkCaveVioletEntrance_MapScriptHeader:
 	warp_event 35, 33, ROUTE_46, 3
 
 	def_coord_events
-	coord_event  5,  2, 0, DarkCaveVioletEntranceFalknerTrigger
+	coord_event  6,  2, 0, DarkCaveVioletEntranceFalknerTrigger
 
 	def_bg_events
 	bg_event 26,  3, BGEVENT_ITEM + ELIXIR, EVENT_DARK_CAVE_VIOLET_ENTRANCE_HIDDEN_ELIXIR
 
 	def_object_events
-	object_event 10,  2, SPRITE_MON_ICON, SPRITEMOVEDATA_POKEMON, 0, URSARING, -1, -1, PAL_NPC_BROWN, OBJECTTYPE_SCRIPT, 0, ObjectEvent, EVENT_DARK_CAVE_URSARING
+	pokemon_event 10, 2, URSARING, SPRITEMOVEDATA_POKEMON, -1, -1, PAL_NPC_BROWN, ClearText, EVENT_DARK_CAVE_URSARING
 	object_event  9,  2, SPRITE_PIDGEOTTO_SIDE, SPRITEMOVEDATA_POKEMON, 0, 0, -1, -1, 0, OBJECTTYPE_SCRIPT, 0, ObjectEvent, EVENT_DARK_CAVE_PIDGEOTTO
 	object_event  8,  2, SPRITE_FALKNER, SPRITEMOVEDATA_STANDING_RIGHT, 0, 0, -1, -1, 0, OBJECTTYPE_SCRIPT, 0, ObjectEvent, EVENT_DARK_CAVE_FALKNER
 	itemball_event  6,  8, POTION, 1, EVENT_DARK_CAVE_VIOLET_ENTRANCE_POTION
@@ -35,7 +35,7 @@ DarkCaveVioletEntrance_MapScriptHeader:
 DarkCaveVioletEntranceFalknerTrigger:
 	waitsfx
 	checkdarkness
-	iftrue .Darkness
+	iftruefwd .Darkness
 	scall .BeatUrsaring
 	showemote EMOTE_SHOCK, DARKCAVEVIOLETENTRANCE_FALKNER, 15
 	opentext
@@ -58,7 +58,7 @@ DarkCaveVioletEntranceFalknerTrigger:
 
 .Darkness:
 	checkevent EVENT_GOT_TM70_FLASH
-	iftrue .ProgressAnyway
+	iftruefwd .ProgressAnyway
 	showtext DarkCaveVioletEntranceFalknerDarknessText
 	applyonemovement PLAYER, step_left
 	end
@@ -95,7 +95,7 @@ DarkCaveVioletEntranceFalknerTrigger:
 	closetext
 	disappear DARKCAVEVIOLETENTRANCE_PIDGEOTTO
 	pause 20
-	applymovement DARKCAVEVIOLETENTRANCE_FALKNER, DarkCaveVioletEntranceMovementData_FalknerHeadBack
+	applyonemovement DARKCAVEVIOLETENTRANCE_FALKNER, step_left
 	end
 
 DarkCaveVioletEntranceMovementData_PidgeottoAttack:
@@ -103,8 +103,8 @@ DarkCaveVioletEntranceMovementData_PidgeottoAttack:
 	run_step_left
 	step_end
 
-DarkCaveVioletEntranceMovementData_FalknerHeadBack:
 DarkCaveVioletEntranceMovementData_PlayerStepAside:
+	step_left
 	step_left
 	step_left
 	step_end

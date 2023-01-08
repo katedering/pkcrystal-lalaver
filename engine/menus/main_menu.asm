@@ -1,11 +1,11 @@
 MainMenu:
 	call DeleteSavedMusic
 	farcall NewGame_ClearTileMapEtc
-	ld a, CGB_DIPLOMA
+	ld a, CGB_PLAIN
 	call GetCGBLayout
 	call SetPalettes
-	ld hl, wGameTimerPaused
-	res 0, [hl]
+	xor a ; FALSE
+	ld [wGameTimerPaused], a
 	call MainMenu_GetWhichMenu
 	ld [wWhichIndexSet], a
 	call MainMenu_PrintCurrentTimeAndDay
@@ -14,16 +14,16 @@ MainMenu:
 	call MainMenuJoypadLoop
 	call CloseWindow
 	ret c
-	call ClearTileMap
+	ld a, "<BLACK>"
+	call FillTileMap
 	ld a, [wMenuSelection]
 	ld hl, .Jumptable
 	call JumpTable
 	jr MainMenu
 
 .MenuDataHeader:
-	db $40 ; flags
-	db 00, 00 ; start coords
-	db 07, 16 ; end coords
+	db MENU_BACKUP_TILES
+	menu_coords 0, 0, 16, 7
 	dw .MenuData2
 	db 1 ; default option
 
@@ -48,11 +48,11 @@ MainMenu:
 	dw MainMenu_Options
 	dw MainMenu_MusicPlayer
 
-CONTINUE       EQU 0
-NEW_GAME       EQU 1
-NEW_GAME_PLUS  EQU 2
-OPTION         EQU 3
-MUSIC_PLAYER   EQU 4
+DEF CONTINUE       EQU 0
+DEF NEW_GAME       EQU 1
+DEF NEW_GAME_PLUS  EQU 2
+DEF OPTION         EQU 3
+DEF MUSIC_PLAYER   EQU 4
 
 MainMenuItems:
 ; .NewGameMenu:

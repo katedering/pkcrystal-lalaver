@@ -23,7 +23,7 @@ _SwitchPartyMons:
 	ld a, " "
 	rst ByteFill
 	pop af
-	ld hl, wVirtualOAM
+	ld hl, wShadowOAM
 	ld bc, $10
 	rst AddNTimes
 	ld de, $4
@@ -40,23 +40,6 @@ SwapMonAndMail:
 	push hl
 	push de
 	push bc
-	ld bc, wPartySpecies
-	ld a, [wBuffer2]
-	ld l, a
-	ld h, $0
-	add hl, bc
-	ld d, h
-	ld e, l
-	ld a, [wBuffer3]
-	ld l, a
-	ld h, $0
-	add hl, bc
-	ld a, [hl]
-	push af
-	ld a, [de]
-	ld [hl], a
-	pop af
-	ld [de], a
 	ld a, [wBuffer2]
 	ld hl, wPartyMons
 	ld bc, PARTYMON_STRUCT_LENGTH

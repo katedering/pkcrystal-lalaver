@@ -2,7 +2,7 @@ NavelRockRoof_MapScriptHeader:
 	def_scene_scripts
 
 	def_callbacks
-	callback MAPCALLBACK_SPRITES, NavelRockRoofDailyLeafRematchCallback
+	callback MAPCALLBACK_OBJECTS, NavelRockRoofDailyLeafRematchCallback
 
 	def_warp_events
 	warp_event  9, 15, NAVEL_ROCK_INSIDE, 14
@@ -15,22 +15,22 @@ NavelRockRoof_MapScriptHeader:
 	object_event  8,  8, SPRITE_LEAF, SPRITEMOVEDATA_STANDING_UP, 0, 0, -1, -1, 0, OBJECTTYPE_SCRIPT, 0, Leaf, EVENT_LEAF_IN_NAVEL_ROCK
 	object_event  8,  8, SPRITE_CHRIS, SPRITEMOVEDATA_STANDING_UP, 0, 0, -1, -1, 0, OBJECTTYPE_SCRIPT, 0, ObjectEvent, EVENT_CHRIS_IN_NAVEL_ROCK
 	object_event  8,  8, SPRITE_KRIS, SPRITEMOVEDATA_STANDING_UP, 0, 0, -1, -1, 0, OBJECTTYPE_SCRIPT, 0, ObjectEvent, EVENT_KRIS_IN_NAVEL_ROCK
+	object_event  8,  8, SPRITE_CRYS, SPRITEMOVEDATA_STANDING_UP, 0, 0, -1, -1, 0, OBJECTTYPE_SCRIPT, 0, ObjectEvent, EVENT_CRYS_IN_NAVEL_ROCK
 
 	object_const_def
 	const NAVELROCKROOF_GREEN
 	const NAVELROCKROOF_CHRIS
 	const NAVELROCKROOF_KRIS
+	const NAVELROCKROOF_CRYS
 
 NavelRockRoofDailyLeafRematchCallback:
 	disappear NAVELROCKROOF_GREEN
+	checkevent EVENT_BEAT_RED
+	iffalsefwd .Disappear ; we last beat Leaf (or haven't yet beaten Red)
 	checkflag ENGINE_LEAF_IN_NAVEL_ROCK
-	iftrue .Disappear
+	iftruefwd .Disappear
 	appear NAVELROCKROOF_GREEN
 .Disappear
-	endcallback
-
-.Appear:
-	appear NAVELROCKROOF_GREEN
 	endcallback
 
 Leaf:
@@ -52,33 +52,47 @@ Leaf:
 	special HealParty
 	refreshscreen
 	checktime 1 << NITE
-	iffalse .Sun
+	iffalsefwd .Sun
 	changeblock 6, 0, $76
 	changeblock 8, 0, $77
 	changeblock 6, 2, $7a
 	changeblock 8, 2, $7b
 .Sun
-	checkflag ENGINE_PLAYER_IS_FEMALE
-	iftrue .FemaleEndingSequence
+	readvar VAR_PLAYERGENDER
+	iffalsefwd .MaleEndingSequence
+	ifequalfwd PLAYER_FEMALE, .FemaleEndingSequence
 	readvar VAR_FACING
-	ifequal UP, .RightMaleEndingSequence
+	ifequalfwd UP, .RightEnbyEndingSequence
+	turnobject PLAYER, UP
+	moveobject NAVELROCKROOF_CRYS, 7, 8
+	appear NAVELROCKROOF_CRYS
+	sjumpfwd .EndingSequence
+
+.RightEnbyEndingSequence:
+	applyonemovement PLAYER, slow_step_up
+	appear NAVELROCKROOF_CRYS
+	sjumpfwd .EndingSequence
+
+.MaleEndingSequence:
+	readvar VAR_FACING
+	ifequalfwd UP, .RightMaleEndingSequence
 	turnobject PLAYER, UP
 	moveobject NAVELROCKROOF_CHRIS, 7, 8
 	appear NAVELROCKROOF_CHRIS
-	sjump .EndingSequence
+	sjumpfwd .EndingSequence
 
 .RightMaleEndingSequence:
 	applyonemovement PLAYER, slow_step_up
 	appear NAVELROCKROOF_CHRIS
-	sjump .EndingSequence
+	sjumpfwd .EndingSequence
 
 .FemaleEndingSequence:
 	readvar VAR_FACING
-	ifequal UP, .RightFemaleEndingSequence
+	ifequalfwd UP, .RightFemaleEndingSequence
 	turnobject PLAYER, UP
 	moveobject NAVELROCKROOF_KRIS, 7, 8
 	appear NAVELROCKROOF_KRIS
-	sjump .EndingSequence
+	sjumpfwd .EndingSequence
 
 .RightFemaleEndingSequence:
 	applyonemovement PLAYER, slow_step_up
@@ -90,20 +104,22 @@ Leaf:
 	pause 40
 	disappear NAVELROCKROOF_CHRIS
 	disappear NAVELROCKROOF_KRIS
+	disappear NAVELROCKROOF_CRYS
+	clearevent EVENT_BEAT_RED
 	setevent EVENT_BEAT_LEAF
 	credits
 	end
 
-LeafText:
+LeafText: ; text > text
 	text "…………"
 	line "…………!"
 	done
 
-LeafWinLossText:
+LeafWinLossText: ; text > text
 	text "…!"
 	done
 
-LeafAfterText:
+LeafAfterText: ; text > text
 	text "…………"
 	line "…………"
 	done

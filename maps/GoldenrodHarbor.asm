@@ -11,6 +11,7 @@ GoldenrodHarbor_MapScriptHeader:
 
 	def_bg_events
 	bg_event 29, 19, BGEVENT_JUMPTEXT, GoldenrodHarborSignText
+	bg_event 20, 19, BGEVENT_JUMPTEXT, GoldenrodHarborAdvancedTipsSignText
 	bg_event 28, 15, BGEVENT_JUMPTEXT, GoldenrodHarborCrateSignText
 	bg_event 22, 21, BGEVENT_ITEM + REVIVE, EVENT_GOLDENROD_HARBOR_HIDDEN_REVIVE
 
@@ -20,21 +21,21 @@ GoldenrodHarbor_MapScriptHeader:
 	itemball_event 13,  3, STAR_PIECE, 1, EVENT_GOLDENROD_HARBOR_STAR_PIECE
 	object_event 27, 15, SPRITE_ACE_TRAINER_F, SPRITEMOVEDATA_STANDING_DOWN, 0, 0, -1, -1, PAL_NPC_GREEN, OBJECTTYPE_COMMAND, pokemart, MARTTYPE_ADVENTURER, MART_GOLDENROD_HARBOR, -1
 	object_event 22, 15, SPRITE_POKEFAN_M, SPRITEMOVEDATA_STANDING_DOWN, 0, 0, -1, -1, 0, OBJECTTYPE_SCRIPT, 0, GoldenrodHarborPokefanmScript, -1
-	object_event 21, 15, SPRITE_MON_ICON, SPRITEMOVEDATA_STILL, 0, MAGIKARP, -1, -1, PAL_NPC_RED, OBJECTTYPE_COMMAND, jumptext, GoldenrodHarborMagikarpText, -1
+	object_event 21, 15, SPRITE_MON_ICON, SPRITEMOVEDATA_STILL, 0, MAGIKARP, -1, -1, PAL_NPC_RED, OBJECTTYPE_SCRIPT, PLAIN_FORM, GoldenrodHarborMagikarpScript, -1
 	object_event 16, 15, SPRITE_SCHOOLBOY, SPRITEMOVEDATA_STANDING_DOWN, 0, 0, -1, -1, PAL_NPC_GREEN, OBJECTTYPE_SCRIPT, 0, GoldenrodHarborYoungsterScript, -1
 	object_event 16, 20, SPRITE_FISHER, SPRITEMOVEDATA_WALK_LEFT_RIGHT, 0, 1, -1, -1, 0, OBJECTTYPE_COMMAND, trade, NPC_TRADE_JACQUES, -1
 	object_event 40, 16, SPRITE_ROCKET, SPRITEMOVEDATA_STANDING_UP, 0, 0, -1, -1, 0, OBJECTTYPE_SCRIPT, 0, ObjectEvent, EVENT_GOLDENROD_CITY_ROCKET_SCOUT
 	object_event  6, 14, SPRITE_SWIMMER_GIRL, SPRITEMOVEDATA_STANDING_LEFT, 0, 0, -1, -1, 0, OBJECTTYPE_GENERICTRAINER, 5, GenericTrainerSwimmerfKatie, -1
 	object_event 23, 28, SPRITE_SWIMMER_GUY, SPRITEMOVEDATA_SPINCLOCKWISE, 0, 0, -1, -1, 0, OBJECTTYPE_GENERICTRAINER, 3, GenericTrainerSwimmermJames, -1
-	object_event 22, 19, SPRITE_LASS, SPRITEMOVEDATA_STANDING_DOWN, 0, 0, -1, -1, 0, OBJECTTYPE_COMMAND, jumptextfaceplayer, GoldenrodHarborLass2Text, -1
-	object_event  6, 26, SPRITE_SAILBOAT, SPRITEMOVEDATA_SAILBOAT_TOP, 0, 0, -1, -1, 0, OBJECTTYPE_COMMAND, end, NULL, -1
-	object_event  6, 26, SPRITE_SAILBOAT, SPRITEMOVEDATA_SAILBOAT_BOTTOM, 0, 0, -1, -1, 0, OBJECTTYPE_COMMAND, end, NULL, -1
+	object_event 23, 19, SPRITE_LASS, SPRITEMOVEDATA_STANDING_DOWN, 0, 0, -1, -1, 0, OBJECTTYPE_COMMAND, jumptextfaceplayer, GoldenrodHarborLass2Text, -1
+	object_event  6, 26, SPRITE_SAILBOAT, SPRITEMOVEDATA_SAILBOAT_TOP, 0, 0, -1, -1, 0, OBJECTTYPE_COMMAND, jumptext, GoldenrodHarborSailboatText, -1
+	object_event  6, 26, SPRITE_SAILBOAT, SPRITEMOVEDATA_SAILBOAT_BOTTOM, 0, 0, -1, -1, 0, OBJECTTYPE_COMMAND, jumptext, GoldenrodHarborSailboatText, -1
 
 GoldenrodHarborFisherScript:
 	faceplayer
 	opentext
 	checkevent EVENT_LISTENED_TO_HYPER_VOICE_INTRO
-	iftrue GoldenrodHarborTutorHyperVoiceScript
+	iftruefwd GoldenrodHarborTutorHyperVoiceScript
 	writetext GoldenrodHarborFisherText
 	waitbutton
 	setevent EVENT_LISTENED_TO_HYPER_VOICE_INTRO
@@ -42,14 +43,14 @@ GoldenrodHarborTutorHyperVoiceScript:
 	writetext Text_GoldenrodHarborTutorHyperVoice
 	waitbutton
 	checkitem SILVER_LEAF
-	iffalse .NoSilverLeaf
+	iffalsefwd .NoSilverLeaf
 	writetext Text_GoldenrodHarborTutorQuestion
 	yesorno
-	iffalse .TutorRefused
+	iffalsefwd .TutorRefused
 	setval HYPER_VOICE
 	writetext ClearText
 	special Special_MoveTutor
-	ifequal $0, .TeachMove
+	ifequalfwd $0, .TeachMove
 .TutorRefused
 	jumpopenedtext Text_GoldenrodHarborTutorRefused
 
@@ -89,6 +90,16 @@ GenericTrainerSwimmermJames:
 	cont "sometimes?"
 	done
 
+
+GoldenrodHarborMagikarpScript:
+	jumpthistext
+
+	text "This is a Fish"
+	line "#mon! Huh?"
+
+	para "It's only a doll…"
+	done
+
 GoldenrodHarborPokefanmScript:
 	faceplayer
 	opentext
@@ -98,16 +109,16 @@ GoldenrodHarborPokefanmScript:
 	loadmenu .MenuData
 	verticalmenu
 	closewindow
-	ifequal $1, .MagikarpDoll
-	ifequal $2, .MarillDoll
-	ifequal $3, .OctilleryDoll
+	ifequalfwd $1, .MagikarpDoll
+	ifequalfwd $2, .MarillDoll
+	ifequalfwd $3, .OctilleryDoll
 	endtext
 
 .MagikarpDoll:
 	checkmoney $0, 1400
-	ifequal $2, .NotEnoughMoney
+	ifequalfwd $2, .NotEnoughMoney
 	checkevent EVENT_DECO_MAGIKARP_DOLL
-	iftrue .AlreadyBought
+	iftruefwd .AlreadyBought
 	takemoney $0, 1400
 	setevent EVENT_DECO_MAGIKARP_DOLL
 	writetext GoldenrodHarborMagikarpDollText
@@ -119,9 +130,9 @@ GoldenrodHarborPokefanmScript:
 
 .MarillDoll:
 	checkmoney $0, 5600
-	ifequal $2, .NotEnoughMoney
+	ifequalfwd $2, .NotEnoughMoney
 	checkevent EVENT_DECO_MARILL_DOLL
-	iftrue .AlreadyBought
+	iftruefwd .AlreadyBought
 	takemoney $0, 5600
 	setevent EVENT_DECO_MARILL_DOLL
 	writetext GoldenrodHarborMarillDollText
@@ -133,9 +144,9 @@ GoldenrodHarborPokefanmScript:
 
 .OctilleryDoll:
 	checkmoney $0, 11200
-	ifequal $2, .NotEnoughMoney
+	ifequalfwd $2, .NotEnoughMoney
 	checkevent EVENT_DECO_OCTILLERY_DOLL
-	iftrue .AlreadyBought
+	iftruefwd .AlreadyBought
 	takemoney $0, 11200
 	setevent EVENT_DECO_OCTILLERY_DOLL
 	writetext GoldenrodHarborOctilleryDollText
@@ -156,9 +167,8 @@ GoldenrodHarborPokefanmScript:
 	sjump .Start
 
 .MenuData:
-	db $40 ; flags
-	db 02, 00 ; start coords
-	db 11, 19 ; end coords
+	db MENU_BACKUP_TILES
+	menu_coords 0, 2, 19, 11
 	dw .MenuData2
 	db 1 ; default option
 
@@ -179,16 +189,16 @@ GoldenrodHarborYoungsterScript:
 	loadmenu .MenuData
 	verticalmenu
 	closewindow
-	ifequal $1, .MagnaPlant
-	ifequal $2, .TropicPlant
-	ifequal $3, .JumboPlant
+	ifequalfwd $1, .MagnaPlant
+	ifequalfwd $2, .TropicPlant
+	ifequalfwd $3, .JumboPlant
 	endtext
 
 .MagnaPlant:
 	checkmoney $0, 6400
-	ifequal $2, .NotEnoughMoney
+	ifequalfwd $2, .NotEnoughMoney
 	checkevent EVENT_DECO_PLANT_1
-	iftrue .AlreadyBought
+	iftruefwd .AlreadyBought
 	takemoney $0, 6400
 	setevent EVENT_DECO_PLANT_1
 	writetext GoldenrodHarborMagnaPlantText
@@ -200,9 +210,9 @@ GoldenrodHarborYoungsterScript:
 
 .TropicPlant:
 	checkmoney $0, 9600
-	ifequal $2, .NotEnoughMoney
+	ifequalfwd $2, .NotEnoughMoney
 	checkevent EVENT_DECO_PLANT_2
-	iftrue .AlreadyBought
+	iftruefwd .AlreadyBought
 	takemoney $0, 9600
 	setevent EVENT_DECO_PLANT_2
 	writetext GoldenrodHarborTropicPlantText
@@ -214,9 +224,9 @@ GoldenrodHarborYoungsterScript:
 
 .JumboPlant:
 	checkmoney $0, 12800
-	ifequal $2, .NotEnoughMoney
+	ifequalfwd $2, .NotEnoughMoney
 	checkevent EVENT_DECO_PLANT_3
-	iftrue .AlreadyBought
+	iftruefwd .AlreadyBought
 	takemoney $0, 12800
 	setevent EVENT_DECO_PLANT_3
 	writetext GoldenrodHarborJumboPlantText
@@ -237,9 +247,8 @@ GoldenrodHarborYoungsterScript:
 	sjump .Start
 
 .MenuData:
-	db $40 ; flags
-	db 02, 00 ; start coords
-	db 11, 19 ; end coords
+	db MENU_BACKUP_TILES
+	menu_coords 0, 2, 19, 11
 	dw .MenuData2
 	db 1 ; default option
 
@@ -324,13 +333,6 @@ SwimmermJamesSeenText:
 SwimmermJamesBeatenText:
 	text "Maybe I can't"
 	line "battle…"
-	done
-
-GoldenrodHarborMagikarpText:
-	text "This is a Fish"
-	line "#mon! Huh?"
-
-	para "It's only a doll…"
 	done
 
 GoldenrodHarborDollVendorText:
@@ -431,7 +433,25 @@ GoldenrodHarborSignText:
 	text "Goldenrod Harbor"
 	done
 
+GoldenrodHarborAdvancedTipsSignText:
+	text "Advanced Tips!"
+
+	para "Sometimes you'll"
+	line "get lucky with a"
+
+	para "vending machine"
+	line "and get two drinks"
+
+	para "for the price of"
+	line "one!"
+	done
+
 GoldenrodHarborCrateSignText:
 	text "A crate full of"
 	line "rare items!"
+	done
+
+GoldenrodHarborSailboatText:
+	text "It's a sailboat"
+	line "named SeaKing."
 	done

@@ -25,14 +25,15 @@ CianwoodPhotoStudioFishingGuruScript:
 	writetext PhotoStudioWhichMonText
 	promptbutton
 	special Special_CianwoodPhotograph
-	ifequal $0, .NoPicture
-	ifequal $1, .EggPicture
+	ifequalfwd $0, .NoPicture
+	ifequalfwd $1, .EggPicture
 	setflag ENGINE_DAILY_PHOTOGRAPH
 	writetext PhotoStudioHoldStillText
 	waitbutton
 	closetext
 	special FadeOutPalettes
 	special LoadMapPalettes
+	callasm LoadBlindingFlashPalette
 	pause 10
 	playsound SFX_DOUBLE_SLAP
 	waitsfx
@@ -88,6 +89,7 @@ PhotoStudioPrestoText:
 
 	para "Your "
 	text_ram wStringBuffer3
+	text ""
 	line "looks happier!"
 	done
 

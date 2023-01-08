@@ -1,6 +1,5 @@
 SpecialHoOhChamber:
-	ld hl, wPartySpecies
-	ld a, [hl]
+	ld a, [wPartyMon1Species]
 	ld [wCurPartySpecies], a
 	ld [wCurSpecies], a
 	ld a, [wPartyMon1Form]
@@ -15,7 +14,6 @@ SpecialHoOhChamber:
 	ret nz
 
 .open
-	call GetMapAttributesPointer
 	eventflagset EVENT_WALL_OPENED_IN_HO_OH_CHAMBER
 	ret
 
@@ -40,23 +38,21 @@ SpecialOmanyteChamber:
 	ld [wCurPartyMon], a
 	push bc
 	ld a, MON_ITEM
-	call GetPartyParamLocation
+	call GetPartyParamLocationAndValue
 	pop bc
-	ld a, [hl]
 	cp WATER_STONE
 	jr nz, .loop
 
 .open
-	call GetMapAttributesPointer
 	eventflagset EVENT_WALL_OPENED_IN_OMANYTE_CHAMBER
 	ret
 
 SpecialAerodactylChamber:
 	call GetMapAttributesPointer
-	ld a, h
+	ld a, b
 	cp HIGH(RuinsOfAlphAerodactylChamber_MapAttributes)
 	jr nz, .nope
-	ld a, l
+	ld a, c
 	cp LOW(RuinsOfAlphAerodactylChamber_MapAttributes)
 	jr nz, .nope
 
@@ -70,10 +66,10 @@ SpecialAerodactylChamber:
 
 SpecialKabutoChamber:
 	call GetMapAttributesPointer
-	ld a, h
+	ld a, b
 	cp HIGH(RuinsOfAlphKabutoChamber_MapAttributes)
 	ret nz
-	ld a, l
+	ld a, c
 	cp LOW(RuinsOfAlphKabutoChamber_MapAttributes)
 	ret nz
 
@@ -119,7 +115,7 @@ Special_DisplayUnownWords:
 
 .copy
 	call .CopyWord
-	ld bc, wAttrMap - wTileMap
+	ld bc, wAttrmap - wTilemap
 	add hl, bc
 	call .FillAttr
 	call ApplyAttrAndTilemapInVBlank

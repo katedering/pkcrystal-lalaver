@@ -1,6 +1,3 @@
-INCLUDE "constants.asm"
-
-
 SECTION "bank1", ROMX
 
 INCLUDE "engine/gfx/load_push_oam.asm"
@@ -17,6 +14,7 @@ INCLUDE "engine/events/shiny_ditto.asm"
 INCLUDE "engine/events/shuckle.asm"
 INCLUDE "engine/events/bills_grandfather.asm"
 INCLUDE "engine/events/hidden_power_guru.asm"
+INCLUDE "engine/events/mint_tea.asm"
 INCLUDE "engine/events/haircut_etc.asm"
 
 
@@ -34,6 +32,7 @@ INCLUDE "engine/events/checktime.asm"
 INCLUDE "engine/events/specials.asm"
 INCLUDE "engine/pokemon/health.asm"
 INCLUDE "engine/events/overworld.asm"
+INCLUDE "engine/events/overcast.asm"
 INCLUDE "engine/items/items.asm"
 INCLUDE "engine/battle/anim_hp_bar.asm"
 INCLUDE "engine/pokemon/move_mon.asm"
@@ -48,10 +47,10 @@ SECTION "Print Number", ROMX
 INCLUDE "engine/math/print_num.asm"
 
 
-SECTION "Bills PC", ROMX
+SECTION "Bill's PC", ROMX
 
-INCLUDE "engine/pokemon/bills_pc.asm"
-INCLUDE "engine/pokemon/bills_pc_ui.asm"
+INCLUDE "engine/pc/bills_pc.asm"
+INCLUDE "engine/pc/bills_pc_ui.asm"
 
 
 SECTION "Poke Ball Effects", ROMX
@@ -159,7 +158,6 @@ INCLUDE "data/trainers/class_names.asm"
 INCLUDE "engine/battle/ai/redundant.asm"
 INCLUDE "engine/events/move_deleter.asm"
 INCLUDE "engine/items/tmhm2.asm"
-INCLUDE "engine/items/key_items.asm"
 INCLUDE "data/moves/descriptions.asm"
 INCLUDE "engine/events/pokerus/pokerus.asm"
 INCLUDE "engine/battle/start_battle.asm"
@@ -183,6 +181,11 @@ SECTION "Enemy Trainer Parties", ROMX
 INCLUDE "engine/battle/read_trainer_party.asm"
 
 
+SECTION "Psychic Inver", ROMX
+
+INCLUDE "engine/battle/pick_psychic_inver_party.asm"
+
+
 SECTION "Battle Core", ROMX
 
 INCLUDE "engine/battle/core.asm"
@@ -195,7 +198,21 @@ INCLUDE "engine/battle/endturn.asm"
 
 SECTION "Pokedex", ROMX
 
+INCLUDE "engine/pokedex/area.asm"
+INCLUDE "engine/pokedex/lcd.asm"
 INCLUDE "engine/pokedex/pokedex.asm"
+INCLUDE "engine/pokedex/unown_dex.asm"
+
+
+SECTION "Pokédex Footprints", ROMX
+
+INCLUDE "data/pokemon/footprint_pointers.asm"
+INCLUDE "gfx/pokemon/footprints.asm"
+
+
+SECTION "Pokedex Shapes", ROMX
+
+INCLUDE "gfx/shapes.asm"
 
 
 SECTION "Moves", ROMX
@@ -219,11 +236,15 @@ INCLUDE "engine/pokedex/pokedex_2.asm"
 SECTION "Crystal Features 1", ROMX
 
 INCLUDE "engine/events/move_tutor.asm"
-INCLUDE "engine/tilesets/tileset_palettes.asm"
 INCLUDE "engine/events/celebi.asm"
 INCLUDE "engine/menus/main_menu.asm"
 INCLUDE "engine/pokemon/search.asm"
 INCLUDE "engine/events/buena_menu.asm"
+
+
+SECTION "Special Palettes", ROMX
+
+INCLUDE "engine/tilesets/tileset_palettes.asm"
 
 
 SECTION "Collision Permissions", ROMX
@@ -255,6 +276,7 @@ INCLUDE "engine/events/squirtbottle.asm"
 INCLUDE "engine/events/card_key.asm"
 INCLUDE "engine/events/basement_key.asm"
 INCLUDE "engine/events/sacred_ash.asm"
+INCLUDE "engine/events/sweet_honey.asm"
 
 
 SECTION "bank14", ROMX
@@ -266,7 +288,6 @@ INCLUDE "engine/pokemon/mon_stats.asm"
 INCLUDE "engine/pokemon/experience.asm"
 INCLUDE "engine/pokemon/switchpartymons.asm"
 INCLUDE "engine/gfx/load_pics.asm"
-INCLUDE "data/pokemon/names.asm"
 INCLUDE "engine/pokemon/natures.asm"
 
 
@@ -277,7 +298,20 @@ INCLUDE "data/pokemon/base_stats.asm"
 
 SECTION "Crystal Phone Text", ROMX
 
-INCLUDE "data/phone/text/extra.asm"
+INCLUDE "data/phone/text/irwin_caller.asm"
+INCLUDE "data/phone/text/arnie_caller.asm"
+INCLUDE "data/phone/text/alan_caller.asm"
+INCLUDE "data/phone/text/dana_caller.asm"
+INCLUDE "data/phone/text/chad_caller.asm"
+INCLUDE "data/phone/text/derek_caller.asm"
+INCLUDE "data/phone/text/tully_caller.asm"
+INCLUDE "data/phone/text/brent_caller.asm"
+INCLUDE "data/phone/text/tiffany_caller.asm"
+INCLUDE "data/phone/text/vance_caller.asm"
+INCLUDE "data/phone/text/wilton_caller.asm"
+INCLUDE "data/phone/text/kenji_caller.asm"
+INCLUDE "data/phone/text/parry_caller.asm"
+INCLUDE "data/phone/text/erin_caller.asm"
 INCLUDE "data/phone/text/lyra.asm"
 
 
@@ -293,7 +327,6 @@ INCLUDE "engine/battle/abilities.asm"
 
 SECTION "bank21", ROMX
 
-INCLUDE "gfx/battle_anims.asm"
 INCLUDE "engine/events/halloffame.asm"
 INCLUDE "engine/gfx/copy_tilemap_at_once.asm"
 INCLUDE "engine/pokemon/abilities.asm"
@@ -316,15 +349,17 @@ INCLUDE "engine/tilesets/timeofday_pals.asm"
 INCLUDE "engine/battle/battle_transition.asm"
 INCLUDE "engine/events/field_moves.asm"
 INCLUDE "engine/events/magnet_train.asm"
+; The three files below assume they're within the same bank.
 INCLUDE "engine/gfx/sprites.asm"
 INCLUDE "engine/gfx/mon_icons.asm"
-INCLUDE "data/pokemon/menu_icon_pointers.asm"
+INCLUDE "data/pokemon/mini_icon_pointers.asm"
 
 
 SECTION "bank24", ROMX
 
 INCLUDE "engine/phone/phone.asm"
 INCLUDE "engine/rtc/timeset.asm"
+INCLUDE "engine/pokegear/phone.asm"
 INCLUDE "engine/pokegear/pokegear.asm"
 INCLUDE "engine/events/fish.asm"
 INCLUDE "engine/games/slot_machine.asm"
@@ -332,7 +367,17 @@ INCLUDE "engine/games/slot_machine.asm"
 
 SECTION "Phone Scripts", ROMX
 
-INCLUDE "engine/phone/more_phone_scripts.asm"
+INCLUDE "engine/phone/scripts/generic_caller.asm"
+INCLUDE "engine/phone/scripts/jack_gossip.asm"
+INCLUDE "engine/phone/scripts/liz_gossip.asm"
+INCLUDE "engine/phone/scripts/chad_gossip.asm"
+INCLUDE "engine/phone/scripts/brent_gossip.asm"
+INCLUDE "engine/phone/scripts/irwin_gossip.asm"
+INCLUDE "engine/phone/scripts/hangups.asm"
+INCLUDE "engine/phone/scripts/reminders.asm"
+INCLUDE "engine/phone/scripts/hangups_2.asm"
+INCLUDE "engine/phone/scripts/reminders_2.asm"
+INCLUDE "engine/phone/scripts/bike_shop.asm"
 INCLUDE "engine/phone/buena_phone_scripts.asm"
 INCLUDE "engine/events/trainer_scripts.asm"
 
@@ -372,7 +417,44 @@ SECTION "Phone Scripts 2", ROMX
 
 INCLUDE "engine/events/std_scripts.asm"
 INCLUDE "engine/events/initialize_events.asm"
-INCLUDE "engine/phone/phone_scripts.asm"
+INCLUDE "engine/phone/scripts/unused.asm"
+INCLUDE "engine/phone/scripts/mom.asm"
+INCLUDE "engine/phone/scripts/bill.asm"
+INCLUDE "engine/phone/scripts/jack.asm"
+INCLUDE "engine/phone/scripts/beverly.asm"
+INCLUDE "engine/phone/scripts/huey.asm"
+INCLUDE "engine/phone/scripts/gaven.asm"
+INCLUDE "engine/phone/scripts/beth.asm"
+INCLUDE "engine/phone/scripts/jose.asm"
+INCLUDE "engine/phone/scripts/reena.asm"
+INCLUDE "engine/phone/scripts/joey.asm"
+INCLUDE "engine/phone/scripts/wade.asm"
+INCLUDE "engine/phone/scripts/ralph.asm"
+INCLUDE "engine/phone/scripts/liz.asm"
+INCLUDE "engine/phone/scripts/anthony.asm"
+INCLUDE "engine/phone/scripts/todd.asm"
+INCLUDE "engine/phone/scripts/gina.asm"
+INCLUDE "engine/phone/scripts/irwin.asm"
+INCLUDE "engine/phone/scripts/arnie.asm"
+INCLUDE "engine/phone/scripts/alan.asm"
+INCLUDE "engine/phone/scripts/dana.asm"
+INCLUDE "engine/phone/scripts/chad.asm"
+INCLUDE "engine/phone/scripts/derek.asm"
+INCLUDE "engine/phone/scripts/tully.asm"
+INCLUDE "engine/phone/scripts/brent.asm"
+INCLUDE "engine/phone/scripts/tiffany.asm"
+INCLUDE "engine/phone/scripts/vance.asm"
+INCLUDE "engine/phone/scripts/wilton.asm"
+INCLUDE "engine/phone/scripts/kenji.asm"
+INCLUDE "engine/phone/scripts/parry.asm"
+INCLUDE "engine/phone/scripts/erin.asm"
+INCLUDE "engine/phone/scripts/generic_callee.asm"
+
+
+SECTION "Evolution Phone Scripts", ROMX
+
+INCLUDE "engine/phone/scripts/elm.asm"
+INCLUDE "engine/phone/scripts/lyra.asm"
 
 
 SECTION "bank32", ROMX
@@ -412,9 +494,13 @@ INCLUDE "gfx/pokemon/bitmask_pointers.asm"
 INCLUDE "gfx/pokemon/bitmasks.asm"
 
 
-SECTION "Pic Animations Frames 1", ROMX
+SECTION "Pic Animations Frames Pointers", ROMX
 
 INCLUDE "gfx/pokemon/frame_pointers.asm"
+
+
+SECTION "Pic Animations Frames 1", ROMX
+
 INCLUDE "gfx/pokemon/kanto_frames.asm"
 
 
@@ -447,7 +533,6 @@ SECTION "bank3E", ROMX
 
 INCLUDE "engine/events/name_rater.asm"
 INCLUDE "engine/events/play_slow_cry.asm"
-INCLUDE "engine/pokedex/unown_dex.asm"
 INCLUDE "engine/events/magikarp.asm"
 INCLUDE "engine/battle/hidden_power.asm"
 INCLUDE "engine/battle/misc.asm"
@@ -464,7 +549,6 @@ INCLUDE "engine/events/wonder_trade.asm"
 SECTION "bank41", ROMX
 
 INCLUDE "engine/gfx/dma_transfer.asm"
-INCLUDE "gfx/emotes.asm"
 INCLUDE "engine/overworld/warp_connection.asm"
 INCLUDE "engine/battle/used_move_text.asm"
 
@@ -481,7 +565,21 @@ INCLUDE "data/text/std_text.asm"
 
 SECTION "Crystal Phone Text 2", ROMX
 
-INCLUDE "data/phone/text/extra2.asm"
+INCLUDE "data/phone/text/bike_shop.asm"
+INCLUDE "data/phone/text/jack_caller.asm"
+INCLUDE "data/phone/text/beverly_caller.asm"
+INCLUDE "data/phone/text/huey_caller.asm"
+INCLUDE "data/phone/text/gaven_caller.asm"
+INCLUDE "data/phone/text/beth_caller.asm"
+INCLUDE "data/phone/text/jose_caller.asm"
+INCLUDE "data/phone/text/reena_caller.asm"
+INCLUDE "data/phone/text/joey_caller.asm"
+INCLUDE "data/phone/text/wade_caller.asm"
+INCLUDE "data/phone/text/ralph_caller.asm"
+INCLUDE "data/phone/text/liz_caller.asm"
+INCLUDE "data/phone/text/anthony_caller.asm"
+INCLUDE "data/phone/text/todd_caller.asm"
+INCLUDE "data/phone/text/gina_caller.asm"
 
 
 SECTION "Phone Text 2", ROMX
@@ -503,7 +601,36 @@ SECTION "Phone Text 3", ROMX
 INCLUDE "data/phone/text/mom.asm"
 INCLUDE "data/phone/text/bill.asm"
 INCLUDE "data/phone/text/elm.asm"
-INCLUDE "data/phone/text/trainers1.asm"
+INCLUDE "data/phone/text/jack_callee.asm"
+INCLUDE "data/phone/text/beverly_callee.asm"
+INCLUDE "data/phone/text/huey_callee.asm"
+INCLUDE "data/phone/text/unknown_callee.asm"
+INCLUDE "data/phone/text/gaven_callee.asm"
+INCLUDE "data/phone/text/beth_callee.asm"
+INCLUDE "data/phone/text/jose_callee.asm"
+INCLUDE "data/phone/text/reena_callee.asm"
+INCLUDE "data/phone/text/joey_callee.asm"
+INCLUDE "data/phone/text/wade_callee.asm"
+INCLUDE "data/phone/text/ralph_callee.asm"
+INCLUDE "data/phone/text/liz_callee.asm"
+INCLUDE "data/phone/text/anthony_callee.asm"
+INCLUDE "data/phone/text/todd_callee.asm"
+INCLUDE "data/phone/text/gina_callee.asm"
+INCLUDE "data/phone/text/irwin_callee.asm"
+INCLUDE "data/phone/text/arnie_callee.asm"
+INCLUDE "data/phone/text/alan_callee.asm"
+INCLUDE "data/phone/text/dana_callee.asm"
+INCLUDE "data/phone/text/chad_callee.asm"
+INCLUDE "data/phone/text/derek_callee.asm"
+INCLUDE "data/phone/text/tully_callee.asm"
+INCLUDE "data/phone/text/brent_callee.asm"
+INCLUDE "data/phone/text/tiffany_callee.asm"
+INCLUDE "data/phone/text/vance_callee.asm"
+INCLUDE "data/phone/text/wilton_callee.asm"
+INCLUDE "data/phone/text/kenji_callee.asm"
+INCLUDE "data/phone/text/parry_callee.asm"
+INCLUDE "data/phone/text/erin_callee.asm"
+INCLUDE "data/phone/text/unused.asm"
 INCLUDE "data/phone/text/liz_overworld.asm"
 
 
@@ -535,16 +662,30 @@ INCLUDE "data/items/apricorn_names.asm"
 INCLUDE "engine/items/print_item_description.asm"
 
 
-SECTION "Move and Landmark Text", ROMX
+SECTION "Pokemon Body Data", ROMX
+
+INCLUDE "data/pokemon/body_data.asm"
+
+
+SECTION "Pokemon Names", ROMX
+
+INCLUDE "data/pokemon/names.asm"
+
+
+SECTION "Move Names", ROMX
 
 INCLUDE "data/moves/names.asm"
-INCLUDE "engine/overworld/landmarks.asm"
 
 
 SECTION "Crystal Events", ROMX
 
 INCLUDE "engine/events/battle_tower/load_trainer.asm"
 INCLUDE "engine/events/odd_egg.asm"
+
+
+SECTION "Painting Pic Pointers", ROMX
+
+INCLUDE "data/events/paintings/pic_pointers.asm"
 
 
 SECTION "Type Chart", ROMX

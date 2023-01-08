@@ -10,7 +10,7 @@ CliffEdgeGate_MapScriptHeader:
 	def_coord_events
 
 	def_bg_events
-	bg_event 17,  6, BGEVENT_ITEM + BIG_PEARL, EVENT_CLIFF_EDGE_GATE_HIDDEN_BIG_PEARL
+	bg_event 17,  6, BGEVENT_ITEM + OVAL_STONE, EVENT_CLIFF_EDGE_GATE_HIDDEN_OVAL_STONE
 
 	def_object_events
 	object_event 11, 16, SPRITE_RECEPTIONIST, SPRITEMOVEDATA_STANDING_DOWN, 0, 0, -1, -1, PAL_NPC_GREEN, OBJECTTYPE_COMMAND, jumptextfaceplayer, CliffEdgeGateReceptionistText, EVENT_YELLOW_FOREST_ROCKET_TAKEOVER
@@ -21,12 +21,12 @@ ProfOaksAide3Script:
 	faceplayer
 	opentext
 	checkevent EVENT_GOT_MACHO_BRACE_FROM_PROF_OAKS_AIDE
-	iftrue .Explain
+	iftruefwd .Explain
 	writetext ProfOaksAide3HiText
 	waitbutton
-	countseencaught
-	readvar VAR_DEXCAUGHT
-	ifgreater 44, .HereYouGo
+	setval16 45
+	special CountCaught
+	iftruefwd .HereYouGo
 .UhOh
 	jumpopenedtext ProfOaksAide3UhOhText
 
@@ -34,7 +34,7 @@ ProfOaksAide3Script:
 	writetext ProfOaksAide3HereYouGoText
 	waitbutton
 	verbosegiveitem MACHO_BRACE
-	iffalse .NoRoom
+	iffalsefwd .NoRoom
 	setevent EVENT_GOT_MACHO_BRACE_FROM_PROF_OAKS_AIDE
 .Explain
 	jumpopenedtext ProfOaksAide3ExplainText
@@ -83,7 +83,7 @@ ProfOaksAide3UhOhText:
 	line "Uh-oh! You've only"
 
 	para "caught "
-	text_decimal wTempPokedexCaughtCount, 1, 3
+	text_decimal wTempDexOwn, 2, 3
 	text " kinds"
 	line "of #mon."
 
@@ -97,7 +97,7 @@ ProfOaksAide3HereYouGoText:
 	line "Great job! You've"
 
 	para "caught "
-	text_decimal wTempPokedexCaughtCount, 1, 3
+	text_decimal wTempDexOwn, 2, 3
 	text " kinds"
 	line "of #mon."
 

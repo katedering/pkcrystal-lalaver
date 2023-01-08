@@ -3,6 +3,7 @@ HiddenTreeGrotto_MapScriptHeader:
 
 	def_callbacks
 	callback MAPCALLBACK_NEWMAP, HiddenGrottoCallback
+	callback MAPCALLBACK_TILES, HiddenTreeGrottoTileCallback
 
 	def_warp_events
 	warp_event  4, 15, HIDDEN_TREE_GROTTO, -1
@@ -26,9 +27,9 @@ HiddenGrottoCallback:
 	setevent EVENT_TEMPORARY_UNTIL_MAP_RELOAD_2
 	setevent EVENT_TEMPORARY_UNTIL_MAP_RELOAD_3
 	special InitializeHiddenGrotto
-	ifequal GROTTO_POKEMON, .pokemon
-	ifequal GROTTO_ITEM, .item
-	ifequal GROTTO_HIDDEN_ITEM, .hidden_item
+	ifequalfwd GROTTO_POKEMON, .pokemon
+	ifequalfwd GROTTO_ITEM, .item
+	ifequalfwd GROTTO_HIDDEN_ITEM, .hidden_item
 	endcallback
 
 .pokemon
@@ -41,6 +42,13 @@ HiddenGrottoCallback:
 
 .hidden_item
 	clearevent EVENT_TEMPORARY_UNTIL_MAP_RELOAD_3
+	endcallback
+
+HiddenTreeGrottoTileCallback:
+	checkevent EVENT_TEMPORARY_UNTIL_MAP_RELOAD_3
+	iftruefwd .end
+	changeblock 4, 4, $a6
+.end
 	endcallback
 
 HiddenGrottoPokemonScript:
@@ -58,11 +66,12 @@ HiddenGrottoItemScript:
 	special GetHiddenGrottoContents
 	getitemname $0, $1
 	giveitem ITEM_FROM_MEM
-	iffalse .PackFull
+	iffalsefwd .PackFull
 	disappear HIDDENTREEGROTTO_ITEM
 	setevent EVENT_TEMPORARY_UNTIL_MAP_RELOAD_3
 	opentext
 	writetext .ItemText
+	special ShowItemIcon
 	playsound SFX_ITEM
 	pause 60
 	itemnotify

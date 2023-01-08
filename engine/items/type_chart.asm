@@ -41,14 +41,14 @@ _TypeChart:
 	call ClearSpriteAnims
 
 	ld hl, TypeChartOAMData
-	ld de, wVirtualOAM
+	ld de, wShadowOAM
 	ld bc, 40 * 4
 	rst CopyBytes
 
 	ld a, 8
 	call SkipMusic
 
-	ld a, %11100111
+	ld a, (1 << rLCDC_ENABLE) | (1 << rLCDC_WINDOW_TILEMAP) | (1 << rLCDC_WINDOW_ENABLE) | (1 << rLCDC_SPRITE_SIZE) | (1 << rLCDC_SPRITES_ENABLE) | (1 << rLCDC_BG_PRIORITY)
 	ldh [rLCDC], a
 
 	xor a
@@ -56,13 +56,11 @@ _TypeChart:
 
 	ld hl, TypeChartTilemap
 	decoord 0, 0
-	ld bc, SCREEN_WIDTH * SCREEN_HEIGHT
-	rst CopyBytes
+	call Decompress
 
 	ld hl, TypeChartAttrmap
-	decoord 0, 0, wAttrMap
-	ld bc, SCREEN_WIDTH * SCREEN_HEIGHT
-	rst CopyBytes
+	decoord 0, 0, wAttrmap
+	call Decompress
 
 	call ApplyAttrAndTilemapInVBlank
 
@@ -83,7 +81,7 @@ _TypeChart:
 	jr .loop
 
 .done
-	ld a, %11100011
+	ld a, LCDC_DEFAULT
 	ldh [rLCDC], a
 
 	pop af
@@ -95,69 +93,7 @@ _TypeChart:
 	jmp ClearBGPalettes
 
 TypeChartPalettes:
-if !DEF(MONOCHROME)
-; BG 0
-	RGB 31, 31, 31
-	RGB 27, 27, 27 ; off-white
-	RGB 00, 19, 00 ; super effective (green)
-	RGB 31, 00, 00 ; not very effective + ATK (red)
-; BG 1
-	RGB 31, 31, 31
-	RGB 27, 27, 27 ; off-white
-	RGB 21, 21, 14 ; NORMAL
-	RGB 27, 04, 02 ; FIGHTING
-; BG 2
-	RGB 31, 31, 31
-	RGB 29, 24, 12 ; GROUND
-	RGB 22, 07, 19 ; POISON
-	RGB 22, 17, 30 ; FLYING
-; BG 3
-	RGB 31, 31, 31
-	RGB 29, 24, 12 ; GROUND
-	RGB 24, 20, 07 ; ROCK
-	RGB 21, 23, 06 ; BUG
-; BG 4
-	RGB 31, 31, 31
-	RGB 11, 25, 11 ; GRASS
-	RGB 11, 18, 30 ; WATER
-	RGB 31, 15, 04 ; FIRE
-; BG 5
-	RGB 31, 31, 31
-	RGB 11, 25, 11 ; GRASS
-	RGB 31, 24, 06 ; ELECTRIC
-	RGB 31, 09, 15 ; PSYCHIC
-; BG 6
-	RGB 31, 31, 31
-	RGB 15, 07, 31 ; DRAGON
-	RGB 16, 27, 27 ; ICE
-	RGB 31, 09, 15 ; PSYCHIC
-; BG 7
-	RGB 31, 31, 31
-	RGB 15, 07, 31 ; DRAGON
-	RGB 15, 11, 09 ; DARK
-	RGB 31, 20, 29 ; FAIRY
-; OB 0
-	RGB 31, 31, 31
-	RGB 22, 22, 24 ; notebook rings (gray)
-	RGB 20, 13, 06 ; notebook binding (brown)
-	RGB 07, 07, 07 ; notebook border (black)
-; OB 1
-	RGB 31, 31, 31
-	RGB 23, 23, 25 ; STEEL
-	RGB 15, 11, 18 ; GHOST
-	RGB 05, 06, 07 ; ineffective (black)
-; OB 2
-	RGB 31, 31, 31
-	RGB 23, 23, 25 ; STEEL
-	RGB 00, 19, 00 ; super effective (green)
-	RGB 31, 00, 00 ; not very effective (red)
-; OB 3
-	RGB 31, 31, 31
-	RGB 27, 27, 27 ; off-white
-	RGB 31, 00, 31 ; unused
-	RGB 00, 05, 31 ; DEF (blue)
-else
-endc
+INCLUDE "gfx/type_chart/type_chart.pal"
 
 TypeChartBG0GFX:
 INCBIN "gfx/type_chart/bg0.2bpp.lz"
@@ -169,13 +105,13 @@ TypeChartOBGFX:
 INCBIN "gfx/type_chart/ob.2bpp.lz"
 
 TypeChartTilemap:
-INCBIN "gfx/type_chart/type_chart.tilemap"
+INCBIN "gfx/type_chart/type_chart.tilemap.lz"
 
 TypeChartAttrmap:
-INCBIN "gfx/type_chart/type_chart.attrmap"
+INCBIN "gfx/type_chart/type_chart.attrmap.lz"
 
 TypeChartOAMData:
-oamdata: MACRO
+MACRO oamdata
 	; x, y, tile id, attributes
 	db (\2) + 16, (\1) + 8, (\3), (\4)
 ENDM

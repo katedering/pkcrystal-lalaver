@@ -27,7 +27,7 @@ GiovannisCave_MapScriptHeader:
 	const GIOVANNISCAVE_GIOVANNI
 
 GiovannisCaveTrigger1:
-	prioritysjump GiovannisCaveCelebiEventScript
+	sdefer GiovannisCaveCelebiEventScript
 GiovannisCaveTrigger0:
 	end
 
@@ -93,7 +93,7 @@ GiovannisCaveCelebiEventScript:
 
 GiovannisCaveRadioScript:
 	checkevent EVENT_TIME_TRAVEL_FINISHED
-	iftrue .AfterTimeTravel
+	iftruefwd .AfterTimeTravel
 	jumptext GiovannisCaveRadioText
 .AfterTimeTravel
 	jumptext GiovannisCaveRadioAfterTimeTravelText

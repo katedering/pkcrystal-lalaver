@@ -1,4 +1,7 @@
 ; ability constants
+; indexes for:
+; - AbilityNames (see data/abilities/names.asm)
+; - AbilityDescriptions (see data/abilities/descriptions.asm)
 	const_def
 	const NO_ABILITY
 	const STENCH
@@ -102,6 +105,7 @@
 	const ICE_BODY
 	const SOLID_ROCK
 	const SNOW_WARNING
+	const HONEY_GATHER
 	const FRISK
 	const RECKLESS
 	const PICKPOCKET
@@ -132,6 +136,7 @@
 	const PRANKSTER
 	const SAND_FORCE
 	const FUR_COAT
+	const BULLETPROOF
 	const COMPETITIVE
 	const MEGA_LAUNCHER
 	const TOUGH_CLAWS
@@ -146,4 +151,10 @@
 	const NEUTRALIZING_GAS
 	const PASTEL_VEIL
 	const QUICK_DRAW
-NUM_ABILITIES EQU const_value
+	const STEELY_SPIRIT
+	const PERISH_BODY
+	const SCREEN_CLEANER
+	const CUD_CHEW
+	const SHARPNESS
+	const ARMOR_TAIL
+DEF NUM_ABILITIES EQU const_value

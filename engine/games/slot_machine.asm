@@ -1,11 +1,11 @@
-SLOTS_NOMATCH EQU -1
-SLOTS_SEVEN EQU $00
-SLOTS_POKEBALL EQU $04
-SLOTS_CHERRY EQU $08
-SLOTS_PIKACHU EQU $0c
-SLOTS_SQUIRTLE EQU $10
-SLOTS_STARYU EQU $14
-REEL_SIZE EQU 15
+DEF SLOTS_NOMATCH EQU -1
+DEF SLOTS_SEVEN EQU $00
+DEF SLOTS_POKEBALL EQU $04
+DEF SLOTS_CHERRY EQU $08
+DEF SLOTS_PIKACHU EQU $0c
+DEF SLOTS_SQUIRTLE EQU $10
+DEF SLOTS_STARYU EQU $14
+DEF REEL_SIZE EQU 15
 
 _SlotMachine:
 	ld hl, wOptions1
@@ -23,7 +23,7 @@ _SlotMachine:
 	ld hl, wOptions1
 	res NO_TEXT_SCROLL, [hl]
 	ld hl, rLCDC
-	res 2, [hl] ; 8x8 sprites
+	res rLCDC_SPRITE_SIZE, [hl]
 	ret
 
 .InitGFX:
@@ -62,13 +62,12 @@ _SlotMachine:
 	ld de, vTiles2 tile $25
 	call Decompress
 
-	ld hl, SlotsTilemap
+	ld hl, SlotsTilemapLZ
 	decoord 0, 0
-	ld bc, SCREEN_WIDTH * 12
-	rst CopyBytes
+	call Decompress
 
 	ld hl, rLCDC
-	set 2, [hl] ; 8x16 sprites
+	set rLCDC_SPRITE_SIZE, [hl]
 	call EnableLCD
 	ld hl, wSlots
 	ld bc, wSlotsEnd - wSlots
@@ -499,7 +498,7 @@ InitReelTiles:
 	ld bc, wReel1
 	ld hl, wReel1OAMAddr - wReel1
 	add hl, bc
-	ld de, wVirtualOAM + 16 * 4
+	ld de, wShadowOAM + 16 * 4
 	ld [hl], e
 	inc hl
 	ld [hl], d
@@ -517,7 +516,7 @@ InitReelTiles:
 	ld bc, wReel2
 	ld hl, wReel1OAMAddr - wReel1
 	add hl, bc
-	ld de, wVirtualOAM + 24 * 4
+	ld de, wShadowOAM + 24 * 4
 	ld [hl], e
 	inc hl
 	ld [hl], d
@@ -535,7 +534,7 @@ InitReelTiles:
 	ld bc, wReel3
 	ld hl, wReel1OAMAddr - wReel1
 	add hl, bc
-	ld de, wVirtualOAM + 32 * 4
+	ld de, wShadowOAM + 32 * 4
 	ld [hl], e
 	inc hl
 	ld [hl], d
@@ -907,7 +906,7 @@ ReelAction_InitGolem:
 	push af
 	depixel 12, 13
 	ld a, SPRITE_ANIM_INDEX_SLOTS_GOLEM
-	call _InitSpriteAnimStruct
+	call InitSpriteAnimStruct
 	ld hl, SPRITEANIMSTRUCT_VAR3
 	add hl, bc
 	pop af
@@ -962,7 +961,7 @@ Slots_InitChansey:
 	push bc
 	depixel 12, 0
 	ld a, SPRITE_ANIM_INDEX_SLOTS_CHANSEY
-	call _InitSpriteAnimStruct
+	call InitSpriteAnimStruct
 	pop bc
 	xor a
 	ld [wSlotsDelay], a
@@ -1494,9 +1493,8 @@ Slots_AskBet:
 	text_end
 
 .MenuDataHeader:
-	db $40 ; flags
-	db 10, 14 ; start coords
-	db 17, 19 ; end coords
+	db MENU_BACKUP_TILES
+	menu_coords 14, 10, 19, 17
 	dw .MenuData2
 	db 1 ; default option
 
@@ -1827,7 +1825,7 @@ Slots_AnimateChansey:
 	push bc
 	depixel 12, 13, 0, 4
 	ld a, SPRITE_ANIM_INDEX_SLOTS_EGG
-	call _InitSpriteAnimStruct
+	call InitSpriteAnimStruct
 	pop bc
 	ret
 
@@ -1908,8 +1906,8 @@ Reel3Tilemap:
 	db SLOTS_PIKACHU  ;  1
 	db SLOTS_CHERRY   ;  2
 
-SlotsTilemap:
-INCBIN "gfx/slots/slots.tilemap"
+SlotsTilemapLZ:
+INCBIN "gfx/slots/slots.tilemap.lz"
 
 Slots1LZ:
 INCBIN "gfx/slots/slots_1.2bpp.lz"

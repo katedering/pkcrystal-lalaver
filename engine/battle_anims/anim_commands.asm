@@ -1,6 +1,7 @@
 ; Battle animation command interpreter.
 
 PlayBattleAnim:
+	farcall CheckBattleAnimSubstitution
 	ld hl, rIE
 	set LCD_STAT, [hl]
 
@@ -52,10 +53,17 @@ _PlayBattleAnim:
 	jmp WaitSFX
 
 BattleAnimRunScript:
+	; Check if we should play this animation unconditionally.
+	; If not, the "battle effects" option can disable it.
 	ld a, [wFXAnimIDHi]
-	and a
-	jr nz, .hi_byte
+	cp HIGH(FIRST_UNCONDITIONAL_ANIM)
+	jr c, .conditional
+	jr nz, .unconditional
+	ld a, [wFXAnimIDLo]
+	cp LOW(FIRST_UNCONDITIONAL_ANIM)
+	jr nc, .unconditional
 
+.conditional
 	farcall CheckBattleEffects
 	jr c, .disabled
 
@@ -85,7 +93,7 @@ BattleAnimRunScript:
 	ld a, h
 	ld [wFXAnimIDHi], a
 
-.hi_byte
+.unconditional
 	call WaitSFX
 	call PlayHitSound
 	call RunBattleAnimScript
@@ -134,8 +142,8 @@ RunBattleAnimScript:
 	ret nz
 
 	; clear oam
-	ld hl, wVirtualOAM
-	ld c, wVirtualOAMEnd - wVirtualOAM
+	ld hl, wShadowOAM
+	ld c, wShadowOAMEnd - wShadowOAM
 	xor a
 .loop2
 	ld [hli], a
@@ -269,8 +277,8 @@ BattleAnimCommands::
 	dw BattleAnimCmd_IncObj
 	dw BattleAnimCmd_SetObj
 	dw BattleAnimCmd_IncBGEffect
-	dw BattleAnimCmd_EnemyFeetObj
-	dw BattleAnimCmd_PlayerHeadObj
+	dw BattleAnimCmd_BattlerGFX_1Row
+	dw BattleAnimCmd_BattlerGFX_2Row
 	dw BattleAnimCmd_CheckPokeball
 	dw BattleAnimCmd_Transform
 	dw BattleAnimCmd_RaiseSub
@@ -278,18 +286,18 @@ BattleAnimCommands::
 	dw BattleAnimCmd_ResetObp0
 	dw BattleAnimCmd_Sound
 	dw BattleAnimCmd_Cry
-	dw BattleAnimCmd_MinimizeOpp
+	dw DoNothing
 	dw BattleAnimCmd_OAMOn
 	dw BattleAnimCmd_OAMOff
 	dw BattleAnimCmd_ClearObjs
 	dw BattleAnimCmd_BeatUp
-	dw BattleAnimCmd_E7 ; dummy
+	dw DoNothing
 	dw BattleAnimCmd_UpdateActorPic
-	dw BattleAnimCmd_Minimize
-	dw BattleAnimCmd_EA ; dummy
-	dw BattleAnimCmd_EB ; dummy
-	dw BattleAnimCmd_EC ; dummy
-	dw BattleAnimCmd_ED ; dummy
+	dw BattleAnimCmd_SetBgPal
+	dw BattleAnimCmd_SetObjPal
+	dw DoNothing
+	dw DoNothing
+	dw DoNothing
 	dw BattleAnimCmd_IfParamAnd
 	dw BattleAnimCmd_JumpUntil
 	dw BattleAnimCmd_BGEffect
@@ -297,9 +305,9 @@ BattleAnimCommands::
 	dw BattleAnimCmd_OBP0
 	dw BattleAnimCmd_OBP1
 	dw BattleAnimCmd_ClearSprites
-	dw BattleAnimCmd_F5 ; dummy
-	dw BattleAnimCmd_F6 ; dummy
-	dw BattleAnimCmd_F7 ; dummy
+	dw DoNothing
+	dw DoNothing
+	dw DoNothing
 	dw BattleAnimCmd_IfParamEqual
 	dw BattleAnimCmd_SetVar
 	dw BattleAnimCmd_IncVar
@@ -309,16 +317,6 @@ BattleAnimCommands::
 	dw BattleAnimCmd_Call
 	dw BattleAnimCmd_Ret
 	assert_table_length $100 - FIRST_BATTLE_ANIM_CMD
-
-BattleAnimCmd_E7:
-BattleAnimCmd_EA:
-BattleAnimCmd_EB:
-BattleAnimCmd_EC:
-BattleAnimCmd_ED:
-BattleAnimCmd_F5:
-BattleAnimCmd_F6:
-BattleAnimCmd_F7:
-	ret ; no-optimize stub function
 
 BattleAnimCmd_Ret:
 	ld hl, wBattleAnimFlags
@@ -368,7 +366,7 @@ BattleAnimCmd_Jump:
 	ret
 
 BattleAnimCmd_StatLoop:
-	ld a, [wLoweredStat]
+	ld a, [wChangedStat]
 	swap a
 	and $f
 	inc a
@@ -620,7 +618,7 @@ endr
 	ld de, vTiles0 tile BATTLEANIM_BASE_TILE
 	add hl, de
 	ld a, [wBattleAnimByte]
-	call LoadBattleAnimObj
+	call LoadBattleAnimGFX
 	ld a, [wBattleAnimTemp0]
 	add c
 	ld [wBattleAnimTemp0], a
@@ -706,7 +704,7 @@ BattleAnimCmd_SetObj:
 	ld [hl], a
 	ret
 
-BattleAnimCmd_EnemyFeetObj:
+BattleAnimCmd_BattlerGFX_1Row:
 	ld hl, wBattleAnimTileDict
 .loop
 	ld a, [hl]
@@ -717,11 +715,11 @@ BattleAnimCmd_EnemyFeetObj:
 	jr .loop
 
 .okay
-	ld a, $28
+	ld a, ANIM_GFX_PLAYERHEAD
 	ld [hli], a
 	ld a, $42
 	ld [hli], a
-	ld a, $29
+	ld a, ANIM_GFX_ENEMYFEET
 	ld [hli], a
 	ld [hl], $49
 
@@ -741,7 +739,7 @@ BattleAnimCmd_EnemyFeetObj:
 	push af
 	push hl
 	push de
-	lb bc, BANK(BattleAnimCmd_EnemyFeetObj), 1
+	lb bc, BANK(BattleAnimCmd_BattlerGFX_1Row), 1
 	call Request2bpp
 	pop de
 	ld a, [wBattleAnimTemp0]
@@ -758,7 +756,7 @@ BattleAnimCmd_EnemyFeetObj:
 	jr nz, .LoadFootprint
 	ret
 
-BattleAnimCmd_PlayerHeadObj:
+BattleAnimCmd_BattlerGFX_2Row:
 	ld hl, wBattleAnimTileDict
 .loop
 	ld a, [hl]
@@ -769,11 +767,11 @@ BattleAnimCmd_PlayerHeadObj:
 	jr .loop
 
 .okay
-	ld a, $28
+	ld a, ANIM_GFX_PLAYERHEAD
 	ld [hli], a
 	ld a, $35
 	ld [hli], a
-	ld a, $29
+	ld a, ANIM_GFX_ENEMYFEET
 	ld [hli], a
 	ld [hl], $43
 
@@ -793,7 +791,7 @@ BattleAnimCmd_PlayerHeadObj:
 	push af
 	push hl
 	push de
-	lb bc, BANK(BattleAnimCmd_EnemyFeetObj), 2
+	lb bc, BANK(BattleAnimCmd_BattlerGFX_2Row), 2
 	call Request2bpp
 	pop de
 	ld a, [wBattleAnimTemp0]
@@ -821,30 +819,32 @@ BattleAnimCmd_Transform:
 	push af
 	ld a, 1
 	ldh [rSVBK], a
-	ld a, [wCurPartySpecies] ; CurPartySpecies
+	ld a, [wCurPartySpecies]
 	push af
 
 	ldh a, [hBattleTurn]
 	and a
 	jr z, .player
 
-	ld a, [wTempBattleMonSpecies] ; TempBattleMonSpecies
-	ld [wCurPartySpecies], a ; CurPartySpecies
-	farcall GetBattleMonVariant
+	ld a, [wTempBattleMonSpecies]
+	ld [wCurPartySpecies], a
+	ld a, [wBattleMonForm]
+	ld [wCurForm], a
 	ld de, vTiles0 tile $00
 	predef GetFrontpic
 	jr .done
 
 .player
-	ld a, [wTempEnemyMonSpecies] ; TempEnemyMonSpecies
-	ld [wCurPartySpecies], a ; CurPartySpecies
-	farcall GetEnemyMonVariant
+	ld a, [wTempEnemyMonSpecies]
+	ld [wCurPartySpecies], a
+	ld a, [wEnemyMonForm]
+	ld [wCurForm], a
 	ld de, vTiles0 tile $00
 	predef GetBackpic
 
 .done
 	pop af
-	ld [wCurPartySpecies], a ; CurPartySpecies
+	ld [wCurPartySpecies], a
 	pop af
 	ldh [rSVBK], a
 	ret
@@ -865,6 +865,105 @@ BattleAnimCmd_UpdateActorPic:
 	lb bc, 0, $24
 	jmp Request2bpp
 
+BattleAnimCmd_SetBgPal:
+	xor a
+	jr SetBattleAnimPal
+BattleAnimCmd_SetObjPal:
+	ld a, 1
+SetBattleAnimPal:
+	; This denotes whether to reference bg pals or obj pals.
+	ld b, a
+
+	call GetBattleAnimByte
+	ld d, a
+	call GetBattleAnimByte
+	ld e, a
+	ld a, d
+	cp PAL_BATTLE_BG_USER
+	assert PAL_BATTLE_BG_USER + 1 == PAL_BATTLE_BG_TARGET
+	ld a, b
+
+	; User/Target pal handling should always index based on bg pal.
+	ld b, 0
+	jr z, .UserPal
+	jr nc, .TargetPal
+	ld b, a
+.finish
+	call .SetPaletteData
+	jmp SetPalettes
+
+.UserPal:
+	ldh a, [hBattleTurn]
+	and a
+	jr nz, .EnemyPal
+.PlayerPal:
+	; Backpic.
+	ld d, PAL_BATTLE_BG_PLAYER
+	call .SetPaletteData
+
+	; This is needed because part of the user pic reuses move info pals.
+	ld d, PAL_BATTLE_BG_TYPE_CAT
+	call .SetPaletteData
+
+	; Head. + 8 to reference object palettes.
+	ld d, PAL_BATTLE_OB_PLAYER + 8
+	jr .finish
+
+.TargetPal:
+	ldh a, [hBattleTurn]
+	and a
+	jr nz, .PlayerPal
+.EnemyPal:
+	; Frontpic.
+	ld d, PAL_BATTLE_BG_ENEMY
+	call .SetPaletteData
+
+	; Feet.
+	ld d, PAL_BATTLE_OB_ENEMY + 8
+	jr .finish
+
+.SetPaletteData:
+	push de
+	push bc
+
+	; Check if we should reference BG or OBJ pals.
+	dec b
+	jr nz, .got_pal_target
+	ld a, d
+	add 8 ; wBGPals + 8 palettes == wOBPals1
+	ld d, a
+
+.got_pal_target
+	; Get palette to change.
+	ld hl, wBGPals1
+	ld bc, 1 palettes
+	ld a, d
+	rst AddNTimes
+
+	; Get palette to set.
+	call SwapHLDE
+	ld a, l
+	inc l
+	jr z, .SetDefaultPal
+	ld hl, CustomBattlePalettes
+	rst AddNTimes
+
+	; Write the palette.
+	call FarCopyColorWRAM
+.done_setpal
+	pop bc
+	pop de
+	ret
+
+.SetDefaultPal:
+	farcall GetDefaultBattlePalette
+	jr .done_setpal
+
+CustomBattlePalettes:
+	table_width 1 palettes, CustomBattlePalettes
+INCLUDE "gfx/battle_anims/custom.pal"
+	assert_table_length NUM_CUSTOM_BATTLE_PALETTES
+
 BattleAnimCmd_RaiseSub:
 	ldh a, [rSVBK]
 	push af
@@ -874,180 +973,22 @@ BattleAnimCmd_RaiseSub:
 	call GetSRAMBank
 
 GetSubstitutePic:
-	ld hl, sScratch
-	ld bc, 7 * 7 tiles
-.loop
-	xor a
-	ld [hli], a
-	dec bc
-	ld a, c
-	or b
-	jr nz, .loop
-
 	ldh a, [hBattleTurn]
 	and a
 	jr z, .player
 
 	ld hl, SubstituteFrontpic
-	ld a, BANK(SubstituteFrontpic)
-	assert wTempTileMap == WRAM1_Begin
-	call FarDecompress
-	call .CopyPic
-	ld hl, vTiles2 tile $00
-	ld de, sScratch
-	lb bc, BANK(GetSubstitutePic), 7 * 7
-	call Request2bpp
+	lb bc, BANK(SubstituteFrontpic), 7 * 7
+	ld de, vTiles2 tile $00
 	jr .done
 
 .player
 	ld hl, SubstituteBackpic
-	ld a, BANK(SubstituteBackpic)
-	assert wTempTileMap == WRAM1_Begin
-	call FarDecompress
-	call .CopyPic
-	ld hl, vTiles2 tile $31
-	ld de, sScratch
-	lb bc, BANK(GetSubstitutePic), 6 * 6
-	call Request2bpp
+	lb bc, BANK(SubstituteBackpic), 6 * 6
+	ld de, vTiles2 tile $31
 
 .done
-	call CloseSRAM
-	pop af
-	ldh [rSVBK], a
-	ret
-
-.CopyPic
-	ld b, 4
-.loop1
-	push bc
-	ld c, 4
-.loop2
-	push bc
-	call .GetTile
-	call .CopyTile
-	pop bc
-	dec c
-	jr nz, .loop2
-	pop bc
-	dec b
-	jr nz, .loop1
-	ret
-
-.GetTile:
-	; hl = wTempTileMap + (4 - b) * 4 tiles + (4 - c) tiles
-	; de = sScratch + (1 + 4 - c) * 7 tiles + (2 + 4 - b) tiles if enemy
-	; de = sScratch + (1 + 4 - c) * 6 tiles + (1 + 4-b) tiles if player
-	ld a, 4
-	sub b
-	ld b, a
-	ld a, 4
-	sub c
-	ld c, a
-	push bc
-	push bc
-	inc c
-	ldh a, [hBattleTurn]
-	and a
-	ld a, c
-	ld bc, 6 tiles
-	ld hl, sScratch
-	jr z, .okay1
-	ld bc, 7 tiles
-	ld hl, sScratch + 1 tiles
-.okay1
-	rst AddNTimes
-	pop bc
-	inc b
-	ldh a, [hBattleTurn]
-	and a
-	jr nz, .okay2
-	inc b
-.okay2
-	ld a, b
-	ld bc, 1 tiles
-	rst AddNTimes
-	ld d, h
-	ld e, l
-	pop bc
-	push bc
-	ld a, b
-	ld hl, wTempTileMap
-	ld bc, 4 tiles
-	rst AddNTimes
-	pop bc
-	swap c
-	ld b, 0
-	add hl, bc
-	ret
-
-.CopyTile
-	ld bc, 1 tiles
-	ld a, BANK(GetSubstitutePic)
-	jmp FarCopyBytes
-
-BattleAnimCmd_MinimizeOpp:
-	ldh a, [rSVBK]
-	push af
-	ld a, $1
-	ldh [rSVBK], a
-	xor a
-	call GetSRAMBank
-	call GetMinimizePic
-	call Request2bpp
-	call CloseSRAM
-	pop af
-	ldh [rSVBK], a
-	ret
-
-GetMinimizePic:
-	ld hl, sScratch
-	ld bc, 7 * 7 tiles
-.loop
-	xor a
-	ld [hli], a
-	dec bc
-	ld a, c
-	or b
-	jr nz, .loop
-
-	ldh a, [hBattleTurn]
-	and a
-	jr z, .player
-
-	ld de, sScratch + $1a tiles
-	call CopyMinimizePic
-	ld hl, vTiles2 tile $00
-	ld de, sScratch
-	lb bc, BANK(GetMinimizePic), 7 * 7
-	ret
-
-.player
-	ld de, sScratch + $16 tiles
-	call CopyMinimizePic
-	ld hl, vTiles2 tile $31
-	ld de, sScratch
-	lb bc, BANK(GetMinimizePic), 6 * 6
-	ret
-
-CopyMinimizePic:
-	ld hl, MinimizePic
-	ld bc, 1 tiles
-	ld a, BANK(MinimizePic)
-	jmp FarCopyBytes
-
-MinimizePic:
-INCBIN "gfx/battle/minimize.2bpp"
-
-BattleAnimCmd_Minimize:
-	ldh a, [rSVBK]
-	push af
-	ld a, $1
-	ldh [rSVBK], a
-	xor a
-	call GetSRAMBank
-	call GetMinimizePic
-	ld hl, vTiles0 tile $00
-	call Request2bpp
+	call DecompressRequest2bpp
 	call CloseSRAM
 	pop af
 	ldh [rSVBK], a
@@ -1059,7 +1000,7 @@ BattleAnimCmd_DropSub:
 	ld a, $1
 	ldh [rSVBK], a
 
-	ld a, [wCurPartySpecies] ; CurPartySpecies
+	ld a, [wCurPartySpecies]
 	push af
 	ldh a, [hBattleTurn]
 	and a
@@ -1073,7 +1014,7 @@ BattleAnimCmd_DropSub:
 
 .done
 	pop af
-	ld [wCurPartySpecies], a ; CurPartySpecies
+	ld [wCurPartySpecies], a
 	pop af
 	ldh [rSVBK], a
 	ret
@@ -1083,29 +1024,31 @@ BattleAnimCmd_BeatUp:
 	push af
 	ld a, $1
 	ldh [rSVBK], a
-	ld a, [wCurPartySpecies] ; CurPartySpecies
+	ld a, [wCurPartySpecies]
 	push af
 
 	ld a, [wBattleAnimParam]
-	ld [wCurPartySpecies], a ; CurPartySpecies
+	ld [wCurPartySpecies], a
 
 	ldh a, [hBattleTurn]
 	and a
 	jr z, .player
 
-	farcall GetBattleMonVariant
+	ld a, [wBattleMonForm]
+	ld [wCurForm], a
 	ld de, vTiles2 tile $00
 	predef GetFrontpic
 	jr .done
 
 .player
-	farcall GetEnemyMonVariant
+	ld a, [wEnemyMonForm]
+	ld [wCurForm], a
 	ld de, vTiles2 tile $31
 	predef GetBackpic
 
 .done
 	pop af
-	ld [wCurPartySpecies], a ; CurPartySpecies
+	ld [wCurPartySpecies], a
 	ld a, CGB_BATTLE_COLORS
 	call GetCGBLayout
 	pop af
@@ -1135,7 +1078,7 @@ BattleAnimCmd_Sound:
 	ld [wSFXDuration], a
 	call .GetCryTrack
 	and 3
-	ld [wCryTracks], a ; CryTracks
+	ld [wCryTracks], a
 
 	ld e, a
 	ld d, 0
@@ -1185,14 +1128,20 @@ endr
 	jr nz, .enemy
 
 	ld a, $f0
-	ld [wCryTracks], a ; CryTracks
-	ld a, [wBattleMonSpecies] ; BattleMonSpecies
+	ld [wCryTracks], a
+	ld a, [wBattleMonSpecies]
+	ld c, a
+	ld a, [wBattleMonForm]
+	ld b, a
 	jr .done_cry_tracks
 
 .enemy
 	ld a, $f
-	ld [wCryTracks], a ; CryTracks
-	ld a, [wEnemyMonSpecies] ; wEnemyMon
+	ld [wCryTracks], a
+	ld a, [wEnemyMonSpecies]
+	ld c, a
+	ld a, [wEnemyMonForm]
+	ld b, a
 
 .done_cry_tracks
 	push hl
@@ -1220,14 +1169,14 @@ endr
 	ld a, [hli]
 	ld c, a
 	ld b, [hl]
-	ld hl, wCryLength ; CryLength
+	ld hl, wCryLength
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
 	add hl, bc
 
 	ld a, l
-	ld [wCryLength], a ; CryLength
+	ld [wCryLength], a
 	ld a, h
 	ld [wCryLength + 1], a
 	ld a, 1
@@ -1249,12 +1198,12 @@ endr
 
 PlayHitSound:
 	ld a, [wNumHits]
-	cp $1
-	jr z, .okay
-	cp $4
+	dec a ; BATTLEANIM_ENEMY_DAMAGE
+	jr z, .ok
+	dec a ; BATTLEANIM_PLAYER_DAMAGE
 	ret nz
 
-.okay
+.ok
 	ld a, [wTypeModifier]
 	and a
 	ret z
@@ -1327,30 +1276,39 @@ BattleAnim_SetBGPals:
 	ldh [rSVBK], a
 if !DEF(MONOCHROME)
 	ld a, b
-	cp $1b
+	ld c, %00011011 ; 0, 1, 2, 3 (cycle inverts)
+	cp c
+	jr z, .invert
 	ldh a, [rBGP]
-	jr z, .is_1b
-	cp $1b
-	jr nz, .not_1b
-.is_1b
+	cp %01010101 ; 1, 1, 1, 1 (invert once)
+	jr z, .invert
+	cp c
+	jr nz, .no_invert
+.invert
+	cp c
 	ld c, 7 palettes
 	ld hl, wBGPals1
-.loop_UnknBGPals
 	ld a, [hl]
+	jr z, .loop_invert_BGPals
+	and a
+	jr z, .already_inverted
+.loop_invert_BGPals
 	cpl
 	ld [hli], a
 	dec c
-	jr nz, .loop_UnknBGPals
+	ld a, [hl]
+	jr nz, .loop_invert_BGPals
 	ld c, 2 palettes
 	ld hl, wOBPals1
-.loop_UnknOBPals
+.loop_invert_OBPals
 	ld a, [hl]
 	cpl
 	ld [hli], a
 	dec c
-	jr nz, .loop_UnknOBPals
-	ld a, $e4
-.not_1b
+	jr nz, .loop_invert_OBPals
+.already_inverted
+	ld a, %11100100
+.no_invert
 	push af
 else
 	ldh a, [rBGP]
@@ -1420,10 +1378,10 @@ BattleAnim_UpdateOAM_All:
 	jr nz, .loop
 	ld a, [wBattleAnimOAMPointerLo]
 	ld l, a
-	ld h, HIGH(wVirtualOAM)
+	ld h, HIGH(wShadowOAM)
 .loop2
 	ld a, l
-	cp LOW(wVirtualOAMEnd)
+	cp LOW(wShadowOAMEnd)
 	ret nc
 	xor a
 	ld [hli], a

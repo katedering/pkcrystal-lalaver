@@ -554,6 +554,15 @@ _PushWindow::
 	ld a, l
 	ld [de], a
 	dec de
+
+	; Check if a window stack overflow happened.
+	ld a, d
+	cp $d0
+	jr nc, .no_overflow
+	ld a, ERR_WINSTACK_OVERFLOW
+	jmp Crash
+
+.no_overflow
 	ld hl, wWindowStackPointer
 	ld [hl], e
 	inc hl
@@ -575,6 +584,56 @@ _PushWindow::
 .col
 	ld a, [hli]
 	ld [de], a
+	dec de
+	dec c
+	jr nz, .col
+
+	pop hl
+	ld bc, SCREEN_WIDTH
+	add hl, bc
+	pop bc
+	dec b
+	jr nz, .row
+	ret
+
+PushWindow_MenuBoxCoordToTile::
+	bccoord 0, 0
+	jr PushWindow_MenuBoxCoordToAbsolute
+
+PushWindow_MenuBoxCoordToAttr::
+	bccoord 0, 0, wAttrmap
+
+; fallthrough
+PushWindow_MenuBoxCoordToAbsolute:
+	push bc
+	call LoadMenuBoxCoords
+	ld a, [wMenuFlags]
+	bit 1, a
+	jr z, .noDec
+	dec b
+	dec c
+.noDec
+	call Coord2Absolute
+	pop bc
+	add hl, bc
+	ret
+
+RestoreTileBackup::
+	call PushWindow_MenuBoxCoordToTile
+	call .copy
+	call PushWindow_MenuBoxCoordToAttr
+	; fallthrough
+
+.copy
+	call GetTileBackupMenuBoxDims
+
+.row
+	push bc
+	push hl
+
+.col
+	ld a, [de]
+	ld [hli], a
 	dec de
 	dec c
 	jr nz, .col

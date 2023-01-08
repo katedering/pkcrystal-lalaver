@@ -1,10 +1,6 @@
 SECTION "HRAM", HRAM
 
-HRAM_START::
-
-hPushOAM:: ds 5
-
-hScriptVar:: db
+hScriptVar:: dw
 
 hROMBankBackup:: db
 
@@ -46,7 +42,7 @@ hInMenu:: db
 
 UNION
 hGraphicStartTile:: db
-hMoveMon:: db
+hIsMapObject:: db ; 0 = object, 1 = mapobject
 hMapObjectIndexBuffer:: db
 hObjectStructIndexBuffer:: db
 NEXTU
@@ -54,6 +50,9 @@ hMapBorderBlock:: db
 hMapWidthPlus6:: db
 hConnectionStripLength:: db
 hConnectedMapWidth:: db
+NEXTU
+	ds 1
+hMoveMon:: db
 ENDU
 
 UNION
@@ -109,7 +108,7 @@ hChartValues::
 hChartHP::  db
 hChartAtk:: db
 hChartDef:: db
-hChartSpd:: db
+hChartSpe:: db
 hChartSat:: db
 hChartSdf:: db
 ENDU
@@ -119,12 +118,6 @@ hMoneyTemp:: ds 3
 hLCDCPointer::     db
 hLYOverrideStart:: db
 hLYOverrideEnd::   db
-
-hSerialReceivedNewData::     db
-hSerialConnectionStatus::    db
-hSerialIgnoringInitialData:: db
-hSerialSend::                db
-hSerialReceive::             db
 
 hSCX:: db
 hSCY:: db
@@ -145,6 +138,18 @@ hBGMapMode::
 	db
 hBGMapHalf::     db
 hBGMapAddress::  dw
+
+	ds 4 ; unused
+
+hSerialReceivedNewData::     db
+hSerialConnectionStatus::    db
+	vc_assert hSerialConnectionStatus == $ffcb, \
+		"hSerialConnectionStatus is no longer located at 00:ffcb."
+hSerialIgnoringInitialData:: db
+hSerialSend::                db
+hSerialReceive::             db
+
+	ds 2 ; unused
 
 hOAMUpdate:: db
 
@@ -174,6 +179,10 @@ NEXTU
 hChartScreen:: db
 hChartFillCoord:: db
 hChartLineCoord:: db
+NEXTU
+hPokedexAreaMode:: ; %xyyyzzzz, x: area unknown, y: region, z: location type
+hPokedexStatsCurAbil:: db
+	ds 2
 ENDU
 
 hCGBPalUpdate:: db
@@ -208,9 +217,16 @@ ENDU
 
 hCrashCode:: db
 
-	ds 8
+hStopPrintingString:: db
 
+UNION
+; vwf
 hAppendVWFText:: ds 4
+NEXTU
+; ctxt
+hPlaceStringCoords:: dw
+hCompressedTextBuffer:: ds 2 ; one character and "@"
+ENDU
 
 hLCDInterruptFunction::
 hFunctionJump::     db ; $c3 jp
@@ -226,5 +242,3 @@ hBitwiseRet::    db ; $c9 ret
 hSingleOperation::
 hSingleOpcode:: db ; opcode
 hSingleRet::    db ; $c9 ret
-
-HRAM_END::

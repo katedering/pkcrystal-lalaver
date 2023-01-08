@@ -91,6 +91,7 @@ ROMX $11
 
 ROMX $12
 	"Crystal Features 1"
+	"Bill's PC"
 
 ROMX $13
 	"bank13"
@@ -123,7 +124,7 @@ ROMX $25
 	"Events"
 
 ROMX $26
-	"Second Map Headers"
+	"Map Attributes"
 
 ROMX $27
 	"Special Map Blockdata"
@@ -183,6 +184,9 @@ ROMX $38
 ROMX $39
 	"bank39"
 
+ROMX $3A
+	"Pokemon Center Scripts 5"
+
 ROMX $3E
 	"bank3E"
 
@@ -202,7 +206,7 @@ ROMX $42
 	"Credits"
 
 ROMX $48
-	"Pic Pointers"
+	"Pokemon Pic Pointers"
 
 VRAM $0
 	"VRAM0"
@@ -227,9 +231,12 @@ WRAM0
 	org $c770
 	"Misc 480"
 	org $c950
-	"Misc 1300"
-	org $ced0
+	"Misc 1326"
+	org $ce7e
 	"Video"
+	"More WRAM 0"
+	org $cff0
+	"Options"
 
 WRAMX $1
 	org $d000
@@ -269,23 +276,29 @@ WRAMX $7
 	"Window Stack"
 
 SRAM $0
-	"Scratch"
+	"PokeDB bank 1B"
+	"Link Battle Data"
+	"SRAM Battle Tower"
+	org $a600
+	"SRAM Mail"
 	"SRAM Bank 0"
+	"PokeDB bank 2B"
 	org $b200
 	"Backup Save"
 
 SRAM $1
 	"Save"
-	"Active Box"
-	"Link Battle Data"
 	"SRAM Hall of Fame"
-	"SRAM Battle Tower"
+	"Box metadata"
+	"PokeDB bank 1C"
+	"PokeDB bank 2C"
 
 SRAM $2
-	"Boxes 1-7"
+	"PokeDB bank 1A"
 
 SRAM $3
-	"Boxes 8-14"
+	"PokeDB bank 2A"
 
 HRAM
+	"OAM DMA"
 	"HRAM"

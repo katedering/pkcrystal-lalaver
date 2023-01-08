@@ -73,7 +73,8 @@ CheckBreedmonCompatibility:
 	ld [wCurForm], a
 	call GetBaseData
 	ld a, [wBaseEggGroups]
-	cp EGG_NONE * $11
+	assert EGG_NONE * $11 == $ff
+	inc a
 	jr z, .Incompatible
 
 	ld a, [wBreedMon1Species]
@@ -83,7 +84,8 @@ CheckBreedmonCompatibility:
 	ld [wCurForm], a
 	call GetBaseData
 	ld a, [wBaseEggGroups]
-	cp EGG_NONE * $11
+	assert EGG_NONE * $11 == $ff
+	inc a
 	jr z, .Incompatible
 
 ; Ditto is automatically compatible with everything.
@@ -162,40 +164,40 @@ CheckBreedmonCompatibility:
 	ret
 
 DoEggStep::
+	ld a, [wPartyCount]
+	and a
+	ret z
+
 	; Check if Flame Body/Magma Armor applies
-	ld de, wPartySpecies
-	ld hl, wPartyMon1Ability
-.ability_loop
-	ld a, [de]
-	inc de
-	inc a
-	jr z, .no_ability_bonus
+	ld e, a
+	ld hl, wPartyMon1IsEgg
 	push hl
 	push de
-	ld de, wPartyMon1IsEgg - wPartyMon1Ability
-	add hl, de
+.loop
 	bit MON_IS_EGG_F, [hl]
-	pop de
-	pop hl
-	jr nz, .ability_next
-	ld c, a
-	push de
+	jr nz, .next_ability
 	push hl
+	push de
+	ld de, MON_SPECIES - MON_IS_EGG
+	add hl, de
+	ld c, [hl]
+	ld de, MON_ABILITY - MON_SPECIES
+	add hl, de
 	call GetAbility
-	pop hl
 	pop de
+	pop hl
 	ld a, b
 	ld c, 2
 	cp FLAME_BODY
-	jr z, .ability_ok
+	jr z, .got_decrement
 	cp MAGMA_ARMOR
-	jr z, .ability_ok
-.ability_next
+	jr z, .got_decrement
+.next_ability
 	call .NextPartyMon
-	jr .ability_loop
-.no_ability_bonus
+	jr nz, .loop
 	ld c, 1
-.ability_ok
+.got_decrement
+	; Check if Oval Charm applies
 	ld a, OVAL_CHARM
 	ld [wCurKeyItem], a
 	push bc
@@ -204,45 +206,40 @@ DoEggStep::
 	jr nc, .no_oval_charm
 	sla c
 .no_oval_charm
-	ld de, wPartySpecies
-	ld hl, wPartyMon1Happiness ; Egg cycles when not hatched
-.loop
-	ld a, [de]
-	inc de
-	inc a
-	jr z, .done
-	push hl
-	push de
-	ld de, wPartyMon1IsEgg - wPartyMon1Happiness
-	add hl, de
-	bit MON_IS_EGG_F, [hl]
 	pop de
 	pop hl
-	jr z, .next
-	ld a, [hl]
-	sub c
-	jr nc, .ok
-	xor a
-.ok
-	ld [hl], a
-	jr z, .hatch
-	; fallthrough
-.next
-	call .NextPartyMon
-	jr .loop
+	ld d, c
 
-.hatch
-	ld a, 1
-	and a
-.done
-	ld c, 0 ; TODO: check if this is needed (was done earlier)
+	; Tick down eggs by d egg cycles.
+	xor a ; Hatching marker.
+	push af
+.egg_loop
+	bit MON_IS_EGG_F, [hl]
+	jr z, .next_egg
+	push hl
+	ld bc, MON_HAPPINESS - MON_IS_EGG
+	add hl, bc
+	ld a, [hl]
+	sub d
+	jr nc, .egg_ok
+	xor a
+.egg_ok
+	ld [hl], a
+	pop hl
+	jr nz, .next_egg
+	pop af
+	or 1
+	push af
+.next_egg
+	call .NextPartyMon
+	jr nz, .egg_loop
+	pop af
 	ret
 
 .NextPartyMon:
-	push de
-	ld de, PARTYMON_STRUCT_LENGTH
-	add hl, de
-	pop de
+	ld bc, PARTYMON_STRUCT_LENGTH
+	add hl, bc
+	dec e
 	ret
 
 OverworldHatchEgg::
@@ -254,163 +251,125 @@ OverworldHatchEgg::
 	jmp CloseText
 
 HatchEggs:
-	ld de, wPartySpecies
-	ld hl, wPartyMon1Happiness
 	xor a
 	ld [wCurPartyMon], a
 
-.loop
-	ld a, [de]
-	inc de
-	inc a
+	ld a, [wPartyCount]
+	and a
 	ret z
+	ld e, a
 
+.loop
 	push de
-	push hl
-	push de
-	ld de, wPartyMon1IsEgg - wPartyMon1Happiness
-	add hl, de
-	bit MON_IS_EGG_F, [hl]
-	pop de
-	pop hl
-	push hl
-	jmp z, .next
-	ld a, [hl]
+
+	; Check if egg cycles is zero.
+	ld a, MON_HAPPINESS
+	call GetPartyParamLocationAndValue
 	and a
 	jmp nz, .next
-	ld [hl], $78
 
-	push de
+	; Is this mon an egg?
+	push hl
+	ld bc, MON_IS_EGG - MON_HAPPINESS
+	add hl, bc
+	bit MON_IS_EGG_F, [hl]
+	res MON_IS_EGG_F, [hl]
+	pop hl
+	jmp z, .next
 
-	farcall SetEggMonCaughtData
-	ld a, [wCurPartyMon]
-	ld hl, wPartyMon1Species
-	ld bc, PARTYMON_STRUCT_LENGTH
-	rst AddNTimes
-	ld a, [hl]
-	ld [wCurPartySpecies], a
-	dec a
-	call SetSeenAndCaughtMon
+	; We have a valid egg. Set friendship state.
+	ld [hl], HATCHED_HAPPINESS
 
-	ld a, [wCurPartyMon]
-	ld hl, wPartyMon1IsEgg
-	ld bc, PARTYMON_STRUCT_LENGTH
-	rst AddNTimes
-	ld a, [hl]
-	and $ff - IS_EGG_MASK
+	; Set OTID
+	ld bc, MON_ID - MON_HAPPINESS
+	add hl, bc
+	ld a, [wPlayerID]
+	ld [hli], a
+	ld a, [wPlayerID + 1]
+	ld [hld], a
+
+	; Heal the mon. UpdatePkmnStats will readjust HP later if max HP changes.
+	ld bc, (MON_MAXHP + 1) - MON_ID
+	add hl, bc
+	ld a, [hld]
+	ld c, a
+	ld a, [hld]
+	ld [hl], c
+	dec hl
+	ld [hld], a
+
+	; Zero status and Unused
+	xor a
+	ld [hld], a
 	ld [hl], a
 
-	ld a, [wCurPartySpecies]
-	cp TOGEPI
+	; Initialize egg caught data.
+	farcall SetEggMonCaughtData
+
+	; Write to wTempMon, wCurPartySpecies and wCurForm. Also gets base data.
+	xor a
+	ld [wMonType], a
+	predef CopyPkmnToTempMon
+
+	; Mark the mon as caught.
+	ld a, [wTempMonSpecies]
+	ld c, a
+	ld a, [wTempMonForm]
+	ld b, a
+	push bc
+	call SetSeenAndCaughtMon
+	pop bc
+
+	; If we hatched a Togepi, set the relevant Prof Elm event flag.
+	ld de, TOGEPI
+	assert HIGH(TOGEPI) == 0
+	call CompareSpeciesWithDE
 	jr nz, .nottogepi
 	eventflagset EVENT_TOGEPI_HATCHED
+
 .nottogepi
+	call GetPartyPokemonName
 
-	pop de
-
-	ld a, [wCurPartySpecies]
-	dec de
-	ld [de], a
-	ld [wNamedObjectIndex], a
-	ld [wCurSpecies], a
-	call GetPokemonName
-
-	ld a, MON_FORM
-	call GetPartyParamLocation
-	ld a, [hl]
-	and SPECIESFORM_MASK
-	ld [wCurForm], a
-
+	; Write the species name to replace "Egg" (or "Bad Egg" I suppose...).
 	ld a, [wCurPartyMon]
 	ld hl, wPartyMonNicknames
 	call SkipNames
+	push hl
 	ld d, h
 	ld e, l
 	ld hl, wStringBuffer1
 	ld bc, MON_NAME_LENGTH
 	rst CopyBytes
-	call GetBaseData
-	ld a, [wCurPartyMon]
-	ld hl, wPartyMons
-	ld bc, PARTYMON_STRUCT_LENGTH
-	rst AddNTimes
-	push hl
-	ld bc, MON_MAXHP
-	add hl, bc
-	ld d, h
-	ld e, l
+
+	; Update stats.
+	farcall UpdatePkmnStats
+
+	; Write OT name.
 	pop hl
 	push hl
-	ld bc, MON_LEVEL
+	ld bc, wPartyMonOTs - wPartyMonNicknames
 	add hl, bc
-	ld a, [hl]
-	ld [wCurPartyLevel], a
-	pop hl
-	push hl
-	ld bc, MON_STATUS
-	add hl, bc
-	xor a
-	ld [hli], a
-	ld [hl], a
-	pop hl
-	push hl
-	ld bc, MON_EVS - 1
-	add hl, bc
-	ld b, FALSE
-	predef CalcPkmnStats
-	pop bc
-	ld hl, MON_MAXHP
-	add hl, bc
-	ld d, h
-	ld e, l
-	ld hl, MON_HP
-	add hl, bc
-	ld a, [de]
-	inc de
-	ld [hli], a
-	ld a, [de]
-	ld [hl], a
-	ld hl, MON_ID
-	add hl, bc
-	ld a, [wPlayerID]
-	ld [hli], a
-	ld a, [wPlayerID + 1]
-	ld [hl], a
-	ld a, [wCurPartyMon]
-	ld hl, wPartyMonOTs
-	ld bc, NAME_LENGTH
-	rst AddNTimes
 	ld d, h
 	ld e, l
 	ld hl, wPlayerName
+	ld bc, MON_NAME_LENGTH
 	rst CopyBytes
+
+	; This prints "Huh?" and does the egg hatch animation.
 	ld hl, .Text_HatchEgg
 	call PrintText
-	ld a, [wCurPartyMon]
-	ld hl, wPartyMonNicknames
-	ld bc, MON_NAME_LENGTH
-	rst AddNTimes
-	ld d, h
-	ld e, l
-	push de
 
+	; Nuzlocke Mode always prompts for nickname. Otherwise, ask.
 	ld a, [wInitialOptions]
 	bit NUZLOCKE_MODE, a
-	jr nz, .alwaysnickname
+	jr nz, .yesnickname
 	ld hl, .Text_NicknameHatchling
 	call PrintText
 	call YesNoBox
-	pop de
 	jr c, .nonickname
-	jr .yesnickname
 
-.alwaysnickname
-	pop de
 .yesnickname
-	xor a
-	ld [wMonType], a
-	push de
-	predef CopyPkmnToTempMon
+	; de = the relevant entry in wPartyMonNicknames.
 	pop de
 	push de
 	ld b, $0 ; pokemon
@@ -421,17 +380,17 @@ HatchEggs:
 	jr .next
 
 .nonickname
+	pop de
 	ld hl, wStringBuffer1
 	ld bc, MON_NAME_LENGTH
 	rst CopyBytes
 
 .next
+	pop de
+	dec e
+	ret z
 	ld hl, wCurPartyMon
 	inc [hl]
-	pop hl
-	ld de, PARTYMON_STRUCT_LENGTH
-	add hl, de
-	pop de
 	jmp .loop
 
 .Text_HatchEgg:
@@ -500,7 +459,7 @@ InitEggMoves:
 	; Default level 1 moves
 	ld de, wTempMonMoves
 	xor a
-	ld [wBuffer1], a
+	ld [wEvolutionOldSpecies], a
 	; c = species
 	ld a, [wTempMonSpecies]
 	ld c, a
@@ -587,23 +546,17 @@ InheritLevelMove:
 	and SPECIESFORM_MASK
 	ld b, a
 	; bc = index
-	call GetSpeciesAndFormIndex
-	dec bc
-	ld hl, EvosAttacksPointers
-	add hl, bc
-	add hl, bc
-	ld a, BANK(EvosAttacksPointers)
-	call GetFarWord
+	predef GetEvosAttacksPointer
 .loop
 	ld a, BANK(EvosAttacks)
 	call GetFarByte
 	inc hl
-	and a
+	inc a
 	jr nz, .loop
 .loop2
 	ld a, BANK(EvosAttacks)
 	call GetFarByte
-	and a
+	inc a
 	ret z
 	inc hl
 	ld a, BANK(EvosAttacks)
@@ -624,7 +577,6 @@ InheritEggMove:
 	ld b, a
 	; bc = index
 	call GetSpeciesAndFormIndex
-	dec bc
 	ld hl, EggMovePointers
 	add hl, bc
 	add hl, bc
@@ -667,11 +619,9 @@ InheritMove:
 
 GetEggFrontpic:
 	push de
-	ld a, [wCurPartyMon]
-	ld hl, wPartyMon1Form
-	ld bc, PARTYMON_STRUCT_LENGTH
-	rst AddNTimes
-	predef GetVariant
+	ld a, MON_FORM
+	call GetPartyParamLocationAndValue
+	ld [wCurForm], a
 	ld a, EGG
 	ld [wCurPartySpecies], a
 	ld [wCurSpecies], a
@@ -681,11 +631,9 @@ GetEggFrontpic:
 
 GetHatchlingFrontpic:
 	push de
-	ld a, [wCurPartyMon]
-	ld hl, wPartyMon1Form
-	ld bc, PARTYMON_STRUCT_LENGTH
-	rst AddNTimes
-	predef GetVariant
+	ld a, MON_FORM
+	call GetPartyParamLocationAndValue
+	ld [wCurForm], a
 	ld a, [wCurPartySpecies]
 	ld [wCurSpecies], a
 	call GetBaseData
@@ -737,7 +685,7 @@ EggHatch_AnimationSequence:
 	rst ByteFill
 	ld hl, EggHatchGFX
 	ld de, vTiles0 tile $00
-	ld bc, $20
+	ld bc, 2 tiles
 	ld a, BANK(EggHatchGFX)
 	call FarCopyBytes
 	call ClearSpriteAnims
@@ -821,7 +769,7 @@ Hatch_LoadFrontpicPal:
 EggHatch_CrackShell:
 	ld a, [wFrameCounter]
 	dec a
-	and $7
+	and $7 ; no-optimize a & X == X
 	cp $7
 	ret z
 	srl a
@@ -832,7 +780,7 @@ EggHatch_CrackShell:
 	ld d, a
 	ld e, 11 * 8
 	ld a, SPRITE_ANIM_INDEX_EGG_CRACK
-	call _InitSpriteAnimStruct
+	call InitSpriteAnimStruct
 	ld hl, SPRITEANIMSTRUCT_TILE_ID
 	add hl, bc
 	ld [hl], $0
@@ -860,7 +808,7 @@ Hatch_InitShellFragments:
 	push bc
 
 	ld a, SPRITE_ANIM_INDEX_EGG_HATCH
-	call _InitSpriteAnimStruct
+	call InitSpriteAnimStruct
 
 	ld hl, SPRITEANIMSTRUCT_TILE_ID
 	add hl, bc
@@ -910,6 +858,9 @@ Special_DayCareMon1:
 	ld hl, DayCareMon1Text
 	call PrintText
 	ld a, [wBreedMon1Species]
+	ld c, a
+	ld a, [wBreedMon1Form]
+	ld b, a
 	call PlayCry
 	ld a, [wDayCareLady]
 	bit 0, a
@@ -923,6 +874,9 @@ Special_DayCareMon2:
 	ld hl, DayCareMon2Text
 	call PrintText
 	ld a, [wBreedMon2Species]
+	ld c, a
+	ld a, [wBreedMon2Form]
+	ld b, a
 	call PlayCry
 	ld a, [wDayCareMan]
 	bit 0, a

@@ -34,7 +34,7 @@ BattleIntroSlidingPics:
 .loop2
 	ldh a, [rLY]
 	cp $60
-	jr c, .loop2
+	jr nz, .loop2
 	ld a, d
 	ldh [hSCX], a
 	call .subfunction5
@@ -58,7 +58,7 @@ BattleIntroSlidingPics:
 	ret
 
 .subfunction3
-	ld hl, wVirtualOAM + 1 ; x pixel
+	ld hl, wShadowOAM + 1 ; x pixel
 	ld c, $12 ; 18
 	ld de, $4
 .loop3

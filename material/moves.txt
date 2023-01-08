@@ -15,6 +15,8 @@ Rhyperior: Submission, Wild Charge
 Houndoom: Bonemerang
 Qwilfish: Selfdestruct
 
+Scyther/Kleavor: Razor Leaf
+
 Slowbro: Metronome
 Lanturn: Earthquake
 Blissey: Reflect
@@ -41,8 +43,6 @@ Meowth/Persian: Hypnosis (Dream World), Gunk Shot (HGSS tutor)
 Psyduck/Golduck: Charm (purified), Low Kick (HGSS tutor)
 
 Sw/Sh:
-Charizard: Hurricane
-Blastoise: Crunch
 Butterfree: Hurricane, Baton Pass, Draining Kiss
 Raichu: Draining Kiss, Play Rough, Safeguard
 Clefairy/Clefable: Baton Pass
@@ -56,10 +56,7 @@ Rapidash: Baton Pass
 Onix: Dragon Dance
 Steelix: Dragon Dance, Scary Face
 Kingler: Hydro Pump
-Hitmonlee: Aura Sphere
-Hitmonchan: Aura Sphere
 Mr. Mime: Dazzling Gleam
-Gyarados: Power Whip
 Lapras: Sparkling Aria, Charm
 Umbreon: Crunch, Thief
 Leafeon: Leech Seed
@@ -74,6 +71,9 @@ Qwilfish: Hex, Scary Face
 Mantine: Hurricane, Rock Blast
 Tyranitar: Rock Throw, Rock Blast
 Weavile: Icicle Spear
+
+S/V:
+Mewtwo: Power Gem
 
 Egg:
 Geodude/Graveler/Golem: Rock Slide

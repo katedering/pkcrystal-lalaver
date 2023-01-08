@@ -31,12 +31,12 @@ CeladonUniversityClassroom4_MapScriptHeader:
 CeladonUniversityClassroom4RaymondScript:
 	faceplayer
 	checkevent EVENT_BEAT_COOLTRAINERM_RAYMOND
-	iftrue .Beaten
+	iftruefwd .Beaten
 	opentext
 	checkevent EVENT_INTRODUCED_CELADON_FOUR
-	iftrue .IntroducedCeladonFour1
+	iftruefwd .IntroducedCeladonFour1
 	writetext .IntroText1
-	sjump .AfterIntro
+	sjumpfwd .AfterIntro
 .IntroducedCeladonFour1
 	writetext .IntroText2
 .AfterIntro
@@ -208,7 +208,7 @@ CeladonUniversityClassroom4Rich_boyScript:
 	faceplayer
 	opentext
 	checkevent EVENT_GOT_ABILITY_CAP_IN_UNIVERSITY
-	iftrue .GotItem
+	iftruefwd .GotItem
 	writetext .Text1
 	promptbutton
 	verbosegiveitem ABILITY_CAP
@@ -266,14 +266,14 @@ CeladonUniversityClassroom4BlackboardText:
 	done
 
 CeladonUniversityClassroom4Bookshelf1:
-	checkevent EVENT_GOT_X_SPCL_ATK_IN_UNIVERSITY
+	checkevent EVENT_GOT_X_SP_ATK_IN_UNIVERSITY
 	iftrue_jumptext .Text2
 	opentext
 	writetext .Text1
 	promptbutton
-	verbosegiveitem X_SPCL_ATK
+	verbosegiveitem X_SP_ATK
 	iffalse_endtext
-	setevent EVENT_GOT_X_SPCL_ATK_IN_UNIVERSITY
+	setevent EVENT_GOT_X_SP_ATK_IN_UNIVERSITY
 	endtext
 
 .Text1:

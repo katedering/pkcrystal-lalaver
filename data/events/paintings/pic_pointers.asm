@@ -1,10 +1,10 @@
 PaintingPicPointers::
-	table_width 3, PaintingPicPointers
-	dba HoOhPaintingPic
-	dba LugiaPaintingPic
-	dba BellTowerPaintingPic
-	dba KabutoPuzzlePic
-	dba OmanytePuzzlePic
-	dba AerodactylPuzzlePic
-	dba HoOhPuzzlePic
+	table_width 2, PaintingPicPointers
+	dw HoOhPaintingPic      ; far-ok
+	dw LugiaPaintingPic     ; far-ok
+	dw BellTowerPaintingPic ; far-ok
+	dw KabutoPuzzlePic      ; far-ok
+	dw OmanytePuzzlePic     ; far-ok
+	dw AerodactylPuzzlePic  ; far-ok
+	dw HoOhPuzzlePic        ; far-ok
 	assert_table_length NUM_PAINTINGS

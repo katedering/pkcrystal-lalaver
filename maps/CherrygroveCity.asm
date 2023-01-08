@@ -13,24 +13,26 @@ CherrygroveCity_MapScriptHeader:
 
 	def_coord_events
 	coord_event 33,  7, 0, CherrygroveGuideGentTrigger
-	coord_event 33,  6, 1, CherrygroveSilverTriggerNorth
-	coord_event 33,  7, 1, CherrygroveSilverTriggerSouth
+	coord_event 33,  6, 1, CherrygroveRivalTriggerNorth
+	coord_event 33,  7, 1, CherrygroveRivalTriggerSouth
 
 	def_bg_events
 	bg_event 30,  8, BGEVENT_JUMPTEXT, CherrygroveCitySignText
 	bg_event 23,  9, BGEVENT_JUMPTEXT, GuideGentsHouseSignText
+	bg_event 13,  5, BGEVENT_JUMPTEXT, CherrygroveCityAdvancedTipsSignText
+	bg_event 35,  2, BGEVENT_ITEM + NUGGET, EVENT_CHERRYGROVE_CITY_HIDDEN_NUGGET
 
 	def_object_events
 	object_event 32,  6, SPRITE_GRAMPS, SPRITEMOVEDATA_STANDING_DOWN, 0, 0, -1, -1, 0, OBJECTTYPE_SCRIPT, 0, CherrygroveCityGuideGent, EVENT_GUIDE_GENT_IN_HIS_HOUSE
-	object_event 39,  6, SPRITE_SILVER, SPRITEMOVEDATA_STANDING_LEFT, 0, 0, -1, -1, 0, OBJECTTYPE_SCRIPT, 0, ObjectEvent, EVENT_RIVAL_CHERRYGROVE_CITY
+	object_event 39,  6, SPRITE_RIVAL, SPRITEMOVEDATA_STANDING_LEFT, 0, 0, -1, -1, 0, OBJECTTYPE_SCRIPT, 0, ObjectEvent, EVENT_RIVAL_CHERRYGROVE_CITY
 	object_event 25, 13, SPRITE_POKEFAN_F, SPRITEMOVEDATA_STANDING_DOWN, 0, 1, -1, -1, PAL_NPC_BLUE, OBJECTTYPE_COMMAND, jumptextfaceplayer, CherrygroveTeacherText_HaveMapCard, -1
 	object_event 23,  7, SPRITE_YOUNGSTER, SPRITEMOVEDATA_WALK_LEFT_RIGHT, 0, 1, -1, -1, PAL_NPC_RED, OBJECTTYPE_SCRIPT, 0, CherrygroveYoungsterScript, -1
 	object_event  7, 12, SPRITE_FISHER, SPRITEMOVEDATA_STANDING_RIGHT, 0, 0, -1, -1, 0, OBJECTTYPE_SCRIPT, 0, MysticWaterGuy, -1
-	pokemon_event 26, 13, PIDGEY, -1, -1, PAL_NPC_BROWN, CherrygrovePidgeyText, -1
+	pokemon_event 26, 13, PIDGEY, SPRITEMOVEDATA_POKEMON, -1, -1, PAL_NPC_BROWN, CherrygrovePidgeyText, -1
 
 	object_const_def
 	const CHERRYGROVECITY_GRAMPS
-	const CHERRYGROVECITY_SILVER
+	const CHERRYGROVECITY_RIVAL
 
 CherrygroveCityFlyPoint:
 	setflag ENGINE_FLYPOINT_CHERRYGROVE
@@ -51,6 +53,9 @@ CherrygroveCityGuideGent:
 	applymovement CHERRYGROVECITY_GRAMPS, GuideGentMovement3
 	turnobject PLAYER, UP
 	showtext GuideGentRoute30Text
+	applymovement CHERRYGROVECITY_GRAMPS, GuideGentMovement3_5
+	turnobject PLAYER, LEFT
+	showtext GuideGentAdvancedTipsText
 	applymovement CHERRYGROVECITY_GRAMPS, GuideGentMovement4
 	turnobject PLAYER, LEFT
 	showtext GuideGentSeaText
@@ -84,45 +89,45 @@ CherrygroveCityGuideGent:
 .mapcardname
 	db "Map Card@"
 
-CherrygroveSilverTriggerSouth:
-	moveobject CHERRYGROVECITY_SILVER, 39, 7
-CherrygroveSilverTriggerNorth:
+CherrygroveRivalTriggerSouth:
+	moveobject CHERRYGROVECITY_RIVAL, 39, 7
+CherrygroveRivalTriggerNorth:
 	turnobject PLAYER, RIGHT
 	showemote EMOTE_SHOCK, PLAYER, 15
 	special Special_FadeOutMusic
 	pause 15
-	appear CHERRYGROVECITY_SILVER
-	applymovement CHERRYGROVECITY_SILVER, CherrygroveCity_RivalWalksToYou
+	appear CHERRYGROVECITY_RIVAL
+	applymovement CHERRYGROVECITY_RIVAL, CherrygroveCity_RivalWalksToYou
 	turnobject PLAYER, RIGHT
 	playmusic MUSIC_RIVAL_ENCOUNTER
 	showtext CherrygroveRivalText_Seen
 	checkevent EVENT_GOT_TOTODILE_FROM_ELM
-	iftrue .Totodile
+	iftruefwd .Totodile
 	checkevent EVENT_GOT_CHIKORITA_FROM_ELM
-	iftrue .Chikorita
-	winlosstext SilverCherrygroveWinText, SilverCherrygroveLossText
-	setlasttalked CHERRYGROVECITY_SILVER
+	iftruefwd .Chikorita
+	winlosstext RivalCherrygroveWinText, RivalCherrygroveLossText
+	setlasttalked CHERRYGROVECITY_RIVAL
 	loadtrainer RIVAL0, 3
 	loadvar VAR_BATTLETYPE, BATTLETYPE_CANLOSE
 	startbattle
 	setevent EVENT_RIVAL_CHERRYGROVE_CITY
 	reloadmap
-	sjump .FinishRival
+	sjumpfwd .FinishRival
 
 .Totodile:
-	winlosstext SilverCherrygroveWinText, SilverCherrygroveLossText
-	setlasttalked CHERRYGROVECITY_SILVER
+	winlosstext RivalCherrygroveWinText, RivalCherrygroveLossText
+	setlasttalked CHERRYGROVECITY_RIVAL
 	loadtrainer RIVAL0, 1
 	loadvar VAR_BATTLETYPE, BATTLETYPE_CANLOSE
 	startbattle
 	dontrestartmapmusic
 	setevent EVENT_RIVAL_CHERRYGROVE_CITY
 	reloadmap
-	sjump .FinishRival
+	sjumpfwd .FinishRival
 
 .Chikorita:
-	winlosstext SilverCherrygroveWinText, SilverCherrygroveLossText
-	setlasttalked CHERRYGROVECITY_SILVER
+	winlosstext RivalCherrygroveWinText, RivalCherrygroveLossText
+	setlasttalked CHERRYGROVECITY_RIVAL
 	loadtrainer RIVAL0, 2
 	loadvar VAR_BATTLETYPE, BATTLETYPE_CANLOSE
 	startbattle
@@ -133,13 +138,16 @@ CherrygroveSilverTriggerNorth:
 	special DeleteSavedMusic
 	playmusic MUSIC_RIVAL_AFTER
 	showtext CherrygroveRivalTextAfter1
-	showemote EMOTE_SHOCK, CHERRYGROVECITY_SILVER, 15
-	showtext CherrygroveRivalTextAfter2
 	playsound SFX_TACKLE
 	applymovement PLAYER, CherrygroveCity_RivalPushesYouOutOfTheWay
+	applymovement CHERRYGROVECITY_RIVAL, CherrygroveCity_RivalStartsToLeave
+	showemote EMOTE_SHOCK, CHERRYGROVECITY_RIVAL, 15
+	applymovement CHERRYGROVECITY_RIVAL, CherrygroveCity_RivalComesBack
+	turnobject PLAYER, UP
+	showtext CherrygroveRivalTextAfter2
 	turnobject PLAYER, LEFT
-	applymovement CHERRYGROVECITY_SILVER, CherrygroveCity_RivalExitsStageLeft
-	disappear CHERRYGROVECITY_SILVER
+	applymovement CHERRYGROVECITY_RIVAL, CherrygroveCity_RivalExitsStageLeft
+	disappear CHERRYGROVECITY_RIVAL
 	special HealPartyEvenForNuzlocke
 	setscene $2
 	playmusic MUSIC_CHERRYGROVE_CITY
@@ -172,19 +180,17 @@ MysticWaterGuyTextAfter:
 	line "for me, then."
 	done
 
+GuideGentMovement1:
+	step_left
+	step_left
+	step_up
 GuideGentPlayerMovement:
 	step_left
 	turn_head_up
 	step_end
 
-GuideGentMovement1:
+GuideGentMovement3:
 	step_left
-	step_left
-	step_up
-	step_left
-	turn_head_up
-	step_end
-
 GuideGentMovement2:
 	step_left
 	step_left
@@ -195,13 +201,10 @@ GuideGentMovement2:
 	turn_head_up
 	step_end
 
-GuideGentMovement3:
+GuideGentMovement3_5:
 	step_left
 	step_left
-	step_left
-	step_left
-	step_left
-	step_left
+	step_down
 	step_left
 	turn_head_up
 	step_end
@@ -211,15 +214,11 @@ GuideGentMovement4:
 	step_left
 	step_left
 	step_down
-	step_left
-	step_left
-	step_left
 	step_down
 	turn_head_left
 	step_end
 
 GuideGentMovement5:
-	step_down
 	step_down
 	step_right
 	step_right
@@ -256,18 +255,23 @@ CherrygroveCity_RivalWalksToYou:
 
 CherrygroveCity_RivalPushesYouOutOfTheWay:
 	run_step_down
-	turn_head_up
+	turn_head_left
 	step_end
 
 CherrygroveCity_RivalExitsStageLeft:
 	run_step_left
 	run_step_left
 	run_step_left
-	run_step_left
 	run_step_up
 	run_step_up
+CherrygroveCity_RivalStartsToLeave:
 	run_step_left
 	run_step_left
+	step_end
+
+CherrygroveCity_RivalComesBack:
+	run_step_right
+	turn_head_down
 	step_end
 
 GuideGentIntroText:
@@ -319,6 +323,15 @@ GuideGentRoute30Text:
 
 	para "prized #mon"
 	line "there."
+	done
+
+GuideGentAdvancedTipsText:
+	text "Advanced Tips"
+	line "signs have this"
+	cont "unusual look."
+
+	para "They're full of"
+	line "helpful advice."
 	done
 
 GuideGentSeaText:
@@ -375,12 +388,12 @@ CherrygroveRivalText_Seen:
 	line "what I mean!"
 	done
 
-SilverCherrygroveWinText:
+RivalCherrygroveWinText:
 	text "Humph. Are you"
 	line "happy you won?"
 	done
 
-SilverCherrygroveLossText:
+RivalCherrygroveLossText:
 	text "Humph. That was a"
 	line "waste of time."
 	done
@@ -398,8 +411,11 @@ CherrygroveRivalTextAfter1:
 	done
 
 CherrygroveRivalTextAfter2:
-	text "Hey! Give back my"
-	line "Trainer Card!"
+	text "I dropped my"
+	line "Trainer Card…"
+
+	para "Hey! Give it"
+	line "back!"
 
 	para "Oh no… You saw"
 	line "my name…"
@@ -447,4 +463,15 @@ CherrygroveCitySignText:
 
 GuideGentsHouseSignText:
 	text "Guide Gent's House"
+	done
+
+CherrygroveCityAdvancedTipsSignText:
+	text "Advanced Tips!"
+
+	para "# Marts will"
+	line "give you a free"
+
+	para "Premier Ball with"
+	line "every purchase of"
+	cont "ten # Balls!"
 	done

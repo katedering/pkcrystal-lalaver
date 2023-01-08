@@ -1,3 +1,15 @@
+; StartMenu.Items indexes
+	const_def
+	const STARTMENUITEM_POKEDEX  ; 0
+	const STARTMENUITEM_POKEMON  ; 1
+	const STARTMENUITEM_PACK     ; 2
+	const STARTMENUITEM_STATUS   ; 3
+	const STARTMENUITEM_SAVE     ; 4
+	const STARTMENUITEM_OPTION   ; 5
+	const STARTMENUITEM_EXIT     ; 6
+	const STARTMENUITEM_POKEGEAR ; 7
+	const STARTMENUITEM_QUIT     ; 8
+
 StartMenu::
 
 	call ClearWindowData
@@ -8,7 +20,7 @@ StartMenu::
 	farcall ReanchorBGMap_NoOAMUpdate
 
 	ld hl, wStatusFlags2
-	bit 2, [hl] ; ENGINE_BUG_CONTEST_TIMER
+	bit STATUSFLAGS2_BUG_CONTEST_TIMER_F, [hl]
 	ld hl, .MenuDataHeader
 	jr z, .GotMenuData
 	ld hl, .ContestMenuDataHeader
@@ -61,7 +73,7 @@ StartMenu::
 	push af
 	ld a, 1
 	ldh [hOAMUpdate], a
-	call LoadFontsExtra
+	call LoadFrame
 	pop af
 	ldh [hOAMUpdate], a
 .ReturnEnd:
@@ -121,16 +133,14 @@ StartMenu::
 	jmp .Reopen
 
 .MenuDataHeader:
-	db $40 ; tile backup
-	db 0, 10 ; start coords
-	db 17, 19 ; end coords
+	db MENU_BACKUP_TILES
+	menu_coords 10, 0, 19, 17
 	dw .MenuData
 	db 1 ; default selection
 
 .ContestMenuDataHeader:
-	db $40 ; tile backup
-	db 2, 10 ; start coords
-	db 17, 19 ; end coords
+	db MENU_BACKUP_TILES
+	menu_coords 10, 2, 19, 17
 	dw .MenuData
 	db 1 ; default selection
 
@@ -201,14 +211,14 @@ endr
 	ld hl, wStatusFlags
 	bit 0, [hl]
 	jr z, .no_pokedex
-	xor a ; pokedex
+	xor a ; STARTMENUITEM_POKEDEX
 	call .AppendMenuList
 .no_pokedex
 
 	ld a, [wPartyCount]
 	and a
 	jr z, .no_pokemon
-	ld a, 1 ; pokemon
+	ld a, STARTMENUITEM_POKEMON
 	call .AppendMenuList
 .no_pokemon
 
@@ -216,37 +226,37 @@ endr
 	and a
 	jr nz, .no_pack
 	ld hl, wStatusFlags2
-	bit 2, [hl] ; ENGINE_BUG_CONTEST_TIMER
+	bit STATUSFLAGS2_BUG_CONTEST_TIMER_F, [hl]
 	jr nz, .no_pack
-	ld a, 2 ; pack
+	ld a, STARTMENUITEM_PACK
 	call .AppendMenuList
 .no_pack
 
 	ld hl, wPokegearFlags
-	bit 7, [hl]
+	bit POKEGEAR_OBTAINED_F, [hl]
 	jr z, .no_pokegear
-	ld a, 7 ; pokegear
+	ld a, STARTMENUITEM_POKEGEAR 
 	call .AppendMenuList
 .no_pokegear
 
-	ld a, 3 ; status
+	ld a, STARTMENUITEM_STATUS
 	call .AppendMenuList
 
 	ld a, [wLinkMode]
 	and a
 	jr nz, .no_save
 	ld hl, wStatusFlags2
-	bit 2, [hl] ; ENGINE_BUG_CONTEST_TIMER
-	ld a, 8 ; quit
+	bit STATUSFLAGS2_BUG_CONTEST_TIMER_F, [hl]
+	ld a, STARTMENUITEM_QUIT
 	jr nz, .write
-	ld a, 4 ; save
+	ld a, STARTMENUITEM_SAVE
 .write
 	call .AppendMenuList
 .no_save
 
-	ld a, 5 ; option
+	ld a, STARTMENUITEM_OPTION
 	call .AppendMenuList
-	ld a, 6 ; exit
+	ld a, STARTMENUITEM_EXIT
 	call .AppendMenuList
 	ld a, c
 	ld [wMenuItemsList], a
@@ -271,13 +281,13 @@ endr
 
 .DrawBugContestStatusBox:
 	ld hl, wStatusFlags2
-	bit 2, [hl] ; ENGINE_BUG_CONTEST_TIMER
+	bit STATUSFLAGS2_BUG_CONTEST_TIMER_F, [hl]
 	ret z
 	farjp StartMenu_DrawBugContestStatusBox
 
 .DrawBugContestStatus:
 	ld hl, wStatusFlags2
-	bit 2, [hl] ; ENGINE_BUG_CONTEST_TIMER
+	bit STATUSFLAGS2_BUG_CONTEST_TIMER_F, [hl]
 	ret z
 	farjp StartMenu_PrintBugContestStatus
 
@@ -342,6 +352,9 @@ StartMenu_Pokegear:
 	call FadeToMenu
 	farcall InitPokegearPalettes
 	farcall PokeGear
+	ld a, [wDefaultSpawnpoint]
+	and a
+	jr nz, _ExitStartMenuAndDoScript
 	call CloseSubmenu
 	call ApplyTilemapInVBlank
 	call SetPalettes
@@ -354,12 +367,12 @@ StartMenu_Pack:
 	call Pack
 	ld a, [wPackUsedItem]
 	and a
-	jr nz, .used_item
+	jr nz, _ExitStartMenuAndDoScript
 	call CloseSubmenu
 	xor a
 	ret
 
-.used_item
+_ExitStartMenuAndDoScript:
 	call ExitAllMenus
 	ld a, 4
 	ret
@@ -378,6 +391,8 @@ StartMenu_Pokemon:
 	farcall InitPartyMenuWithCancel
 	farcall InitPartyMenuGFX
 .menunoreload
+	ld a, A_BUTTON | B_BUTTON | SELECT
+	ld [wMenuJoypadFilter], a
 	farcall WritePartyMenuTilemap
 	farcall PrintPartyMenuText
 	call ApplyTilemapInVBlank
@@ -385,7 +400,14 @@ StartMenu_Pokemon:
 	call DelayFrame
 	farcall PartyMenuSelect
 	jr c, .return ; if cancelled or pressed B
+	ldh a, [hJoyLast]
+	and SELECT
+	jr z, .not_switch
+	call SwitchPartyMons
+	jr .after_action
+.not_switch
 	call PokemonActionSubmenu
+.after_action
 	push af
 	call SFXDelay2
 	pop af

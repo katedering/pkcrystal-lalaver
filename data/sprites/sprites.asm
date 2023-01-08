@@ -1,4 +1,4 @@
-overworld_sprite: MACRO
+MACRO overworld_sprite
 ; pointer, bank, type, palette
 	dab \1
 	db \2, \3
@@ -16,7 +16,7 @@ SpriteHeaders:
 	overworld_sprite MomSpriteGFX, WALKING_SPRITE, PAL_OW_RED
 	overworld_sprite DadSpriteGFX, STANDING_SPRITE, PAL_OW_BROWN
 	overworld_sprite LyraSpriteGFX, WALKING_SPRITE, PAL_OW_RED
-	overworld_sprite SilverSpriteGFX, WALKING_SPRITE, PAL_OW_RED
+	overworld_sprite RivalSpriteGFX, WALKING_SPRITE, PAL_OW_RED
 	overworld_sprite FalknerSpriteGFX, WALKING_SPRITE, PAL_OW_BLUE
 	overworld_sprite BugsySpriteGFX, WALKING_SPRITE, PAL_OW_GREEN
 	overworld_sprite WhitneySpriteGFX, WALKING_SPRITE, PAL_OW_RED
@@ -73,7 +73,7 @@ SpriteHeaders:
 	overworld_sprite AnabelSpriteGFX, WALKING_SPRITE, PAL_OW_PURPLE
 	overworld_sprite FlannerySpriteGFX, WALKING_SPRITE, PAL_OW_RED
 	overworld_sprite MayleneSpriteGFX, WALKING_SPRITE, PAL_OW_RED
-	overworld_sprite SkylaSpriteGFX, WALKING_SPRITE, PAL_OW_RED
+	overworld_sprite MarlonSpriteGFX, WALKING_SPRITE, PAL_OW_BLUE
 	overworld_sprite ValerieSpriteGFX, WALKING_SPRITE, PAL_OW_PURPLE
 	overworld_sprite KukuiSpriteGFX, STANDING_SPRITE, PAL_OW_GREEN
 	overworld_sprite CaitlinSpriteGFX, WALKING_SPRITE, PAL_OW_RED
@@ -198,4 +198,14 @@ SpriteHeaders:
 	overworld_sprite ElectricFenceRightSpriteGFX, STANDING_SPRITE, PAL_OW_TREE
 	overworld_sprite SailboatSpriteGFX, STANDING_SPRITE, PAL_OW_PURPLE
 	overworld_sprite IceBoulderSpriteGFX, STANDING_SPRITE, PAL_OW_ROCK
+	overworld_sprite BeachGuySpriteGFX, WALKING_SPRITE, PAL_OW_RED
+	overworld_sprite BeachGirlSpriteGFX, WALKING_SPRITE, PAL_OW_GREEN
+	overworld_sprite PiersSpriteGFX, STANDING_SPRITE, PAL_OW_RED
+	overworld_sprite KatySpriteGFX, WALKING_SPRITE, PAL_OW_BLUE
+	overworld_sprite AlolanExeggutorSpriteGFX, BIG_GYARADOS_SPRITE, PAL_OW_BROWN
+	overworld_sprite SoldierSpriteGFX, WALKING_SPRITE, PAL_OW_GREEN
+	overworld_sprite CrysSpriteGFX, WALKING_SPRITE, PAL_OW_GREEN
+	overworld_sprite CrysBikeSpriteGFX, WALKING_SPRITE, PAL_OW_GREEN
+	overworld_sprite CrysSurfSpriteGFX, WALKING_SPRITE, PAL_OW_GREEN
+	overworld_sprite ThortonSpriteGFX, WALKING_SPRITE, PAL_OW_BLUE
 	assert_table_length NUM_OVERWORLD_SPRITES

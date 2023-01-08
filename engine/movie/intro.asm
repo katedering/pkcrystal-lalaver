@@ -318,7 +318,7 @@ IntroScene7:
 	call ClearSpriteAnims
 	depixel 13, 27, 4, 0
 	ld a, SPRITE_ANIM_INDEX_INTRO_SUICUNE
-	call _InitSpriteAnimStruct
+	call InitSpriteAnimStruct
 	ld a, $f0
 	ld [wGlobalAnimXOffset], a
 	call Intro_SetCGBPalUpdate
@@ -359,7 +359,7 @@ IntroScene9:
 	xor a
 	ldh [hLCDCPointer], a
 	call ClearSprites
-	hlcoord 0, 0, wAttrMap
+	hlcoord 0, 0, wAttrmap
 	; first 12 rows have palette 1
 	ld bc, 12 * SCREEN_WIDTH
 	ld a, $1
@@ -411,7 +411,7 @@ IntroScene10:
 	depixel 22, 6
 	ld a, SPRITE_ANIM_INDEX_INTRO_WOOPER
 .got_anim
-	call _InitSpriteAnimStruct
+	call InitSpriteAnimStruct
 	ld de, SFX_INTRO_PICHU
 	jmp PlaySFX
 
@@ -552,7 +552,7 @@ IntroScene13:
 	call ClearSpriteAnims
 	depixel 13, 11, 4, 0
 	ld a, SPRITE_ANIM_INDEX_INTRO_SUICUNE
-	call _InitSpriteAnimStruct
+	call InitSpriteAnimStruct
 	ld de, MUSIC_CRYSTAL_OPENING
 	call PlayMusic
 	xor a
@@ -657,10 +657,10 @@ IntroScene15:
 	call Intro_SetCGBPalUpdate
 	depixel 8, 5
 	ld a, SPRITE_ANIM_INDEX_INTRO_UNOWN_F
-	call _InitSpriteAnimStruct
+	call InitSpriteAnimStruct
 	depixel 12, 0
 	ld a, SPRITE_ANIM_INDEX_INTRO_SUICUNE_AWAY
-	call _InitSpriteAnimStruct
+	call InitSpriteAnimStruct
 	xor a
 	ld [wIntroSceneFrameCounter], a
 	ld [wIntroSceneTimer], a
@@ -801,7 +801,7 @@ IntroScene19:
 	call Intro_SetCGBPalUpdate
 	depixel 12, 0
 	ld a, SPRITE_ANIM_INDEX_INTRO_SUICUNE_AWAY
-	call _InitSpriteAnimStruct
+	call InitSpriteAnimStruct
 	xor a
 	ld [wIntroSceneFrameCounter], a
 	ld [wIntroSceneTimer], a
@@ -828,8 +828,8 @@ IntroScene20:
 .AppearUnown:
 	sub $18
 	ld c, a
-	and $3
-	cp $3
+	or ~$3
+	inc a
 	ret nz
 	ld a, c
 	and $1c
@@ -1016,93 +1016,12 @@ Intro_Scene24_ApplyPaletteFade:
 	ret
 
 .FadePals:
-; Fade to white.
-if !DEF(MONOCHROME)
-	RGB 24, 12, 09
-	RGB 31, 31, 31
-	RGB 12, 00, 31
-	RGB 00, 00, 00
-
-	RGB 31, 19, 05
-	RGB 31, 31, 31
-	RGB 15, 05, 31
-	RGB 07, 07, 07
-
-	RGB 31, 21, 09
-	RGB 31, 31, 31
-	RGB 18, 09, 31
-	RGB 11, 11, 11
-
-	RGB 31, 23, 13
-	RGB 31, 31, 31
-	RGB 21, 13, 31
-	RGB 15, 15, 15
-
-	RGB 31, 25, 17
-	RGB 31, 31, 31
-	RGB 25, 17, 31
-	RGB 19, 19, 19
-
-	RGB 31, 27, 21
-	RGB 31, 31, 31
-	RGB 27, 21, 31
-	RGB 23, 23, 23
-
-	RGB 31, 29, 25
-	RGB 31, 31, 31
-	RGB 29, 26, 31
-	RGB 27, 27, 27
-
-	RGB 31, 31, 31
-	RGB 31, 31, 31
-	RGB 31, 31, 31
-	RGB 31, 31, 31
-else
-	RGB_MONOCHROME_LIGHT
-	RGB_MONOCHROME_WHITE
-	RGB_MONOCHROME_DARK
-	RGB_MONOCHROME_BLACK
-
-	RGB_MONOCHROME_WHITE
-	RGB_MONOCHROME_WHITE
-	RGB_MONOCHROME_DARK
-	RGB_MONOCHROME_BLACK
-
-	RGB_MONOCHROME_WHITE
-	RGB_MONOCHROME_WHITE
-	RGB_MONOCHROME_LIGHT
-	RGB_MONOCHROME_DARK
-
-	RGB_MONOCHROME_WHITE
-	RGB_MONOCHROME_WHITE
-	RGB_MONOCHROME_LIGHT
-	RGB_MONOCHROME_DARK
-
-	RGB_MONOCHROME_WHITE
-	RGB_MONOCHROME_WHITE
-	RGB_MONOCHROME_LIGHT
-	RGB_MONOCHROME_LIGHT
-
-	RGB_MONOCHROME_WHITE
-	RGB_MONOCHROME_WHITE
-	RGB_MONOCHROME_LIGHT
-	RGB_MONOCHROME_LIGHT
-
-	RGB_MONOCHROME_WHITE
-	RGB_MONOCHROME_WHITE
-	RGB_MONOCHROME_WHITE
-	RGB_MONOCHROME_WHITE
-
-	RGB_MONOCHROME_WHITE
-	RGB_MONOCHROME_WHITE
-	RGB_MONOCHROME_WHITE
-	RGB_MONOCHROME_WHITE
-endc
+INCLUDE "gfx/intro/fade.pal"
 
 CrystalIntro_InitUnownAnim:
 	push de
 	ld a, SPRITE_ANIM_INDEX_INTRO_UNOWN
-	call _InitSpriteAnimStruct
+	call InitSpriteAnimStruct
 	ld hl, SPRITEANIMSTRUCT_VAR1
 	add hl, bc
 	ld [hl], $8
@@ -1112,7 +1031,7 @@ CrystalIntro_InitUnownAnim:
 
 	push de
 	ld a, SPRITE_ANIM_INDEX_INTRO_UNOWN
-	call _InitSpriteAnimStruct
+	call InitSpriteAnimStruct
 	ld hl, SPRITEANIMSTRUCT_VAR1
 	add hl, bc
 	ld [hl], $18
@@ -1122,7 +1041,7 @@ CrystalIntro_InitUnownAnim:
 
 	push de
 	ld a, SPRITE_ANIM_INDEX_INTRO_UNOWN
-	call _InitSpriteAnimStruct
+	call InitSpriteAnimStruct
 	ld hl, SPRITEANIMSTRUCT_VAR1
 	add hl, bc
 	ld [hl], $28
@@ -1131,7 +1050,7 @@ CrystalIntro_InitUnownAnim:
 	pop de
 
 	ld a, SPRITE_ANIM_INDEX_INTRO_UNOWN
-	call _InitSpriteAnimStruct
+	call InitSpriteAnimStruct
 	ld hl, SPRITEANIMSTRUCT_VAR1
 	add hl, bc
 	ld [hl], $38
@@ -1143,11 +1062,9 @@ CrystalIntro_UnownFade:
 	add a
 	add a
 	ld e, a
-	ld d, $0
-	ld hl, wBGPals2
+	ld d, 0
+	ld hl, wBGPals2 + 2
 	add hl, de
-	inc hl
-	inc hl
 	ld a, [wIntroSceneTimer]
 	and $3f
 	cp $1f + 1
@@ -1330,29 +1247,16 @@ Intro_Scene20_AppearUnown:
 	ret
 
 .pal
-if !DEF(MONOCHROME)
-	RGB 24, 12, 09
-	RGB 31, 31, 31
-	RGB 12, 00, 31
-	RGB 00, 00, 00
-else
-	RGB_MONOCHROME_LIGHT
-	RGB_MONOCHROME_WHITE
-	RGB_MONOCHROME_DARK
-	RGB_MONOCHROME_BLACK
-endc
+INCLUDE "gfx/intro/unown.pal"
 
 Intro_FadeUnownWordPals:
 	add a
 	add a
 	add a
 	ld e, a
-	ld d, $0
-	ld hl, wBGPals2
+	ld d, 0
+	ld hl, wBGPals2 + 4
 	add hl, de
-rept 4
-	inc hl
-endr
 	ld a, [wIntroSceneTimer]
 	add a
 	ld c, a
@@ -1691,122 +1595,7 @@ IntroTilemap004:
 INCBIN "gfx/intro/004.tilemap.lz"
 
 Palette_e5edd:
-if !DEF(MONOCHROME)
-	RGB 31, 31, 31
-	RGB 20, 20, 20
-	RGB 11, 11, 11
-	RGB  0,  0,  0
-
-	RGB  0,  4,  5
-	RGB  1,  8,  5
-	RGB  4, 12,  9
-	RGB 24, 12,  9
-
-	RGB  0,  4,  5
-	RGB  9,  6,  8
-	RGB  8, 16,  5
-	RGB  5, 10,  4
-
-	RGB 31, 31, 31
-	RGB  9,  6,  8
-	RGB 18,  9,  9
-	RGB 13,  8,  9
-
-	RGB 31, 31, 31
-	RGB 20, 20, 20
-	RGB 11, 11, 11
-	RGB  0,  0,  0
-
-	RGB 31, 31, 31
-	RGB 20, 20, 20
-	RGB 11, 11, 11
-	RGB  0,  0,  0
-
-	RGB 31, 31, 31
-	RGB 20, 20, 20
-	RGB 11, 11, 11
-	RGB  0,  0,  0
-
-	RGB 31, 31, 31
-	RGB 20, 20, 20
-	RGB 11, 11, 11
-	RGB  0,  0,  0
-
-	RGB 31, 31, 31
-	RGB 31, 31, 31
-	RGB  2,  5, 22
-	RGB  1,  5, 12
-
-	RGB 31, 31, 31
-	RGB 31, 10, 25
-	RGB 31, 21,  0
-	RGB  0,  0,  0
-
-	RGB 31, 31, 31
-	RGB 20, 20, 20
-	RGB 11, 21, 31
-	RGB  0,  0,  0
-
-	RGB 31, 31, 31
-	RGB 20, 20, 20
-	RGB 11, 11, 11
-	RGB  0,  0,  0
-
-	RGB 31, 31, 31
-	RGB 20, 20, 20
-	RGB 11, 11, 11
-	RGB  0,  0,  0
-
-	RGB 31, 31, 31
-	RGB 20, 20, 20
-	RGB 11, 11, 11
-	RGB  0,  0,  0
-
-	RGB 31, 31, 31
-	RGB 20, 20, 20
-	RGB 11, 11, 11
-	RGB  0,  0,  0
-
-	RGB 31, 31, 31
-	RGB 20, 20, 20
-	RGB 11, 11, 11
-	RGB  0,  0,  0
-else
-	MONOCHROME_RGB_FOUR
-	RGB_MONOCHROME_BLACK
-	RGB_MONOCHROME_DARK
-	RGB_MONOCHROME_DARK
-	RGB_MONOCHROME_LIGHT
-	RGB_MONOCHROME_BLACK
-	RGB_MONOCHROME_LIGHT
-	RGB_MONOCHROME_LIGHT
-	RGB_MONOCHROME_DARK
-	RGB_MONOCHROME_WHITE
-	RGB_MONOCHROME_LIGHT
-	RGB_MONOCHROME_WHITE
-	RGB_MONOCHROME_WHITE
-	MONOCHROME_RGB_FOUR
-	MONOCHROME_RGB_FOUR
-	MONOCHROME_RGB_FOUR
-	MONOCHROME_RGB_FOUR
-	RGB_MONOCHROME_WHITE
-	RGB_MONOCHROME_WHITE
-	RGB_MONOCHROME_DARK
-	RGB_MONOCHROME_DARK
-	RGB_MONOCHROME_WHITE
-	RGB_MONOCHROME_DARK
-	RGB_MONOCHROME_LIGHT
-	RGB_MONOCHROME_BLACK
-	RGB_MONOCHROME_WHITE
-	RGB_MONOCHROME_LIGHT
-	RGB_MONOCHROME_LIGHT
-	RGB_MONOCHROME_BLACK
-	MONOCHROME_RGB_FOUR
-	MONOCHROME_RGB_FOUR
-	MONOCHROME_RGB_FOUR
-	MONOCHROME_RGB_FOUR
-	MONOCHROME_RGB_FOUR
-endc
+INCLUDE "gfx/intro/background.pal"
 
 IntroUnownsGFX:
 INCBIN "gfx/intro/unowns.2bpp.lz"
@@ -1833,105 +1622,7 @@ IntroTilemap007:
 INCBIN "gfx/intro/007.tilemap.lz"
 
 Palette_365ad:
-if !DEF(MONOCHROME)
-	RGB  0,  0,  0
-	RGB  0,  0,  0
-	RGB  0,  0,  0
-	RGB  0,  0,  0
-
-	RGB  0,  0,  0
-	RGB  0,  0,  0
-	RGB  0,  0,  0
-	RGB  0,  0,  0
-
-	RGB  0,  0,  0
-	RGB  0,  0,  0
-	RGB  0,  0,  0
-	RGB  0,  0,  0
-
-	RGB  0,  0,  0
-	RGB  0,  0,  0
-	RGB  0,  0,  0
-	RGB  0,  0,  0
-
-	RGB  0,  0,  0
-	RGB  0,  0,  0
-	RGB  0,  0,  0
-	RGB  0,  0,  0
-
-	RGB  0,  0,  0
-	RGB  0,  0,  0
-	RGB  0,  0,  0
-	RGB  0,  0,  0
-
-	RGB  0,  0,  0
-	RGB  0,  0,  0
-	RGB  0,  0,  0
-	RGB  0,  0,  0
-
-	RGB  0,  0,  0
-	RGB  0,  0,  0
-	RGB  0,  0,  0
-	RGB  0,  0,  0
-
-	RGB 31, 31, 31
-	RGB 10,  0, 10
-	RGB 19,  0, 19
-	RGB 31,  0, 31
-
-	RGB 31, 31, 31
-	RGB 20, 20, 20
-	RGB 11, 11, 11
-	RGB  0,  0,  0
-
-	RGB 31, 31, 31
-	RGB 20, 20, 20
-	RGB 11, 11, 11
-	RGB  0,  0,  0
-
-	RGB 31, 31, 31
-	RGB 20, 20, 20
-	RGB 11, 11, 11
-	RGB  0,  0,  0
-
-	RGB 31, 31, 31
-	RGB 20, 20, 20
-	RGB 11, 11, 11
-	RGB  0,  0,  0
-
-	RGB 31, 31, 31
-	RGB 20, 20, 20
-	RGB 11, 11, 11
-	RGB  0,  0,  0
-
-	RGB 31, 31, 31
-	RGB 20, 20, 20
-	RGB 11, 11, 11
-	RGB  0,  0,  0
-
-	RGB 31, 31, 31
-	RGB 20, 20, 20
-	RGB 11, 11, 11
-	RGB  0,  0,  0
-else
-rept 8
-	RGB_MONOCHROME_BLACK
-	RGB_MONOCHROME_BLACK
-	RGB_MONOCHROME_BLACK
-	RGB_MONOCHROME_BLACK
-endr
-	RGB_MONOCHROME_WHITE
-	RGB_MONOCHROME_LIGHT
-	RGB_MONOCHROME_LIGHT
-	RGB_MONOCHROME_LIGHT
-	MONOCHROME_RGB_FOUR
-	MONOCHROME_RGB_FOUR
-	MONOCHROME_RGB_FOUR
-	MONOCHROME_RGB_FOUR
-	MONOCHROME_RGB_FOUR
-	MONOCHROME_RGB_FOUR
-	MONOCHROME_RGB_FOUR
-endc
+INCLUDE "gfx/intro/unowns.pal"
 
 IntroCrystalUnownsGFX:
 INCBIN "gfx/intro/crystal_unowns.2bpp.lz"
@@ -1943,102 +1634,7 @@ IntroTilemap015:
 INCBIN "gfx/intro/015.tilemap.lz"
 
 Palette_e679d:
-if !DEF(MONOCHROME)
-	RGB 31, 31, 31
-	RGB 31, 31, 31
-	RGB 31, 31, 31
-	RGB 31, 31, 31
-
-	RGB 31, 31, 31
-	RGB 31, 31, 31
-	RGB 31, 31, 31
-	RGB 31, 31, 31
-
-	RGB 31, 31, 31
-	RGB 31, 31, 31
-	RGB 31, 31, 31
-	RGB 31, 31, 31
-
-	RGB 31, 31, 31
-	RGB 31, 31, 31
-	RGB 31, 31, 31
-	RGB 31, 31, 31
-
-	RGB 31, 31, 31
-	RGB 31, 31, 31
-	RGB 31, 31, 31
-	RGB 31, 31, 31
-
-	RGB 31, 31, 31
-	RGB 31, 31, 31
-	RGB 31, 31, 31
-	RGB 31, 31, 31
-
-	RGB 31, 31, 31
-	RGB 31, 31, 31
-	RGB 31, 31, 31
-	RGB 31, 31, 31
-
-	RGB 31, 31, 31
-	RGB 31, 31, 31
-	RGB 31, 31, 31
-	RGB 31, 31, 31
-
-	RGB 31, 31, 31
-	RGB 20, 20, 20
-	RGB 11, 11, 11
-	RGB  0,  0,  0
-
-	RGB 31, 31, 31
-	RGB 20, 20, 20
-	RGB 11, 11, 11
-	RGB  0,  0,  0
-
-	RGB 31, 31, 31
-	RGB 20, 20, 20
-	RGB 11, 11, 11
-	RGB  0,  0,  0
-
-	RGB 31, 31, 31
-	RGB 20, 20, 20
-	RGB 11, 11, 11
-	RGB  0,  0,  0
-
-	RGB 31, 31, 31
-	RGB 20, 20, 20
-	RGB 11, 11, 11
-	RGB  0,  0,  0
-
-	RGB 31, 31, 31
-	RGB 20, 20, 20
-	RGB 11, 11, 11
-	RGB  0,  0,  0
-
-	RGB 31, 31, 31
-	RGB 20, 20, 20
-	RGB 11, 11, 11
-	RGB  0,  0,  0
-
-	RGB 31, 31, 31
-	RGB 20, 20, 20
-	RGB 11, 11, 11
-	RGB  0,  0,  0
-else
-rept 8
-	RGB_MONOCHROME_WHITE
-	RGB_MONOCHROME_WHITE
-	RGB_MONOCHROME_WHITE
-	RGB_MONOCHROME_WHITE
-endr
-	MONOCHROME_RGB_FOUR
-	MONOCHROME_RGB_FOUR
-	MONOCHROME_RGB_FOUR
-	MONOCHROME_RGB_FOUR
-	MONOCHROME_RGB_FOUR
-	MONOCHROME_RGB_FOUR
-	MONOCHROME_RGB_FOUR
-	MONOCHROME_RGB_FOUR
-endc
+INCLUDE "gfx/intro/crystal_unowns.pal"
 
 IntroSuicuneCloseGFX:
 INCBIN "gfx/intro/suicune_close.2bpp.lz"
@@ -2050,116 +1646,7 @@ IntroTilemap011:
 INCBIN "gfx/intro/011.tilemap.lz"
 
 Palette_e6d6d:
-if !DEF(MONOCHROME)
-	RGB 24, 12,  9
-	RGB 20, 20, 20
-	RGB 11, 11, 11
-	RGB  0,  0,  0
-
-	RGB 24, 12,  9
-	RGB 31, 31, 31
-	RGB  8,  9, 31
-	RGB  0,  0,  0
-
-	RGB 24, 12,  9
-	RGB 12, 20, 31
-	RGB 19,  8, 31
-	RGB  0,  0,  0
-
-	RGB 12, 20, 31
-	RGB  8,  9, 31
-	RGB 19,  8, 31
-	RGB  0,  0,  0
-
-	RGB 31, 31, 31
-	RGB 12, 20, 31
-	RGB  8,  9, 31
-	RGB  0,  0,  0
-
-	RGB 31, 31, 31
-	RGB 20, 20, 20
-	RGB 11, 11, 11
-	RGB  0,  0,  0
-
-	RGB 31, 31, 31
-	RGB 20, 20, 20
-	RGB 11, 11, 11
-	RGB  0,  0,  0
-
-	RGB 31, 31, 31
-	RGB 20, 20, 20
-	RGB 11, 11, 11
-	RGB  0,  0,  0
-
-	RGB 31, 31, 31
-	RGB 20, 20, 20
-	RGB 11, 11, 11
-	RGB  0,  0,  0
-
-	RGB 31, 31, 31
-	RGB 20, 20, 20
-	RGB 11, 11, 11
-	RGB  0,  0,  0
-
-	RGB 31, 31, 31
-	RGB 20, 20, 20
-	RGB 11, 11, 11
-	RGB  0,  0,  0
-
-	RGB 31, 31, 31
-	RGB 20, 20, 20
-	RGB 11, 11, 11
-	RGB  0,  0,  0
-
-	RGB 31, 31, 31
-	RGB 20, 20, 20
-	RGB 11, 11, 11
-	RGB  0,  0,  0
-
-	RGB 31, 31, 31
-	RGB 20, 20, 20
-	RGB 11, 11, 11
-	RGB  0,  0,  0
-
-	RGB 31, 31, 31
-	RGB 20, 20, 20
-	RGB 11, 11, 11
-	RGB  0,  0,  0
-
-	RGB 31, 31, 31
-	RGB 20, 20, 20
-	RGB 11, 11, 11
-	RGB  0,  0,  0
-else
-	RGB_MONOCHROME_LIGHT
-	RGB_MONOCHROME_LIGHT
-	RGB_MONOCHROME_DARK
-	RGB_MONOCHROME_BLACK
-	RGB_MONOCHROME_LIGHT
-	RGB_MONOCHROME_WHITE
-	RGB_MONOCHROME_DARK
-	RGB_MONOCHROME_BLACK
-	RGB_MONOCHROME_LIGHT
-	RGB_MONOCHROME_LIGHT
-	RGB_MONOCHROME_DARK
-	RGB_MONOCHROME_BLACK
-	RGB_MONOCHROME_LIGHT
-	RGB_MONOCHROME_DARK
-	RGB_MONOCHROME_DARK
-	RGB_MONOCHROME_BLACK
-	MONOCHROME_RGB_FOUR
-	MONOCHROME_RGB_FOUR
-	MONOCHROME_RGB_FOUR
-	MONOCHROME_RGB_FOUR
-	MONOCHROME_RGB_FOUR
-	MONOCHROME_RGB_FOUR
-	MONOCHROME_RGB_FOUR
-	MONOCHROME_RGB_FOUR
-	MONOCHROME_RGB_FOUR
-	MONOCHROME_RGB_FOUR
-	MONOCHROME_RGB_FOUR
-	MONOCHROME_RGB_FOUR
-endc
+INCLUDE "gfx/intro/suicune_close.pal"
 
 IntroSuicuneJumpGFX:
 INCBIN "gfx/intro/suicune_jump.2bpp.lz"
@@ -2180,116 +1667,7 @@ IntroTilemap013:
 INCBIN "gfx/intro/013.tilemap.lz"
 
 Palette_e77dd:
-if !DEF(MONOCHROME)
-	RGB 24, 12,  9
-	RGB 20, 20, 20
-	RGB 11, 11, 11
-	RGB  0,  0,  0
-
-	RGB 24, 12,  9
-	RGB 31, 31, 31
-	RGB  8,  9, 31
-	RGB  0,  0,  0
-
-	RGB 24, 12,  9
-	RGB 24, 12,  9
-	RGB 24, 12,  9
-	RGB 24, 12,  9
-
-	RGB 24, 12,  9
-	RGB 24, 12,  9
-	RGB 24, 12,  9
-	RGB 24, 12,  9
-
-	RGB 24, 12,  9
-	RGB 24, 12,  9
-	RGB 24, 12,  9
-	RGB 24, 12,  9
-
-	RGB 24, 12,  9
-	RGB 24, 12,  9
-	RGB 24, 12,  9
-	RGB 24, 12,  9
-
-	RGB 24, 12,  9
-	RGB 24, 12,  9
-	RGB 24, 12,  9
-	RGB 24, 12,  9
-
-	RGB 24, 12,  9
-	RGB 24, 12,  9
-	RGB 24, 12,  9
-	RGB 24, 12,  9
-
-	RGB 31, 31, 31
-	RGB 31, 31, 31
-	RGB 12,  0, 31
-	RGB  0,  0,  0
-
-	RGB 31, 31, 31
-	RGB 21,  9,  0
-	RGB 21,  9,  0
-	RGB  0,  0,  0
-
-	RGB 31, 31, 31
-	RGB 20, 20, 20
-	RGB 11, 11, 11
-	RGB  0,  0,  0
-
-	RGB 31, 31, 31
-	RGB 20, 20, 20
-	RGB 11, 11, 11
-	RGB  0,  0,  0
-
-	RGB 31, 31, 31
-	RGB 20, 20, 20
-	RGB 11, 11, 11
-	RGB  0,  0,  0
-
-	RGB 31, 31, 31
-	RGB 20, 20, 20
-	RGB 11, 11, 11
-	RGB  0,  0,  0
-
-	RGB 31, 31, 31
-	RGB 20, 20, 20
-	RGB 11, 11, 11
-	RGB  0,  0,  0
-
-	RGB 31, 31, 31
-	RGB 20, 20, 20
-	RGB 11, 11, 11
-	RGB  0,  0,  0
-else
-	RGB_MONOCHROME_LIGHT
-	RGB_MONOCHROME_LIGHT
-	RGB_MONOCHROME_DARK
-	RGB_MONOCHROME_BLACK
-	RGB_MONOCHROME_LIGHT
-	RGB_MONOCHROME_WHITE
-	RGB_MONOCHROME_DARK
-	RGB_MONOCHROME_BLACK
-rept 6
-	RGB_MONOCHROME_LIGHT
-	RGB_MONOCHROME_LIGHT
-	RGB_MONOCHROME_LIGHT
-	RGB_MONOCHROME_LIGHT
-endr
-	RGB_MONOCHROME_WHITE
-	RGB_MONOCHROME_WHITE
-	RGB_MONOCHROME_DARK
-	RGB_MONOCHROME_BLACK
-	RGB_MONOCHROME_WHITE
-	RGB_MONOCHROME_DARK
-	RGB_MONOCHROME_DARK
-	RGB_MONOCHROME_BLACK
-	MONOCHROME_RGB_FOUR
-	MONOCHROME_RGB_FOUR
-	MONOCHROME_RGB_FOUR
-	MONOCHROME_RGB_FOUR
-	MONOCHROME_RGB_FOUR
-	MONOCHROME_RGB_FOUR
-endc
+INCLUDE "gfx/intro/suicune.pal"
 
 IntroUnownBackGFX:
 INCBIN "gfx/intro/unown_back.2bpp.lz"

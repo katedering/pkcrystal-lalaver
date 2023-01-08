@@ -35,6 +35,57 @@ ResetOWMapState:
 
 EnterMapConnection:
 ; Return carry if a connection has been entered.
+	ld hl, DualMapConnections
+.dual_loop
+; check end
+	ld a, [hli]
+	and a
+	jr z, .not_dual
+; check map group
+	ld b, a
+	ld a, [wMapGroup]
+	cp b
+	jr nz, .skip31
+; check map number
+	ld a, [hli]
+	ld b, a
+	ld a, [wMapNumber]
+	cp b
+	jr nz, .skip30
+; check step direction
+	ld a, [hli]
+	ld b, a
+	ld a, [wPlayerStepDirection]
+	cp b
+	jr nz, .skip29
+; check coordinate
+	ld a, [hli]
+	ld e, a
+	ld a, [hli]
+	ld d, a
+	ld a, [hli]
+	ld b, a
+	ld a, [de]
+	cp b
+; de = map connection struct
+	ld a, [hli]
+	ld e, a
+	ld a, [hli]
+	ld d, a
+; hl = connection data
+	jr c, .lesser
+	ld bc, 12 ; size of connection
+	add hl, bc
+.lesser
+	call GetMapConnection
+	; fallthrough
+
+.not_dual
+	xor a
+	ld hl, wFollowedWarpData
+	ld bc, wFollowedWarpDataEnd - wFollowedWarpData
+	rst ByteFill
+
 	ld a, [wPlayerStepDirection]
 	and a
 	jmp z, EnterSouthConnection
@@ -45,6 +96,15 @@ EnterMapConnection:
 	dec a
 	jr z, EnterEastConnection
 	ret
+
+.skip31
+	inc hl
+.skip30
+	inc hl
+.skip29
+	ld bc, 8 + 12 * 2 - 3 ; size of dual_connection, minus 3 bytes passed already
+	add hl, bc
+	jr .dual_loop
 
 EnterWestConnection:
 	ld a, [wWestConnectedMapGroup]
@@ -213,7 +273,7 @@ LoadMapTimeOfDay:
 	call .ClearBGMap
 	decoord 0, 0
 	call .copy
-	decoord 0, 0, wAttrMap
+	decoord 0, 0, wAttrmap
 	ld a, $1
 	ldh [rVBK], a
 .copy
@@ -272,12 +332,16 @@ DeferredLoadMapGraphics:
 	ldh [hTileAnimFrame], a
 	ret
 
-LoadMapGraphics:
+LoadMapTilesetGFX:
 	call LoadMapTileset
 	call LoadTilesetGFX
 	xor a
 	ldh [hMapAnims], a
 	ldh [hTileAnimFrame], a
+	ret
+
+LoadMapGraphics:
+	call LoadMapTilesetGFX
 	farjp RefreshSprites
 
 LoadMapPalettes:
@@ -321,7 +385,7 @@ CheckMovingOffEdgeOfMap::
 	ret
 
 .down
-	ld a, [wPlayerStandingMapY]
+	ld a, [wPlayerMapY]
 	sub 4
 	ld b, a
 	ld a, [wMapHeight]
@@ -332,7 +396,7 @@ CheckMovingOffEdgeOfMap::
 	ret
 
 .up
-	ld a, [wPlayerStandingMapY]
+	ld a, [wPlayerMapY]
 	sub 4
 	cp -1
 	jr z, .ok
@@ -340,7 +404,7 @@ CheckMovingOffEdgeOfMap::
 	ret
 
 .left
-	ld a, [wPlayerStandingMapX]
+	ld a, [wPlayerMapX]
 	sub $4
 	cp -1
 	jr z, .ok
@@ -348,7 +412,7 @@ CheckMovingOffEdgeOfMap::
 	ret
 
 .right
-	ld a, [wPlayerStandingMapX]
+	ld a, [wPlayerMapX]
 	sub 4
 	ld b, a
 	ld a, [wMapWidth]
@@ -407,3 +471,5 @@ GetMapScreenCoords::
 	and $1
 	ld [wMetatileStandingX], a
 	ret
+
+INCLUDE "data/maps/dual_connections.asm"

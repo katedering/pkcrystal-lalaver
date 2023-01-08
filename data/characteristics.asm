@@ -5,131 +5,161 @@ Characteristics:
 	dw .Chara_HP2
 	dw .Chara_HP3
 	dw .Chara_HP4
-	dw .Chara_ATK0
-	dw .Chara_ATK1
-	dw .Chara_ATK2
-	dw .Chara_ATK3
-	dw .Chara_ATK4
-	dw .Chara_DEF0
-	dw .Chara_DEF1
-	dw .Chara_DEF2
-	dw .Chara_DEF3
-	dw .Chara_DEF4
-	dw .Chara_SPA0
-	dw .Chara_SPA1
-	dw .Chara_SPA2
-	dw .Chara_SPA3
-	dw .Chara_SPA4
-	dw .Chara_SPD0
-	dw .Chara_SPD1
-	dw .Chara_SPD2
-	dw .Chara_SPD3
-	dw .Chara_SPD4
-	dw .Chara_SPE0
-	dw .Chara_SPE1
-	dw .Chara_SPE2
-	dw .Chara_SPE3
-	dw .Chara_SPE4
+	dw .Chara_Atk0
+	dw .Chara_Atk1
+	dw .Chara_Atk2
+	dw .Chara_Atk3
+	dw .Chara_Atk4
+	dw .Chara_Def0
+	dw .Chara_Def1
+	dw .Chara_Def2
+	dw .Chara_Def3
+	dw .Chara_Def4
+	dw .Chara_SAt0
+	dw .Chara_SAt1
+	dw .Chara_SAt2
+	dw .Chara_SAt3
+	dw .Chara_SAt4
+	dw .Chara_SDf0
+	dw .Chara_SDf1
+	dw .Chara_SDf2
+	dw .Chara_SDf3
+	dw .Chara_SDf4
+	dw .Chara_Spe0
+	dw .Chara_Spe1
+	dw .Chara_Spe2
+	dw .Chara_Spe3
+	dw .Chara_Spe4
 	assert_table_length NUM_STATS * 5
 
 .Chara_HP0:
-	db    "Loves to"
-	next1 "eat@"
+	text  "Loves to"
+	next1 "eat"
+	done
 .Chara_HP1:
-	db    "Takes"
+	text  "Takes"
 	next1 "plenty of"
-	next1 "siestas@"
+	next1 "siestas"
+	done
 .Chara_HP2:
-	db    "Nods off"
-	next1 "a lot@"
+	text  "Nods off"
+	next1 "a lot"
+	done
 .Chara_HP3:
-	db    "Scatters"
+	text  "Scatters"
 	next1 "things"
-	next1 "often@"
+	next1 "often"
+	done
 .Chara_HP4:
-	db    "Likes to"
-	next1 "relax@"
+	text  "Likes to"
+	next1 "relax"
+	done
 
-.Chara_ATK0:
-	db    "Proud of"
-	next1 "its power@"
-.Chara_ATK1:
-	db    "Likes to"
+.Chara_Atk0:
+	text  "Proud of"
+	next1 "its power"
+	done
+.Chara_Atk1:
+	text  "Likes to"
 	next1 "thrash"
-	next1 "about@"
-.Chara_ATK2:
-	db    "A little"
+	next1 "about"
+	done
+.Chara_Atk2:
+	text  "A little"
 	next1 "quick"
-	next1 "tempered@"
-.Chara_ATK3:
-	db    "Likes to"
-	next1 "fight@"
-.Chara_ATK4:
-	db    "Quick"
-	next1 "tempered@"
+	next1 "tempered"
+	done
+.Chara_Atk3:
+	text  "Likes to"
+	next1 "fight"
+	done
+.Chara_Atk4:
+	text  "Quick"
+	next1 "tempered"
+	done
 
-.Chara_DEF0:
-	db    "Sturdy"
-	next1 "body@"
-.Chara_DEF1:
-	db    "Capable of"
+.Chara_Def0:
+	text  "Sturdy"
+	next1 "body"
+	done
+.Chara_Def1:
+	text  "Capable of"
 	next1 "taking"
-	next1 "hits@"
-.Chara_DEF2:
-	db    "Highly"
-	next1 "persistent@"
-.Chara_DEF3:
-	db    "Good"
-	next1 "endurance@"
-.Chara_DEF4:
-	db    "Good"
+	next1 "hits"
+	done
+.Chara_Def2:
+	text  "Highly"
+	next1 "persistent"
+	done
+.Chara_Def3:
+	text  "Good"
+	next1 "endurance"
+	done
+.Chara_Def4:
+	text  "Good"
 	next1 "persever-"
-	next1 "ance@"
+	next1 "ance"
+	done
 
-.Chara_SPA0:
-	db    "Highly"
-	next1 "curious@"
-.Chara_SPA1:
-	db    "Mischiev-"
-	next1 "ous@"
-.Chara_SPA2:
-	db    "Thoroughly"
-	next1 "cunning@"
-.Chara_SPA3:
-	db    "Often lost"
-	next1 "in thought@"
-.Chara_SPA4:
-	db    "Very"
-	next1 "finicky@"
+.Chara_SAt0:
+	text  "Highly"
+	next1 "curious"
+	done
+.Chara_SAt1:
+	text  "Mischiev-"
+	next1 "ous"
+	done
+.Chara_SAt2:
+	text  "Thoroughly"
+	next1 "cunning"
+	done
+.Chara_SAt3:
+	text  "Often lost"
+	next1 "in thought"
+	done
+.Chara_SAt4:
+	text  "Very"
+	next1 "finicky"
+	done
 
-.Chara_SPD0:
-	db    "Strong"
-	next1 "willed@"
-.Chara_SPD1:
-	db    "Somewhat"
-	next1 "vain@"
-.Chara_SPD2:
-	db    "Strongly"
-	next1 "defiant@"
-.Chara_SPD3:
-	db    "Hates to"
-	next1 "lose@"
-.Chara_SPD4:
-	db    "Somewhat"
-	next1 "stubborn@"
+.Chara_SDf0:
+	text  "Strong"
+	next1 "willed"
+	done
+.Chara_SDf1:
+	text  "Somewhat"
+	next1 "vain"
+	done
+.Chara_SDf2:
+	text  "Strongly"
+	next1 "defiant"
+	done
+.Chara_SDf3:
+	text  "Hates to"
+	next1 "lose"
+	done
+.Chara_SDf4:
+	text  "Somewhat"
+	next1 "stubborn"
+	done
 
-.Chara_SPE0:
-	db    "Likes to"
-	next1 "run@"
-.Chara_SPE1:
-	db    "Alert to"
-	next1 "sounds@"
-.Chara_SPE2:
-	db    "Impetuous"
-	next1 "and silly@"
-.Chara_SPE3:
-	db    "Somewhat"
-	next1 "of a clown@"
-.Chara_SPE4:
-	db    "Quick to"
-	next1 "flee@"
+.Chara_Spe0:
+	text  "Likes to"
+	next1 "run"
+	done
+.Chara_Spe1:
+	text  "Alert to"
+	next1 "sounds"
+	done
+.Chara_Spe2:
+	text  "Impetuous"
+	next1 "and silly"
+	done
+.Chara_Spe3:
+	text  "Somewhat"
+	next1 "of a clown"
+	done
+.Chara_Spe4:
+	text  "Quick to"
+	next1 "flee"
+	done

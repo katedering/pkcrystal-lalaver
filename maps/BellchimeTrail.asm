@@ -9,12 +9,19 @@ BellchimeTrail_MapScriptHeader:
 	warp_event  4,  4, WISE_TRIOS_ROOM, 1
 	warp_event  4,  5, WISE_TRIOS_ROOM, 2
 	warp_event 21,  9, TIN_TOWER_1F, 1 ; hole
+	warp_event 12,  4, HIDDEN_TREE_GROTTO, 1
 
 	def_coord_events
 	coord_event 21,  9, 1, BellchimeTrailPanUpTrigger
 
 	def_bg_events
 	bg_event 22, 12, BGEVENT_JUMPTEXT, TinTowerSignText
+	bg_event  8,  3, BGEVENT_JUMPTEXT, BellchimeTrailWaterText
+	bg_event  9,  3, BGEVENT_JUMPTEXT, BellchimeTrailWaterText
+	bg_event  8,  6, BGEVENT_JUMPTEXT, BellchimeTrailWaterText
+	bg_event  9,  6, BGEVENT_JUMPTEXT, BellchimeTrailWaterText
+	bg_event 12,  3, BGEVENT_JUMPSTD, treegrotto, HIDDENGROTTO_BELLCHIME_TRAIL
+	bg_event 13,  3, BGEVENT_JUMPSTD, treegrotto, HIDDENGROTTO_BELLCHIME_TRAIL
 
 	def_object_events
 	object_event 16,  6, SPRITE_VALERIE, SPRITEMOVEDATA_STANDING_DOWN, 0, 0, -1, -1, 0, OBJECTTYPE_SCRIPT, 0, BellchimeTrailValerieScript, EVENT_VALERIE_BELLCHIME_TRAIL
@@ -23,7 +30,7 @@ BellchimeTrail_MapScriptHeader:
 	const BELLCHIMETRAIL_VALERIE
 
 BellchimeTrailStepDownTrigger:
-	prioritysjump .Script
+	sdefer .Script
 	end
 
 .Script:
@@ -38,13 +45,13 @@ BellchimeTrailStepDownTrigger:
 
 SetupValerieMorningWalkCallback:
 	checkevent EVENT_FOUGHT_SUICUNE
-	iffalse .Disappear
+	iffalsefwd .Disappear
 	checkevent EVENT_BEAT_VALERIE
-	iffalse .Appear
+	iffalsefwd .Appear
 	checkflag ENGINE_VALERIE_MORNING_WALK
-	iftrue .Disappear
+	iftruefwd .Disappear
 	checktime 1 << MORN
-	iffalse .Disappear
+	iffalsefwd .Disappear
 .Appear:
 	appear BELLCHIMETRAIL_VALERIE
 	endcallback
@@ -83,13 +90,18 @@ TinTowerSignText:
 	cont "roost here."
 	done
 
+BellchimeTrailWaterText:
+	text "The stream is too"
+	line "small for Surfing."
+	done
+
 BellchimeTrailValerieScript:
 	faceplayer
 	opentext
 	checkevent EVENT_BEAT_VALERIE
-	iftrue .Rematch
+	iftruefwd .Rematch
 	checkevent EVENT_LISTENED_TO_VALERIE
-	iftrue .Listened
+	iftruefwd .Listened
 	writetext .IntroText
 	waitbutton
 	setevent EVENT_LISTENED_TO_VALERIE
@@ -132,25 +144,25 @@ BellchimeTrailValerieScript:
 	winlosstext .RematchBeatenText, 0
 	setlasttalked BELLCHIMETRAIL_VALERIE
 	readvar VAR_BADGES
-	ifequal 16, .Battle3
+	ifequalfwd 16, .Battle3
 	checkevent EVENT_BEAT_ELITE_FOUR
-	iftrue .Battle2
+	iftruefwd .Battle2
 	loadtrainer VALERIE, 1
 	startbattle
 	reloadmapafterbattle
-	sjump .AfterRematch
+	sjumpfwd .AfterRematch
 
 .Battle2:
 	loadtrainer VALERIE, 2
 	startbattle
 	reloadmapafterbattle
-	sjump .AfterRematch
+	sjumpfwd .AfterRematch
 
 .Battle3:
 	loadtrainer VALERIE, 3
 	startbattle
 	reloadmapafterbattle
-	sjump .AfterRematch
+	; fallthrough
 
 .AfterRematch:
 	opentext

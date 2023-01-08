@@ -23,7 +23,7 @@ DragonShrine_MapScriptHeader:
 	const DRAGONSHRINE_CLAIR
 
 DragonShrineTrigger0:
-	prioritysjump DragonShrineTestScript
+	sdefer DragonShrineTestScript
 	end
 
 DragonShrineTestScript:
@@ -39,9 +39,9 @@ DragonShrineTestScript:
 	loadmenu DragonShrineQuestion1_MenuHeader
 	verticalmenu
 	closewindow
-	ifequal $1, .RightAnswer
-	ifequal $2, .WrongAnswer
-	ifequal $3, .RightAnswer
+	ifequalfwd $1, .RightAnswer
+	ifequalfwd $2, .WrongAnswer
+	ifequalfwd $3, .RightAnswer
 	end
 
 .Question2:
@@ -51,9 +51,9 @@ DragonShrineTestScript:
 	loadmenu DragonShrineQuestion2_MenuHeader
 	verticalmenu
 	closewindow
-	ifequal $1, .RightAnswer
-	ifequal $2, .RightAnswer
-	ifequal $3, .WrongAnswer
+	ifequalfwd $1, .RightAnswer
+	ifequalfwd $2, .RightAnswer
+	ifequalfwd $3, .WrongAnswer
 .Question3:
 	setevent EVENT_TEMPORARY_UNTIL_MAP_RELOAD_4
 	writetext DragonShrineQuestion3Text
@@ -61,9 +61,9 @@ DragonShrineTestScript:
 	loadmenu DragonShrineQuestion3_MenuHeader
 	verticalmenu
 	closewindow
-	ifequal $1, .WrongAnswer
-	ifequal $2, .RightAnswer
-	ifequal $3, .RightAnswer
+	ifequalfwd $1, .WrongAnswer
+	ifequalfwd $2, .RightAnswer
+	ifequalfwd $3, .RightAnswer
 .Question4:
 	setevent EVENT_TEMPORARY_UNTIL_MAP_RELOAD_5
 	writetext DragonShrineQuestion4Text
@@ -71,9 +71,9 @@ DragonShrineTestScript:
 	loadmenu DragonShrineQuestion4_MenuHeader
 	verticalmenu
 	closewindow
-	ifequal $1, .RightAnswer
-	ifequal $2, .WrongAnswer
-	ifequal $3, .RightAnswer
+	ifequalfwd $1, .RightAnswer
+	ifequalfwd $2, .WrongAnswer
+	ifequalfwd $3, .RightAnswer
 .Question5:
 	setevent EVENT_TEMPORARY_UNTIL_MAP_RELOAD_6
 	writetext DragonShrineQuestion5Text
@@ -81,12 +81,12 @@ DragonShrineTestScript:
 	loadmenu DragonShrineQuestion5_MenuHeader
 	verticalmenu
 	closewindow
-	ifequal $1, .WrongAnswer
-	ifequal $2, .WrongAnswer
-	ifequal $3, .RightAnswer
+	ifequalfwd $1, .WrongAnswer
+	ifequalfwd $2, .WrongAnswer
+	ifequalfwd $3, .RightAnswer
 .RightAnswer:
 	checkevent EVENT_TEMPORARY_UNTIL_MAP_RELOAD_6
-	iftrue .PassedTheTest
+	iftruefwd .PassedTheTest
 	writetext DragonShrineRightAnswerText
 	promptbutton
 	checkevent EVENT_TEMPORARY_UNTIL_MAP_RELOAD_5
@@ -176,7 +176,7 @@ DragonShrineElder1Script:
 	checkevent EVENT_TEMPORARY_UNTIL_MAP_RELOAD_7
 	iftrue_jumptextfaceplayer DragonShrineSymbolicDragonText
 	checkevent EVENT_GOT_DRATINI
-	iffalse .GiveDratini
+	iffalsefwd .GiveDratini
 	checkevent EVENT_BEAT_RIVAL_IN_MT_MOON
 	iftrue_jumptextfaceplayer DragonShrineSilverIsInTrainingText
 	jumptextfaceplayer DragonShrineClairsGrandfatherText
@@ -187,11 +187,11 @@ DragonShrineElder1Script:
 	writetext DragonShrineTakeThisDratiniText
 	waitbutton
 	checkevent EVENT_ANSWERED_DRAGON_MASTER_QUIZ_WRONG
-	iftrue .NoExtremeSpeed
-	givepoke DRATINI, NO_FORM, 15, SITRUS_BERRY, ULTRA_BALL, EXTREMESPEED
-	sjump .FinishElderScript
+	iftruefwd .NoExtremeSpeed
+	givepoke DRATINI, PLAIN_FORM, 15, SITRUS_BERRY, ULTRA_BALL, EXTREMESPEED
+	sjumpfwd .FinishElderScript
 .NoExtremeSpeed
-	givepoke DRATINI, NO_FORM, 15, SITRUS_BERRY, ULTRA_BALL
+	givepoke DRATINI, PLAIN_FORM, 15, SITRUS_BERRY, ULTRA_BALL
 .FinishElderScript
 	iffalse_jumpopenedtext DragonShrinePartyAndBoxFullText
 	setevent EVENT_GOT_DRATINI
@@ -199,9 +199,8 @@ DragonShrineElder1Script:
 	jumpopenedtext DragonShrineSymbolicDragonText
 
 DragonShrineQuestion1_MenuHeader:
-	db $40 ; flags
-	db 04, 08 ; start coords
-	db 11, 19 ; end coords
+	db MENU_BACKUP_TILES
+	menu_coords 8, 4, 19, 11
 	dw .MenuData
 	db 1 ; default option
 
@@ -213,9 +212,8 @@ DragonShrineQuestion1_MenuHeader:
 	db "Friend@"
 
 DragonShrineQuestion2_MenuHeader:
-	db $40 ; flags
-	db 04, 09 ; start coords
-	db 11, 19 ; end coords
+	db MENU_BACKUP_TILES
+	menu_coords 9, 4, 19, 11
 	dw .MenuData
 	db 1 ; default option
 
@@ -227,9 +225,8 @@ DragonShrineQuestion2_MenuHeader:
 	db "Cheating@"
 
 DragonShrineQuestion3_MenuHeader:
-	db $40 ; flags
-	db 04, 05 ; start coords
-	db 11, 19 ; end coords
+	db MENU_BACKUP_TILES
+	menu_coords 5, 4, 19, 11
 	dw .MenuData
 	db 1 ; default option
 
@@ -241,9 +238,8 @@ DragonShrineQuestion3_MenuHeader:
 	db "Anybody@"
 
 DragonShrineQuestion4_MenuHeader:
-	db $40 ; flags
-	db 04, 08 ; start coords
-	db 11, 19 ; end coords
+	db MENU_BACKUP_TILES
+	menu_coords 8, 4, 19, 11
 	dw .MenuData
 	db 1 ; default option
 
@@ -255,9 +251,8 @@ DragonShrineQuestion4_MenuHeader:
 	db "Knowledge@"
 
 DragonShrineQuestion5_MenuHeader:
-	db $40 ; flags
-	db 04, 11 ; start coords
-	db 11, 19 ; end coords
+	db MENU_BACKUP_TILES
+	menu_coords 11, 4, 19, 11
 	dw .MenuData
 	db 1 ; default option
 
@@ -448,7 +443,7 @@ DragonShrineTakeThisDratiniText:
 
 DragonShrinePartyAndBoxFullText:
 	text "Hm? Your party and"
-	line "box are both full."
+	line "Box are both full."
 	done
 
 DragonShrineSymbolicDragonText:
@@ -582,6 +577,6 @@ DragonShrineRisingBadgeExplanationText:
 	line "question."
 	done
 
-DragonShrineSpeechlessText:
+DragonShrineSpeechlessText: ; text > text
 	text "………………………………"
 	done

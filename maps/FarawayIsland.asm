@@ -5,7 +5,7 @@ FarawayIsland_MapScriptHeader:
 
 	def_callbacks
 	callback MAPCALLBACK_NEWMAP, FarawayIslandVisited
-	callback MAPCALLBACK_SPRITES, FarawayIslandSetupLawrence
+	callback MAPCALLBACK_OBJECTS, FarawayIslandSetupLawrence
 
 	def_warp_events
 	warp_event 22,  8, FARAWAY_JUNGLE, 1
@@ -25,7 +25,7 @@ FarawayIsland_MapScriptHeader:
 	const FARAWAYISLAND_LAWRENCE
 
 FarawayIslandTrigger1:
-	prioritysjump FarawayIsland_PlayerArrives
+	sdefer FarawayIsland_PlayerArrives
 FarawayIslandTrigger0:
 	end
 
@@ -36,9 +36,9 @@ FarawayIslandVisited:
 FarawayIslandSetupLawrence:
 	disappear FARAWAYISLAND_LAWRENCE
 	checkevent EVENT_BEAT_LAWRENCE
-	iffalse .Done
+	iffalsefwd .Done
 	checkevent EVENT_BEAT_LAWRENCE_AGAIN
-	iftrue .Done
+	iftruefwd .Done
 	appear FARAWAYISLAND_LAWRENCE
 .Done
 	endcallback
@@ -56,7 +56,7 @@ FarawayIslandSailorScript:
 	opentext
 	writetext SeagallopFerryFarawayToVermilionQuestionText
 	yesorno
-	iffalse .RefuseFerry
+	iffalsefwd .RefuseFerry
 	writetext SeagallopFerryFarawayToVermilionText
 	waitbutton
 	closetext
@@ -86,7 +86,7 @@ FarawayIslandLawrenceScript:
 	opentext
 	writetext FarawayIslandLawrenceText1
 	yesorno
-	iffalse .no_battle
+	iffalsefwd .no_battle
 	writetext FarawayIslandLawrenceYesText
 	waitbutton
 	closetext

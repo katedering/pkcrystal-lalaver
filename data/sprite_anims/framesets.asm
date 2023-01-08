@@ -10,6 +10,8 @@ SpriteAnimFrameData:
 	dw .Frameset_PartyMonWithItemFast
 	dw .Frameset_TextEntryCursor
 	dw .Frameset_TextEntryCursorBig
+	dw .Frameset_TextEntryCursorBlue
+	dw .Frameset_TextEntryCursorBlueBig
 	dw .Frameset_GameFreakLogo
 	dw .Frameset_SlotsGolem
 	dw .Frameset_SlotsChansey
@@ -52,10 +54,17 @@ SpriteAnimFrameData:
 	dw .Frameset_MaxStatSparkle
 	dw .Frameset_HyperTrainedStat
 	dw .Frameset_PcCursor
+	dw .Frameset_PcCursorItem
 	dw .Frameset_PcQuick
 	dw .Frameset_PcMode
 	dw .Frameset_PcMode2
 	dw .Frameset_PcPack
+	dw .Frameset_DexCursor
+	dw .Frameset_DexUnownCursor
+	dw .Frameset_DexSlowpoke
+	dw .Frameset_TownMapFly
+	dw .Frameset_GreenWalk
+	dw .Frameset_MagnetTrainGreen
 	assert_table_length NUM_SPRITE_ANIM_FRAMESETS
 
 .Frameset_00:
@@ -106,11 +115,25 @@ SpriteAnimFrameData:
 	frame SPRITE_ANIM_OAMSET_BLUE_WALK_2,  8, OAM_X_FLIP
 	dorestart
 
+.Frameset_GreenWalk:
+	frame SPRITE_ANIM_OAMSET_GREEN_WALK_1,  8
+	frame SPRITE_ANIM_OAMSET_GREEN_WALK_2,  8
+	frame SPRITE_ANIM_OAMSET_GREEN_WALK_1,  8
+	frame SPRITE_ANIM_OAMSET_GREEN_WALK_2,  8, OAM_X_FLIP
+	dorestart
+
 .Frameset_MagnetTrainBlue:
 	frame SPRITE_ANIM_OAMSET_MAGNET_TRAIN_BLUE_1,  8
 	frame SPRITE_ANIM_OAMSET_MAGNET_TRAIN_BLUE_2,  8
 	frame SPRITE_ANIM_OAMSET_MAGNET_TRAIN_BLUE_1,  8
 	frame SPRITE_ANIM_OAMSET_MAGNET_TRAIN_BLUE_2,  8, OAM_X_FLIP
+	dorestart
+
+.Frameset_MagnetTrainGreen:
+	frame SPRITE_ANIM_OAMSET_MAGNET_TRAIN_GREEN_1,  8
+	frame SPRITE_ANIM_OAMSET_MAGNET_TRAIN_GREEN_2,  8
+	frame SPRITE_ANIM_OAMSET_MAGNET_TRAIN_GREEN_1,  8
+	frame SPRITE_ANIM_OAMSET_MAGNET_TRAIN_GREEN_2,  8, OAM_X_FLIP
 	dorestart
 
 .Frameset_TextEntryCursor:
@@ -120,6 +143,16 @@ SpriteAnimFrameData:
 
 .Frameset_TextEntryCursorBig:
 	frame SPRITE_ANIM_OAMSET_TEXT_ENTRY_CURSOR_BIG,  1
+	dorepeat  1
+	dorestart
+
+.Frameset_TextEntryCursorBlue:
+	frame SPRITE_ANIM_OAMSET_TEXT_ENTRY_CURSOR_BLUE,  1
+	dorepeat  1
+	dorestart
+
+.Frameset_TextEntryCursorBlueBig:
+	frame SPRITE_ANIM_OAMSET_TEXT_ENTRY_CURSOR_BLUE_BIG,  1
 	dorepeat  1
 	dorestart
 
@@ -256,7 +289,7 @@ SpriteAnimFrameData:
 	frame SPRITE_ANIM_OAMSET_TREE_1,  2
 	frame SPRITE_ANIM_OAMSET_HEADBUTT_TREE_2,  2
 	frame SPRITE_ANIM_OAMSET_TREE_1,  2
-	frame SPRITE_ANIM_OAMSET_HEADBUTT_TREE_2,  2, OAM_X_FLIP
+	frame SPRITE_ANIM_OAMSET_HEADBUTT_TREE_3,  2
 	dorestart
 
 .Frameset_IntroSuicune:
@@ -343,6 +376,11 @@ SpriteAnimFrameData:
 	frame SPRITE_ANIM_OAMSET_PC_CURSOR, 32
 	dorestart
 
+.Frameset_PcCursorItem:
+	; Conditionally switched to when dealing with items
+	frame SPRITE_ANIM_OAMSET_PC_CURSOR_ITEM, 32
+	dorestart
+
 .Frameset_PcQuick:
 	frame SPRITE_ANIM_OAMSET_PC_QUICK, 8
 	delanim
@@ -357,4 +395,24 @@ SpriteAnimFrameData:
 
 .Frameset_PcPack:
 	frame SPRITE_ANIM_OAMSET_PC_PACK, 32
+	dorestart
+
+.Frameset_DexCursor:
+	frame SPRITE_ANIM_OAMSET_DEX_CURSOR, 32
+	dorestart
+
+.Frameset_DexUnownCursor:
+	frame SPRITE_ANIM_OAMSET_DEX_UNOWN_CURSOR, 32
+	dorestart
+
+.Frameset_DexSlowpoke:
+	frame SPRITE_ANIM_OAMSET_DEX_SLOWPOKE_1, 3
+	frame SPRITE_ANIM_OAMSET_DEX_SLOWPOKE_2, 3
+	frame SPRITE_ANIM_OAMSET_DEX_SLOWPOKE_3, 3
+	frame SPRITE_ANIM_OAMSET_DEX_SLOWPOKE_4, 3
+	frame SPRITE_ANIM_OAMSET_DEX_SLOWPOKE_5, 3
+	dorestart
+
+.Frameset_TownMapFly:
+	frame SPRITE_ANIM_OAMSET_TOWN_MAP_FLY, 32
 	dorestart

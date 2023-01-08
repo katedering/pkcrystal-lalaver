@@ -520,6 +520,7 @@ Special_BattleTower_NextRentalBattle:
 	text "You can expect to"
 	line "see a "
 	text_ram wOTPartyMonNicknames
+	text ""
 	cont "with "
 	text_ram wStringBuffer1
 	text "."
@@ -652,22 +653,24 @@ Special_BattleTower_BeginChallenge:
 	ldh [hDivisor], a
 	ld b, 2
 	call Divide
-
-	; GetCurStreakAddr closes SRAM, so reopen it.
-	ld a, BANK(sBTTrainers)
-	call GetSRAMBank
-	pop de
 	ldh a, [hRemainder]
 	cp BATTLETOWER_STREAK_LENGTH * 2
-	jr nz, .close_sram
-	dec de
+	pop de
+
+	; GetCurStreakAddr has already closed SRAM.
+	ret nz
+
 	call BT_InRentalMode
 	ld a, BATTLETOWER_FACTORYHEAD
 	jr z, .got_frontier_brain
 	ld a, BATTLETOWER_TOWERTYCOON
 .got_frontier_brain
+	push af
+	ld a, BANK(sBTTrainers)
+	call GetSRAMBank
+	pop af
+	dec de
 	ld [de], a
-.close_sram
 	jmp CloseSRAM
 
 BT_GetBothStreakAddr:
@@ -759,22 +762,20 @@ BT_GetTrainerIndex:
 	jmp CloseSRAM
 
 Special_BattleTower_LoadOpponentTrainerAndPokemonsWithOTSprite:
+	; Load sprite of the opponent trainer
+	; because s/he is chosen randomly and appears out of nowhere
 	call BT_GetCurTrainerIndex
 	ld c, a
 	ld b, 0
-
-	push bc
 	farcall WriteBattleTowerTrainerName
-	pop bc
+LoadTrainerSpriteAsMapObject1::
 	ld c, a
+	ld b, 0
 	dec c
 	ld hl, BTTrainerClassSprites
 	add hl, bc
 	ld a, [hl]
-	ld [wBTTempOTSprite], a
-
-	; Load sprite of the opponent trainer
-	; because s/he is chosen randomly and appears out of nowhere
+LoadSpriteAsMapObject1::
 	ld [wMap1ObjectSprite], a
 	ldh [hUsedSpriteIndex], a
 	ld a, 24
@@ -801,14 +802,8 @@ _BT_SetPlayerOT:
 	ld bc, 0
 	ld d, a
 .loop
-	; Party species array
-	push de
-	ld hl, wPartySpecies
-	ld de, wOTPartySpecies
-	ld a, 1 ; just a single byte to copy each iteration
-	call .CopyPartyData
-
 	; Main party struct
+	push de
 	ld hl, wPartyMons
 	ld de, wOTPartyMons
 	ld a, PARTYMON_STRUCT_LENGTH
@@ -843,11 +838,6 @@ _BT_SetPlayerOT:
 	ld a, c
 	cp d
 	jr nz, .loop
-
-	; Add party species terminator, then we're done
-	ld hl, wOTPartySpecies
-	add hl, bc
-	ld [hl], -1
 	ret
 
 .CopyPartyData:
