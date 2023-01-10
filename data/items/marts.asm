@@ -80,7 +80,7 @@ VioletMart:
 	db -1
 
 AzaleaMart:
-	db 12 ; # items
+	db 10 ; # items
 	db LURE_BALL
 	db FRIEND_BALL
 	db FAST_BALL
@@ -90,8 +90,6 @@ AzaleaMart:
 	db CHARCOAL
 	db SUPER_POTION
 	db FULL_HEAL
-	db SILVER_LEAF
-	db GOLD_LEAF
 	db FLOWER_MAIL
 	db -1
 

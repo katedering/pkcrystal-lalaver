@@ -40,6 +40,7 @@ VioletCity_MapScriptHeader:
 	fruittree_event 14, 33, FRUITTREE_VIOLET_CITY, CHERI_BERRY, PAL_NPC_RED
 	itemball_event 10,  6, PP_UP, 1, EVENT_VIOLET_CITY_PP_UP
 	itemball_event 35, 12, RARE_CANDY, 1, EVENT_VIOLET_CITY_RARE_CANDY
+	object_event 13, 12, SPRITE_LASS, SPRITEMOVEDATA_STANDING_DOWN, 0, 0, -1, -1, PAL_NPC_BLUE, OBJECTTYPE_SCRIPT, 0, VioletCityGuardGirlScript, EVENT_BEAT_FALKNER
 
 	object_const_def
 	const VIOLETCITY_EARL
@@ -299,4 +300,32 @@ SproutTowerSignText:
 EarlsPokemonAcademySignText:
 	text "Earl's #mon"
 	line "Academy"
+	done
+
+VioletCityGuardGirlScript:
+	faceplayer
+	opentext
+	writetext .VioletCityGuardGirlWayBlockedText
+	waitbutton
+	closetext
+	end
+	
+.VioletCityGuardGirlWayBlockedText
+	text "Earl said to not"
+	line "let anyone through"
+	cont "here, if they do"
+	cont "not have the badge"
+	cont "from Violet Gym."
+	
+	para "Oh? You don't have"
+	line "it yet? Sorry."
+	cont "You can't go this"
+	cont "way yet. There are"
+	cont "some really strong"
+	cont "#mon this way."
+	
+	para "If you beat the"
+	line "gym, come see me"
+	cont "at the Academy!"
+	cont "Bye!"
 	done

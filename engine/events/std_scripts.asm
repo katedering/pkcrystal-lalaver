@@ -1602,8 +1602,8 @@ CoinVendor_IntroScript:
 .MenuData2:
 	db $80 ; flags
 	db 3 ; items
-	db " 50 :  ¥1000@"
-	db "500 : ¥10000@"
+	db " 100:  ¥1000@"
+	db "1000: ¥10000@"
 	db "Cancel@"
 
 HappinessCheckScript:

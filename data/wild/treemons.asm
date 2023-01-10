@@ -29,6 +29,19 @@ MACRO tree_mon
 ENDM
 
 TreeMonSet_City:
+	tree_mon 50, SPEAROW,                10
+	tree_mon 20, MEOWTH, ALOLAN_FORM,    10
+	tree_mon 20, AIPOM,                  10
+	tree_mon 10, MURKROW,                10 
+	db -1
+	; rare
+	tree_mon 45, SPEAROW,                10
+	tree_mon 25, HERACROSS,              10
+	tree_mon 10, MEOWTH, ALOLAN_FORM,    10
+	tree_mon 10, AIPOM,                  10
+	tree_mon 10, MURKROW,                10
+	db -1
+
 TreeMonSet_Canyon:
 	tree_mon 80, SPEAROW,    10
 	tree_mon 20, AIPOM,      10
@@ -40,14 +53,16 @@ TreeMonSet_Canyon:
 	db -1
 
 TreeMonSet_Town:
-	tree_mon 65, SPEAROW,    10
+	tree_mon 60, SPEAROW,    10
 	tree_mon 15, EKANS,      10
 	tree_mon 20, AIPOM,      10
+	tree_mon  5, MURKROW,    10
 	db -1
 	; rare
-	tree_mon 60, PIDGEY,     10
+	tree_mon 55, PIDGEY,     10
 	tree_mon 30, HERACROSS,  10
 	tree_mon 10, MEOWTH,     10
+	tree_mon  5, MURKROW,    10
 	db -1
 
 TreeMonSet_Route:
@@ -127,6 +142,6 @@ TreeMonSet_Rock:
 	tree_mon 60, KRABBY,                  15
 	tree_mon 28, GEODUDE,                 15
 	tree_mon 10, SHUCKLE,                 15
-	tree_mon  1, OMANYTE,                 10
-	tree_mon  1, KABUTO,                  10
+	tree_mon  1, OMANYTE,                 15
+	tree_mon  1, KABUTO,                  15
 	db -1

@@ -2118,4 +2118,10 @@ CuteFinalPkmnText:
 	para "Are you enjoying"
 	line "the battle?"
 	prompt
+	
+RocketFinalPkmnText:
+	text "Nearly over now…"
+	line "You're pretty"
+	cont "good, trainer."
+	prompt
 

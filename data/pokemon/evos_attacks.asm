@@ -702,7 +702,7 @@ ClefairyEvosAttacks:
 	db 1, GROWL
 	db 1, ENCORE
 	db 7, SING
-	db 10, DOUBLE_SLAP
+	db 10, DOUBLE_SLAP ; Double Slap
 	db 13, DEFENSE_CURL
 	db 16, SWEET_KISS ; Follow Me → new move
 	db 19, DIZZY_PUNCH ; Bestow → Crystal unique move
@@ -1356,7 +1356,7 @@ PoliwagEvosAttacks:
 	db 1, SWEET_KISS ; event move
 	db 1, WATER_GUN ; Water Sport → Water Gun
 	db 5, HYPNOSIS ; Water Gun → Hypnosis
-	db 8, DOUBLE_SLAP ; Hypnosis → Double Slap
+	db 8, DOUBLE_SLAP ; Hypnosis → removed Double Slap
 	db 11, AQUA_JET ; Bubble → new move
 	db 15, MUD_SLAP ; Double Slap → TM move
 	db 18, RAIN_DANCE
@@ -1376,7 +1376,7 @@ PoliwhirlEvosAttacks:
 	db 1, SWEET_KISS ; event move
 	db 1, WATER_GUN ; Water Sport → Water Gun
 	db 5, HYPNOSIS ; Water Gun → Hypnosis
-	db 8, DOUBLE_SLAP ; Hypnosis → Double Slap
+	db 8, DOUBLE_SLAP ; Hypnosis → removed Double Slap
 	db 11, AQUA_JET ; Bubble → new move
 	db 15, MUD_SLAP ; Double Slap → TM move
 	db 18, RAIN_DANCE
@@ -2633,7 +2633,11 @@ KoffingEvosAttacks:
 	db 4, ACID ; Smog → new move
 	db 7, SMOKESCREEN
 	db 12, ENDURE ; Assurance → TM move
+if DEF(FAITHFUL)
 	db 15, WILL_O_WISP ; Clear Smog → TM move
+else
+	db 15, SCREECH
+endc
 	db 18, VENOSHOCK ; Sludge → tutor move
 	db 23, RAGE ; Self-Destruct → RBY TM move
 	db 26, HAZE
@@ -2651,7 +2655,11 @@ WeezingPlainEvosAttacks:
 	db 4, ACID ; Smog → new move
 	db 7, SMOKESCREEN
 	db 12, ENDURE ; Assurance → TM move
+if DEF(FAITHFUL)
 	db 15, WILL_O_WISP ; Clear Smog → TM move
+else
+	db 15, SCREECH
+endc
 	db 18, VENOSHOCK ; Sludge → tutor move
 	db 23, RAGE ; Self-Destruct → RBY TM move
 	db 26, HAZE
@@ -4411,7 +4419,7 @@ JumpluffEvosAttacks:
 	db -1 ; no more level-up moves
 
 AipomEvosAttacks:
-	evo_data EVOLVE_MOVE, DOUBLE_SLAP, AMBIPOM
+	evo_data EVOLVE_MOVE, DOUBLE_SLAP, AMBIPOM ; removed Double Slap
 	db -1 ; no more evolutions
 	db 1, SCRATCH
 	db 1, LEER ; Tail Whip → similar move
@@ -5836,6 +5844,7 @@ MismagiusEvosAttacks:
 	db 1, DISARM_VOICE ; new move
 	db 1, CONFUSION ; Spite → new move
 	db 1, ASTONISH
+	db 1, NASTY_PLOT
 	db -1 ; no more level-up moves
 
 HonchkrowEvosAttacks:

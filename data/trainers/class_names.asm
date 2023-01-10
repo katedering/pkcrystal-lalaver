@@ -159,4 +159,5 @@ TrainerClassNames::
 	li "<PK><MN> Master"  ; TRIP
 	li "Archmage"         ; FEDMAE
 	li "Debug"            ; CUTE
+	li "Ex-Rocket"        ; ROCKET
 	assert_list_length NUM_TRAINER_CLASSES + 1

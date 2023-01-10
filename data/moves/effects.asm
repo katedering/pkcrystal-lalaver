@@ -145,7 +145,6 @@ MultiHit:
 Bonemerang:
 CometPunch:
 DoubleKick:
-DoubleSlap:
 PinMissile:
 IcicleSpear:
 RockBlast:

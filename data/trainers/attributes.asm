@@ -949,5 +949,11 @@ TrainerClassAttributes:
 	db 250 ; base reward
 	dw NO_AI
 	dw CONTEXT_USE + SWITCH_OFTEN
-
+	
+; Ex-Rocket
+	db HYPER_POTION, HYPER_POTION ; items
+	db 70 ; base reward
+	dw AI_BASIC + AI_CAUTIOUS + AI_SMART + AI_TYPES
+	dw CONTEXT_USE + SWITCH_SOMETIMES
+	
 	assert_table_length NUM_TRAINER_CLASSES

@@ -449,7 +449,10 @@ KatePic: INCBIN "gfx/trainers/kate.2bpp.lz"
 AshPic: INCBIN "gfx/trainers/ash.2bpp.lz"
 TripPic: INCBIN "gfx/trainers/trip.2bpp.lz"
 FedmaePic: INCBIN "gfx/trainers/fedmae.2bpp.lz"
+
+SECTION "BonusTrainerPics2", ROMX
 CutePic: INCBIN "gfx/trainers/cute.2bpp.lz"
+RocketPic: INCBIN "gfx/trainers/rocket.2bpp.lz"
 
 SECTION "OmastarFossilPic", ROMX
 OmastarFossilPic: INCBIN "gfx/trainers/omastar_fossil.2bpp.lz"

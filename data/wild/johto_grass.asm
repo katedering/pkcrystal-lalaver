@@ -1459,27 +1459,27 @@
 	def_grass_wildmons ROUTE_33
 	db 10 percent, 10 percent, 10 percent ; encounter rates: morn/day/nite
 	; morn
-	wildmon 6, RATTATA
 	wildmon 6, SPEAROW
 	wildmon 6, GEODUDE
 	wildmon 7, HOPPIP
+	wildmon 6, MEOWTH
 	wildmon 7, EKANS, ARBOK_JOHTO_FORM
 	wildmon 6, SUNKERN
 	wildmon 7, SUNKERN
 	; day
-	wildmon 6, RATTATA
 	wildmon 6, SPEAROW
 	wildmon 6, GEODUDE
 	wildmon 7, HOPPIP
+	wildmon 6, MEOWTH
 	wildmon 7, EKANS, ARBOK_JOHTO_FORM
 	wildmon 6, SUNKERN
 	wildmon 7, SUNKERN
 	; nite
-	wildmon 6, RATTATA
 	wildmon 6, ZUBAT
 	wildmon 6, GEODUDE
 	wildmon 7, ZUBAT
 	wildmon 7, RATTATA
+	wildmon 6, MEOWTH, ALOLAN_FORM
 	wildmon 6, ODDISH
 	wildmon 7, SLOWPOKE
 	end_grass_wildmons
@@ -1534,9 +1534,9 @@
 	wildmon 12, DROWZEE
 	wildmon 14, HOOTHOOT
 	wildmon 13, PSYDUCK
-	wildmon 13, HOOTHOOT
 	wildmon 12, JIGGLYPUFF
 	wildmon 10, DITTO
+	wildmon 13, MURKROW
 	wildmon 12, YANMA
 	end_grass_wildmons
 
@@ -1907,29 +1907,29 @@
 	def_grass_wildmons VIOLET_OUTSKIRTS
 	db 10 percent, 10 percent, 10 percent ; encounter rates: morn/day/nite
 	; morn
-	wildmon LEVEL_FROM_BADGES - 2, RATTATA, ALOLAN_FORM
-	wildmon LEVEL_FROM_BADGES - 2, PIDGEY
+	wildmon LEVEL_FROM_BADGES - 1, RATTATA, ALOLAN_FORM
+	wildmon LEVEL_FROM_BADGES - 1, PIDGEY
 	wildmon LEVEL_FROM_BADGES - 0, BELLSPROUT
-	wildmon LEVEL_FROM_BADGES - 3, GROWLITHE
-	wildmon LEVEL_FROM_BADGES - 1, PIDGEOTTO
-	wildmon LEVEL_FROM_BADGES - 3, RATICATE, ALOLAN_FORM
-	wildmon LEVEL_FROM_BADGES - 1, RATICATE, ALOLAN_FORM
+	wildmon LEVEL_FROM_BADGES - 2, GROWLITHE
+	wildmon LEVEL_FROM_BADGES + 1, PIDGEY
+	wildmon LEVEL_FROM_BADGES + 1, RATTATA, ALOLAN_FORM
+	wildmon LEVEL_FROM_BADGES - 0, MEOWTH
 	; day
-	wildmon LEVEL_FROM_BADGES - 2, RATTATA, ALOLAN_FORM
-	wildmon LEVEL_FROM_BADGES - 2, PIDGEY
+	wildmon LEVEL_FROM_BADGES - 1, RATTATA, ALOLAN_FORM
+	wildmon LEVEL_FROM_BADGES - 1, PIDGEY
 	wildmon LEVEL_FROM_BADGES - 0, BELLSPROUT
-	wildmon LEVEL_FROM_BADGES - 3, GROWLITHE
-	wildmon LEVEL_FROM_BADGES - 1, PIDGEOTTO
-	wildmon LEVEL_FROM_BADGES - 3, RATICATE, ALOLAN_FORM
-	wildmon LEVEL_FROM_BADGES - 1, RATICATE, ALOLAN_FORM
+	wildmon LEVEL_FROM_BADGES - 2, GROWLITHE
+	wildmon LEVEL_FROM_BADGES + 1, PIDGEY
+	wildmon LEVEL_FROM_BADGES + 1, RATTATA, ALOLAN_FORM
+	wildmon LEVEL_FROM_BADGES - 0, MEOWTH
 	; nite
-	wildmon LEVEL_FROM_BADGES - 2, RATTATA, ALOLAN_FORM
-	wildmon LEVEL_FROM_BADGES - 2, HOOTHOOT
-	wildmon LEVEL_FROM_BADGES - 0, GASTLY
-	wildmon LEVEL_FROM_BADGES - 3, VULPIX
-	wildmon LEVEL_FROM_BADGES - 1, NOCTOWL
-	wildmon LEVEL_FROM_BADGES - 3, RATICATE, ALOLAN_FORM
-	wildmon LEVEL_FROM_BADGES - 1, RATICATE, ALOLAN_FORM
+	wildmon LEVEL_FROM_BADGES - 0, RATTATA, ALOLAN_FORM
+	wildmon LEVEL_FROM_BADGES - 0, PIDGEY
+	wildmon LEVEL_FROM_BADGES + 1, BELLSPROUT
+	wildmon LEVEL_FROM_BADGES - 1, GROWLITHE
+	wildmon LEVEL_FROM_BADGES + 2, PIDGEY
+	wildmon LEVEL_FROM_BADGES + 2, RATTATA, ALOLAN_FORM
+	wildmon LEVEL_FROM_BADGES + 1, MEOWTH, ALOLAN_FORM
 	end_grass_wildmons
 
 	def_grass_wildmons ROUTE_32_COAST
@@ -2181,7 +2181,7 @@
 	wildmon LEVEL_FROM_BADGES - 3, MAGNEMITE
 	wildmon LEVEL_FROM_BADGES - 1, MAGNEMITE
 	wildmon LEVEL_FROM_BADGES - 3, VOLTORB, HISUIAN_FORM
-	wildmon LEVEL_FROM_BADGES - 1, ELEKID
+	wildmon LEVEL_FROM_BADGES - 1, MEOWTH, GALARIAN_FORM
 	end_grass_wildmons
 
 	def_grass_wildmons RUGGED_ROAD_SOUTH

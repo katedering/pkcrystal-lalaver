@@ -388,6 +388,18 @@ PlayersHouse2FCuteGirlScript:
 	end
 
 .ContinueCuteGirl:
+	giveitem HP_UP, 99
+	giveitem PROTEIN, 99
+	giveitem IRON, 99
+	giveitem CARBOS, 99
+	giveitem CALCIUM, 99
+	giveitem ZINC, 99
+	giveitem MULCH, 99
+	giveitem SWEET_HONEY, 99
+	giveitem SILVER_LEAF, 99
+	giveitem GOLD_LEAF, 99
+	giveitem MINT_LEAF, 99
+	giveitem BOTTLE_CAP, 99
 	writetext .CuteGirlBattleText
 	yesorno
 	iffalse_jumpopenedtext .DontNeedItText
@@ -415,8 +427,8 @@ PlayersHouse2FCuteGirlScript:
 .NeedToGetYourStarterText
 	text "I'm sorry, but"
 	line "you really need"
-	cont "to go downstairs"
-	cont "first!"
+	cont "to go see the"
+	cont "Professor first!"
 	done
 
 .CuteGirlBattleText
@@ -430,6 +442,11 @@ PlayersHouse2FCuteGirlScript:
 	text "Wow! You must be"
 	line "really sure of"
 	cont "yourself!"
+	
+	para "Hey, check your"
+	line "bag. I gave you"
+	cont "some free goodies"
+	cont "just because!"
 	done
 	
 .AcceptedText
@@ -440,6 +457,11 @@ PlayersHouse2FCuteGirlScript:
 .BeatenCuteGirlText
 	text "You won!"
 	line "Congratulations!"
+	
+	para "Also, check your"
+	line "bag. I gave you"
+	cont "some free goodies"
+	cont "just because!"
 	done
 
 .HowDidYouLoseText

@@ -53,6 +53,7 @@ VioletGymFalknerScript:
 	startbattle
 	reloadmapafterbattle
 	setevent EVENT_BEAT_FALKNER
+	clearevent EVENT_VIOLET_OUTSKIRTS_BLOCKED
 	opentext
 	writetext ReceivedZephyrBadgeText
 	playsound SFX_GET_BADGE

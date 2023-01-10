@@ -116,5 +116,6 @@ FinalText_SinglePhrases:
 	dw TripFinalPkmnText
 	dw FedmaeFinalPkmnText
 	dw CuteFinalPkmnText
+	dw RocketFinalPkmnText
 	; all trainers between LEAF and PROF_OAK are omitted
 	assert_table_length NUM_TRAINER_CLASSES - (PROF_OAK - LEAF - 1)

@@ -519,9 +519,15 @@ PoisonpowderDescription:
 	done
 
 WillOWispDescription:
-	text "A move that may"
-	next "burn the foe."
+if DEF(FAITHFUL)
+	text "A move that will"
+	next "cause a burn."
 	done
+else
+	text "A move that burns"
+	next "with dark flame."
+	done
+endc
 
 StunSporeDescription:
 ThunderWaveDescription:
