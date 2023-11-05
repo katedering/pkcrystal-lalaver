@@ -52,7 +52,9 @@ Route32_MapScriptHeader:
 	itemball_event  6, 32, REPEL, 1, EVENT_ROUTE_32_REPEL
 	cuttree_event 10, 19, EVENT_ROUTE_32_CUT_TREE
 	cuttree_event -1, 29, EVENT_MAGNET_TUNNEL_EAST_CUT_TREE
-	cuttree_event 23, 32, EVENT_CHERRYGROVE_BAY_CUT_TREE
+	cuttree_event 19, 32, EVENT_CHERRYGROVE_BAY_CUT_TREE
+	object_event  9, 44, SPRITE_FISHER, SPRITEMOVEDATA_STANDING_UP, 0, 0, -1, -1, 0, OBJECTTYPE_SCRIPT, 0, Route32QwilfishSalesmanScript, -1
+
 
 	object_const_def
 	const ROUTE32_COOLTRAINER_M
@@ -1006,4 +1008,69 @@ Route32AdvancedTips2Text:
 	para "them money based"
 	line "on how many badges"
 	cont "you own!"
+	done
+
+Route32QwilfishSalesmanScript:
+	faceplayer
+	checkevent EVENT_BOUGHT_HISUIAN_QWILFISH
+	iftrue_jumptext .NoRefundsText
+	opentext
+	writetext .HeyKidWantToBuyThisMonText
+	special PlaceMoneyTopRight
+	yesorno
+	iffalse_jumpopenedtext .MaybeLaterText
+	checkmoney $0, 5000
+	ifequalfwd $2, .NotEnoughCash
+	readvar VAR_PARTYCOUNT
+	ifequalfwd PARTY_LENGTH, .NoRoom
+	givepoke QWILFISH, HISUIAN_FORM, 5, SITRUS_BERRY, DIVE_BALL
+	setevent EVENT_BOUGHT_HISUIAN_QWILFISH
+	waitsfx
+	playsound SFX_TRANSACTION
+	takemoney $0, 5000
+	special PlaceMoneyTopRight
+	jumpthisopenedtext
+
+	text "It's all yours"
+	line "now. No refunds."
+	done
+
+.NotEnoughCash
+	jumpthisopenedtext
+	
+	text "You don't have"
+	line "enough cash, kid."
+	done
+
+
+.NoRoom
+	jumpthisopenedtext
+	
+	text "Make room in your"
+	line "party for this,"
+	cont "then come back."
+	done
+
+.NoRefundsText
+	text "I don't give out"
+	line "refunds. It's"
+	cont "your problem now."
+	done
+
+.HeyKidWantToBuyThisMonText
+	text "Hey, you. I just"
+	line "caught this weird"
+	cont "Qwilfish. It looks"
+	cont "different than any"
+	cont "other one I've"
+	cont "ever seen."
+	
+	para "You want it? I can"
+	line "sell it to you for"
+	cont "¥5000, right now."
+	done
+
+.MaybeLaterText
+	text "I won't hang onto"
+	line "it forever, now."
 	done

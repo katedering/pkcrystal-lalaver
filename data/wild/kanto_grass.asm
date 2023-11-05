@@ -540,7 +540,7 @@
 	wildmon 51, GRANBULL
 	wildmon 54, VULPIX
 	wildmon 54, JIGGLYPUFF
-	wildmon 52, PORYGON
+	wildmon 50, PORYGON
 	wildmon 51, WIGGLYTUFF
 	; day
 	wildmon 49, RATICATE
@@ -548,7 +548,7 @@
 	wildmon 51, GRANBULL
 	wildmon 54, VULPIX
 	wildmon 54, JIGGLYPUFF
-	wildmon 52, PORYGON
+	wildmon 50, PORYGON
 	wildmon 51, WIGGLYTUFF
 	; nite
 	wildmon 49, PERSIAN
@@ -556,7 +556,7 @@
 	wildmon 51, HOUNDOUR
 	wildmon 54, VULPIX
 	wildmon 54, JIGGLYPUFF
-	wildmon 52, PORYGON
+	wildmon 50, PORYGON
 	wildmon 51, WIGGLYTUFF
 	end_grass_wildmons
 
@@ -643,6 +643,7 @@
 	wildmon 50, JOLTEON
 	wildmon 52, ELECTABUZZ
 	end_grass_wildmons
+
 
 	def_grass_wildmons ROUTE_11
 	db 10 percent, 10 percent, 10 percent ; encounter rates: morn/day/nite
@@ -1114,7 +1115,7 @@
 	wildmon 37, NOCTOWL
 	wildmon 37, RATICATE
 	wildmon 40, NOCTOWL
-	wildmon 38, QUAGSIRE
+	wildmon 38, RATICATE
 	wildmon 38, QUAGSIRE
 	wildmon 39, RATICATE, ALOLAN_FORM
 	wildmon 39, QUAGSIRE
@@ -1546,26 +1547,26 @@
 	wildmon 55, PARAS
 	wildmon 57, NIDORINA
 	wildmon 57, NIDORINO
-	wildmon 59, TAUROS
+	wildmon 59, TAUROS, PALDEAN_FORM
 	wildmon 60, NIDOKING
 	wildmon 60, NIDOQUEEN
-	wildmon 50, TAUROS, TAUROS_PALDEAN_FIRE_FORM
+	wildmon 50, PARASECT
 	; day
 	wildmon 55, PARAS
 	wildmon 57, NIDORINA
 	wildmon 57, NIDORINO
-	wildmon 59, TAUROS
+	wildmon 59, TAUROS, PALDEAN_FORM
 	wildmon 60, NIDOKING
 	wildmon 60, NIDOQUEEN
-	wildmon 50, TAUROS, PALDEAN_FORM
+	wildmon 50, PARASECT
 	; nite
 	wildmon 55, PARAS
 	wildmon 57, NIDORINA
 	wildmon 57, NIDORINO
-	wildmon 59, PARASECT
+	wildmon 59, TAUROS, PALDEAN_FORM
 	wildmon 60, NIDOKING
 	wildmon 60, NIDOQUEEN
-	wildmon 50, TAUROS, TAUROS_PALDEAN_WATER_FORM
+	wildmon 50, PARASECT
 	end_grass_wildmons
 
 	def_grass_wildmons SAFARI_ZONE_NORTH
@@ -1574,25 +1575,25 @@
 	wildmon 55, VENONAT
 	wildmon 58, VENOMOTH
 	wildmon 56, RHYHORN
+	wildmon 59, TAUROS, TAUROS_PALDEAN_FIRE_FORM
 	wildmon 59, PINSIR
-	wildmon 59, RHYDON
-	wildmon 60, KANGASKHAN
+	wildmon 60, RHYDON
 	wildmon 60, CHANSEY
 	; day
 	wildmon 55, VENONAT
 	wildmon 58, VENOMOTH
 	wildmon 56, RHYHORN
+	wildmon 59, TAUROS, TAUROS_PALDEAN_FIRE_FORM
 	wildmon 59, PINSIR
-	wildmon 59, RHYDON
-	wildmon 60, KANGASKHAN
+	wildmon 60, RHYDON
 	wildmon 60, CHANSEY
 	; nite
 	wildmon 55, VENONAT
 	wildmon 58, VENOMOTH
 	wildmon 56, RHYHORN
+	wildmon 59, TAUROS, TAUROS_PALDEAN_FIRE_FORM
 	wildmon 59, PINSIR
-	wildmon 59, RHYDON
-	wildmon 60, KANGASKHAN
+	wildmon 60, RHYDON
 	wildmon 60, KANGASKHAN
 	end_grass_wildmons
 
@@ -1600,26 +1601,26 @@
 	db 10 percent, 10 percent, 10 percent ; encounter rates: morn/day/nite
 	; morn
 	wildmon 55, VENONAT
-	wildmon 58, VENOMOTH
-	wildmon 56, DODRIO
-	wildmon 59, NIDORINA
-	wildmon 59, NIDORINO
+	wildmon 58, NIDORINA
+	wildmon 58, NIDORINO
+	wildmon 59, TAUROS, TAUROS_PALDEAN_WATER_FORM
+	wildmon 59, VENOMOTH
 	wildmon 60, KANGASKHAN
 	wildmon 60, MAROWAK
 	; day
 	wildmon 55, VENONAT
-	wildmon 58, VENOMOTH
-	wildmon 56, DODRIO
-	wildmon 59, NIDORINA
-	wildmon 59, NIDORINO
+	wildmon 58, NIDORINA
+	wildmon 58, NIDORINO
+	wildmon 59, TAUROS, TAUROS_PALDEAN_WATER_FORM
+	wildmon 59, VENOMOTH
 	wildmon 60, KANGASKHAN
 	wildmon 60, MAROWAK
 	; nite
 	wildmon 55, VENONAT
-	wildmon 58, VENOMOTH
-	wildmon 56, DODRIO
-	wildmon 59, NIDORINO
-	wildmon 59, NIDORINA
+	wildmon 58, NIDORINO
+	wildmon 58, NIDORINA
+	wildmon 59, TAUROS, TAUROS_PALDEAN_WATER_FORM
+	wildmon 59, VENOMOTH
 	wildmon 60, KANGASKHAN
 	wildmon 60, MAROWAK
 	end_grass_wildmons

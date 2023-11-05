@@ -34,6 +34,7 @@ BossTrainers:
 	db ASH
 	db TRIP
 	db FEDMAE
+	db ROCKET
 JohtoGymLeaders:
 	db FALKNER
 	db WHITNEY

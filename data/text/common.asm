@@ -1308,7 +1308,7 @@ _NPCTradeAfterText1::
 	text_ram wStringBuffer2
 	text " doing?"
 	done
-	
+
 SECTION "_NPCTradeIntroText2", ROMX
 _NPCTradeIntroText2::
 	text "Hi, I'm looking"
@@ -4253,8 +4253,11 @@ SECTION "_ItemHappinessRoseButStatFellText", ROMX
 _ItemHappinessRoseButStatFellText::
 	text_ram wStringBuffer1
 	text " became"
-	line "friendly. Base"
-	cont ""
+	line "more friendly."
+	para ""
+	text_ram wStringBuffer1
+	text "'s base"
+	line ""
 	text_ram wStringBuffer2
 	text " fell!"
 	prompt
@@ -4550,6 +4553,20 @@ WonderTradePromptText::
 	line "you want to trade?"
 	prompt
 
+SECTION "WonderTradeCantTradeSpikyEaredPichuText", ROMX
+WonderTradeCantTradeSpikyEaredPichuText::
+    text "This Pichu appears"
+    line "to have traveled"
+    cont "through time."
+
+    para "It would be risky"
+    line "to transfer it,"
+
+    para "so it's best for"
+    line "Pichu to stay"
+    cont "where it is."
+    prompt
+
 ;SECTION "WonderTradeCantTradeEggText", ROMX
 ;WonderTradeCantTradeEggText::
 ;	text "Sorry. We can't"
@@ -4656,4 +4673,3 @@ CantChangeTradedMonBallTextData::
 	line "the Ball a traded"
 	cont "#mon is in."
 	prompt
-

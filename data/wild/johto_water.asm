@@ -128,8 +128,8 @@
 
 	def_water_wildmons DRAGONS_DEN_B1F
 	db 4 percent ; encounter rate
-	wildmon 25, MAGIKARP
-	wildmon 30, MAGIKARP
+	wildmon 45, MAGIKARP
+	wildmon 50, MAGIKARP
 	wildmon 20, DRATINI
 	end_water_wildmons
 
@@ -184,7 +184,7 @@
 
 	def_water_wildmons ROUTE_41
 	db 3 percent ; encounter rate
-	wildmon 20, MANTYKE
+	wildmon 15, MANTYKE
 	wildmon 20, MANTINE
 	wildmon 20, REMORAID
 	end_water_wildmons
@@ -296,9 +296,9 @@
 
 	def_water_wildmons BLACKTHORN_CITY
 	db 4 percent ; encounter rate
-	wildmon 35, MAGIKARP
-	wildmon 40, MAGIKARP
 	wildmon 45, MAGIKARP
+	wildmon 50, MAGIKARP
+	wildmon 55, MAGIKARP
 	end_water_wildmons
 
 	def_water_wildmons SILVER_CAVE_OUTSIDE
@@ -382,7 +382,7 @@
 	db 6 percent ; encounter rate
 	wildmon LEVEL_FROM_BADGES - 5, WOOPER
 	wildmon LEVEL_FROM_BADGES + 0, QUAGSIRE
-	wildmon LEVEL_FROM_BADGES + 1, WOOPER, PALDEAN_FORM
+	wildmon LEVEL_FROM_BADGES + 5, QUAGSIRE
 	end_water_wildmons
 
 	def_water_wildmons MAGNET_TUNNEL_INSIDE

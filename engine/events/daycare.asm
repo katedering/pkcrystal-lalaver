@@ -488,7 +488,7 @@ DayCare_GiveEgg:
 	; Recalculates stats and sets other partymon stuff.
 	farcall SetTempPartyMonData
 	farcall AddTempMonToParty
-	ld a, 0
+	ld a, 0 ; no-optimize a = 0
 	jr nc, .done
 	farcall NewStorageBoxPointer
 	jr c, .PartyAndBoxFull
@@ -688,22 +688,20 @@ DayCare_GenerateEgg:
 	jr nz, .first_dittocheck_done
 	ld a, [wBreedMon1Species]
 	cp DITTO
-	ld a, 1
+	ld a, TRUE
 	jr z, .LoadWhichBreedmonIsTheMother
 .first_dittocheck_done
 	ld a, [wBreedMon2Form]
 	and EXTSPECIES_MASK
 	jr nz, .second_dittocheck_done
 	ld a, [wBreedMon2Species]
-	cp DITTO
-	ld a, 0
+	sub DITTO
 	jr z, .LoadWhichBreedmonIsTheMother
 .second_dittocheck_done
 	farcall GetGender
-	ld a, 0
+	ld a, FALSE
 	jr z, .LoadWhichBreedmonIsTheMother
-	inc a
-
+	inc a ; TRUE
 .LoadWhichBreedmonIsTheMother:
 	; load wCurForm for base data check later
 	ld [wBreedMotherOrNonDitto], a
@@ -752,12 +750,17 @@ DayCare_GenerateEgg:
 	ld [wTempMonSpecies], a
 	ld c, a
 
-	; Form inheritance: from the mother or non-Ditto. If both
-	; parents share species, pick at random.
+	; Form inheritance: from the mother or non-Ditto.
+	; Should only happen if stored pre-evo form is NO_FORM.
+	; If both parents share species, pick at random.
 	; Must assign [wCurForm] before GetBaseData.
 	ld hl, wBreedMon1Form
 	call .inherit_mother_unless_samespecies ; this should preserve c!
 	ld a, [wCurForm]
+	ld b, a
+	and FORM_MASK
+	jr nz, .form_ok
+	ld a, b
 	and EXTSPECIES_MASK ; get extspecies of child
 	ld b, a
 	ld a, [hl]
@@ -869,13 +872,19 @@ DayCare_GenerateEgg:
 	; hold it)
 	ld b, 3
 	ld a, [wBreedMon1Item]
+	cp ABILITYPATCH
+	jr z, .parent1_abilitypatch
 	cp ABILITY_CAP
 	jr nz, .no_parent1_abilitycap
+.parent1_abilitypatch
 	dec b
 .no_parent1_abilitycap
 	ld a, [wBreedMon2Item]
+	cp ABILITYPATCH
+	jr z, .parent2_abilitypatch
 	cp ABILITY_CAP
 	jr nz, .no_parent2_abilitycap
+.parent2_abilitypatch
 	dec b
 .no_parent2_abilitycap
 	ld a, b
@@ -1066,6 +1075,14 @@ DayCare_GenerateEgg:
 	ld a, [wBreedMon1Species]
 	ld b, a
 	ld a, [wBreedMon2Species]
+	cp b
+	ld a, [wBreedMotherOrNonDitto]
+	jr nz, .use_mother
+	ld a, [wBreedMon1ExtSpecies]
+	and EXTSPECIES_MASK
+	ld b, a
+	ld a, [wBreedMon2ExtSpecies]
+	and EXTSPECIES_MASK
 	cp b
 	ld a, [wBreedMotherOrNonDitto]
 	jr nz, .use_mother

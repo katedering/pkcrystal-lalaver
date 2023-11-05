@@ -1131,6 +1131,8 @@ DEF CRYS EQU __trainer_class__
 	trainerclass FEDMAE
 	
 	trainerclass CUTE
+	
+	trainerclass ROCKET
 
 DEF NUM_TRAINER_CLASSES EQU __trainer_class__ - 1
 

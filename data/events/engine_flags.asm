@@ -150,7 +150,7 @@ EngineFlags:
 	engine_flag wDailyFlags4, DAILYFLAGS4_CHANGED_TRENDY_PHRASE_F
 	engine_flag wDailyFlags4, DAILYFLAGS4_ALL_HIDDEN_GROTTOES_F
 	engine_flag wDailyFlags4, 6 ; unused
-	engine_flag wDailyFlags4, 7 ; reset elite faux upon loading map
+	engine_flag wDailyFlags4, 7 ; unused
 
 	engine_flag wWeeklyFlags, WEEKLYFLAGS_MT_MOON_SQUARE_CLEFAIRY_F
 	engine_flag wWeeklyFlags, WEEKLYFLAGS_UNION_CAVE_LAPRAS_F

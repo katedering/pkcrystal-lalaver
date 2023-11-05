@@ -1082,6 +1082,14 @@ MistText:
 	line "shrouded in mist!"
 	prompt
 
+ProtectedByItemText:
+	text "<TARGET> is"
+	line "protected by"
+	cont ""
+	text_ram wStringBuffer1
+	text "."
+	prompt
+
 ProtectedByMistText:
 	text "<TARGET> is"
 	line "protected by mist."
@@ -2117,5 +2125,11 @@ CuteFinalPkmnText:
 	
 	para "Are you enjoying"
 	line "the battle?"
+	prompt
+	
+RocketFinalPkmnText:
+	text "Nearly over now…"
+	line "You're pretty"
+	cont "good, trainer."
 	prompt
 

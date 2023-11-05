@@ -239,7 +239,7 @@ HandleWeather:
 	dec [hl]
 	jr nz, .ongoing
 
-	ld hl, .WeatherEndedMessages
+	ld hl, WeatherEndedMessages
 	ld a, [wBattleWeather]
 	dec a
 	add a
@@ -253,12 +253,6 @@ HandleWeather:
 	xor a
 	ld [wBattleWeather], a
 	ret
-
-.WeatherEndedMessages: ; these are all used with StdBattleTextbox
-	dw BattleText_TheRainStopped ; far-ok
-	dw BattleText_TheSunlightFaded ; far-ok
-	dw BattleText_TheSandstormSubsided ; far-ok
-	dw BattleText_TheHailStopped ; far-ok
 
 .ongoing
 	; the above needs actual [wBattleWeather] to be
@@ -322,9 +316,9 @@ HandleWeather:
 	xor a
 	ld [wNumHits], a
 	inc a
-	ld [wKickCounter], a
+	ld [wBattleAnimParam], a
 	ld [wAlreadySawWeather], a
-	farcall Call_PlayBattleAnim
+	farcall PlayBattleAnimDE
 .saw_sandstorm
 
 	ld hl, SandstormHitsText
@@ -361,15 +355,22 @@ endc
 	xor a
 	ld [wNumHits], a
 	inc a
-	ld [wKickCounter], a
+	ld [wBattleAnimParam], a
 	ld [wAlreadySawWeather], a
-	farcall Call_PlayBattleAnim
+	farcall PlayBattleAnimDE
 .saw_hail
 
 	ld hl, HailHitsText
 	call StdBattleTextbox
 	call GetSixteenthMaxHP
 	predef_jump SubtractHPFromUser
+
+WeatherEndedMessages:
+	farbank BattleText
+	fardw BattleText_TheRainStopped
+	fardw BattleText_TheSunlightFaded
+	fardw BattleText_TheSandstormSubsided
+	fardw BattleText_TheHailStopped
 
 HandleFutureSight:
 	call SetFastestTurn
@@ -489,7 +490,7 @@ HandleLeechSeed:
 	call GetBattleVar
 	and 1 << SUBSTATUS_FLYING | 1 << SUBSTATUS_UNDERGROUND
 	jr nz, .no_anim
-	farcall Call_PlayBattleAnim_OnlyIfVisible
+	farcall PlayBattleAnimDE_OnlyIfVisible
 .no_anim
 	call SwitchTurn
 
@@ -533,6 +534,10 @@ HandlePoison:
 	call GetTrueUserAbility
 	cp POISON_HEAL
 	jr nz, DoPoisonBurnDamage
+
+	; Toxic counter should still increase.
+	call IncrementToxic
+
 	; check if we are at full HP
 	farcall CheckFullHP
 	ret z
@@ -570,17 +575,8 @@ DoPoisonBurnDamage:
 	; Burn and Toxic does (or starts at) 1/16 damage as of Gen VII
 	call nz, GetSixteenthMaxHP
 
-	ldh a, [hBattleTurn]
-	and a
-	ld hl, wPlayerToxicCount
-	jr z, .got_toxic_count
-	ld hl, wEnemyToxicCount
-.got_toxic_count
-	ld a, BATTLE_VARS_STATUS
-	call GetBattleVar
-	bit TOX, a
+	call IncrementToxic
 	jr z, .did_toxic
-	inc [hl]
 	ld a, [hl]
 	ld hl, 0
 .add
@@ -592,13 +588,32 @@ DoPoisonBurnDamage:
 .did_toxic
 	predef_jump SubtractHPFromUser
 
+IncrementToxic:
+; Returns nz if we are badly poisoned, and sets hl to the current toxic counter.
+	ldh a, [hBattleTurn]
+	and a
+	ld hl, wPlayerToxicCount
+	jr z, .got_toxic_count
+	ld hl, wEnemyToxicCount
+.got_toxic_count
+	ld a, BATTLE_VARS_STATUS
+	call GetBattleVar
+	bit TOX, a
+	ret z
+	inc [hl]
+	ret nz
+
+	; avoid overflow
+	dec [hl]
+	ret
+
 DoPoisonBurnDamageAnim:
 	push de
 	call StdBattleTextbox
 	pop de
 	xor a
 	ld [wNumHits], a
-	farcall Call_PlayBattleAnim_OnlyIfVisible
+	farcall PlayBattleAnimDE_OnlyIfVisible
 	jmp GetEighthMaxHP
 
 HandleCurse:
@@ -616,7 +631,7 @@ HandleCurse:
 	xor a
 	ld [wNumHits], a
 	ld de, ANIM_UNDER_CURSE
-	farcall Call_PlayBattleAnim_OnlyIfVisible
+	farcall PlayBattleAnimDE_OnlyIfVisible
 	call GetQuarterMaxHP
 	predef SubtractHPFromUser
 	ld hl, HurtByCurseText
@@ -938,6 +953,7 @@ HandleHealingItems:
 	farcall HandleHPHealingItem
 	farcall UseHeldStatusHealingItem
 	farcall HandleStatBoostBerry
+	farcall CheckMirrorHerb ; for stat boost berry
 	farjp UseConfusionHealingItem
 
 HandleStatusOrbs:

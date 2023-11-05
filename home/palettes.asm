@@ -109,7 +109,7 @@ DmgToCgbObjPals::
 	ldh a, [rSVBK]
 	push af
 
-	ld a, 5
+	ld a, BANK(wOBPals1)
 	ldh [rSVBK], a
 
 ; copy & reorder obj pal buffer
@@ -198,17 +198,15 @@ CopyPals::
 	ld l, a
 	ld h, 0
 	add hl, de
-	ld e, [hl]
-	inc hl
+	ld a, [hli]
 	ld d, [hl]
 
 ; dest
 	pop hl
 ; write color
-	ld [hl], e
-	inc hl
-	ld [hl], d
-	inc hl
+	ld [hli], a
+	ld a, d
+	ld [hli], a
 ; next pal color
 	srl b
 	srl b
@@ -251,6 +249,21 @@ Special_ReloadSpritesNoPalettes::
 	ld a, BANK(wBGPals2)
 	ldh [rSVBK], a
 	ld hl, wBGPals2
+	ld bc, 8 palettes
+	xor a
+	rst ByteFill
+	pop af
+	ldh [rSVBK], a
+	ld a, 1
+	ldh [hCGBPalUpdate], a
+	jmp DelayFrame
+
+SetBlackObjectPals::
+	ldh a, [rSVBK]
+	push af
+	ld a, BANK(wOBPals2)
+	ldh [rSVBK], a
+	ld hl, wOBPals2
 	ld bc, 8 palettes
 	xor a
 	rst ByteFill

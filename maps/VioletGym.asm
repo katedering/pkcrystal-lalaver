@@ -33,11 +33,9 @@ VioletGymFalknerAwayScript:
 	applyonemovement VIOLETGYM_GYM_GUY2, step_down
 	showtext VioletGymGuyFalknerAwayText
 	turnobject PLAYER, DOWN
-	pause 10
-	special FadeOutPalettes
-	playsound SFX_ENTER_DOOR
-	waitsfx
-	warp VIOLET_CITY, 18, 22
+	warpcheck
+	warpsound
+	newloadmap MAPSETUP_DOOR
 	end
 
 VioletGymFalknerScript:
@@ -53,6 +51,7 @@ VioletGymFalknerScript:
 	startbattle
 	reloadmapafterbattle
 	setevent EVENT_BEAT_FALKNER
+	clearevent EVENT_VIOLET_OUTSKIRTS_BLOCKED
 	opentext
 	writetext ReceivedZephyrBadgeText
 	playsound SFX_GET_BADGE
