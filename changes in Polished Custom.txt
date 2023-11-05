@@ -72,12 +72,7 @@ Custom Change Log for Polished Crystal
 ===OTHER===
 === Added Omanyte / Kabuto (1%!) to Rock Smash rocks (good luck!)
 > Added G-Birds to Celadon coin shop 9999ea
-> Buffed some moves and Meganium
-=== Meganium now has 113 Sp.Atk and 535 BST
-=== It also can now learn Dragon Pulse because why not.
-=== Buffed accuracy of Rock Throw, Rock Slide, Hyper Fang, Super Fang, Sacred Fire, and Play Rough to 100%
-=== Buffed status chance of the elemental punches to 15%, Flamethrower/Thunderbolt/Ice Beam to 20%, and Fire Blast/Thunder/Blizzard to 30%
-=== Buffed Hypnosis to 80% accuracy!
+> Buffed Meganium
 > Added parties to all the TODO Bulbasaur trainers on Shamouti Island, etc.
 > Added new events after some Gym Battles (free Pokemon, yay!)
 > Added new re-battleable Rocket trainer so you can always have that awesome battle music.
