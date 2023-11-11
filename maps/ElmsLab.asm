@@ -1436,6 +1436,18 @@ ElmGiveTicketText2:
 	para "A champ like you"
 	line "should do well"
 	cont "competing there!"
+	
+	para "And before I"
+	line "forget, there"
+	cont "also seem to be"
+	cont "sightings of new"
+	
+    para "and extremely rare"
+	line "#mon in Johto."
+	
+	para "Perhaps you can"
+	line "find and catch"
+	cont "them, <PLAYER>."
 	done
 
 LyraAnnouncesGymChallengeText:

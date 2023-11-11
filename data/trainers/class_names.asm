@@ -160,4 +160,5 @@ TrainerClassNames::
 	li "Archmage"         ; FEDMAE
 	li "Debug"            ; CUTE
 	li "Ex-Rocket"        ; ROCKET
+	li "Shrine"           ; UNKNOWN
 	assert_list_length NUM_TRAINER_CLASSES + 1

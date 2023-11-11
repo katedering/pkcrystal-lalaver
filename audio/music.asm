@@ -568,8 +568,14 @@ INCLUDE "audio/music/undertale/megalovania.asm"
 SECTION "Song - rby/titlescreen", ROMX
 INCLUDE "audio/music/rby/titlescreen.asm"
 
+SECTION "Song - rby/wildbattle", ROMX
+INCLUDE "audio/music/rby/wildbattle.asm"
+
 SECTION "Song - rby/trainerbattle", ROMX
 INCLUDE "audio/music/rby/trainerbattle.asm"
 
 SECTION "Song - rby/gymleaderbattle", ROMX
 INCLUDE "audio/music/rby/gymleaderbattle.asm"
+
+SECTION "Song - rby/finalbattle", ROMX
+INCLUDE "audio/music/rby/finalbattle.asm"

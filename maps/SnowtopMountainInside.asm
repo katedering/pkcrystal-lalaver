@@ -18,8 +18,8 @@ SnowtopMountainInside_MapScriptHeader:
 	def_object_events
 	object_event 28, 14, SPRITE_KIMONO_GIRL, SPRITEMOVEDATA_SPINRANDOM_FAST, 0, 0, -1, -1, PAL_NPC_BLUE, OBJECTTYPE_SCRIPT, 0, KimonoGirlAmiScript, -1
 	object_event  5, 20, SPRITE_SKIER, SPRITEMOVEDATA_STANDING_DOWN, 0, 0, -1, -1, 0, OBJECTTYPE_SCRIPT, 0, SnowtopMountainInsideSkierScript, -1
-	itemball_event  8,  8, ETHER, 1, EVENT_SNOWTOP_MOUNTAIN_INSIDE_ETHER
-	itemball_event 16,  9, HEAVY_BOOTS, 1, EVENT_SNOWTOP_MOUNTAIN_INSIDE_HEAVY_BOOTS
+	itemball_event 13, 26, ETHER, 1, EVENT_SNOWTOP_MOUNTAIN_INSIDE_ETHER
+	itemball_event 6,   6, HEAVY_BOOTS, 1, EVENT_SNOWTOP_MOUNTAIN_INSIDE_HEAVY_BOOTS
 	itemball_event 31, 17, COVERT_CLOAK, 1, EVENT_SNOWTOP_MOUNTAIN_INSIDE_COVERT_CLOAK
 
 	object_const_def
@@ -197,3 +197,5 @@ Text_SnowtopMountainInsideTutorTaught:
 	line "#mon knows"
 	cont "Icy Wind!"
 	done
+
+

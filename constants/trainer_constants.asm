@@ -1133,6 +1133,8 @@ DEF CRYS EQU __trainer_class__
 	trainerclass CUTE
 	
 	trainerclass ROCKET
+	
+	trainerclass UNKNOWN
 
 DEF NUM_TRAINER_CLASSES EQU __trainer_class__ - 1
 

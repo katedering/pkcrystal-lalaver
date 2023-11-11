@@ -7,6 +7,7 @@ MurkySwamp_MapScriptHeader:
 	warp_event  7, 35, STORMY_BEACH, 1
 	warp_event  8, 35, STORMY_BEACH, 2
 	warp_event 36,  5, UNION_CAVE_B1F_SOUTH, 3
+	warp_event 42,  9, CRUEL_CHAMBER, 1
 
 	def_coord_events
 
@@ -29,6 +30,8 @@ MurkySwamp_MapScriptHeader:
 	itemball_event 14, 34, MULCH, 1, EVENT_MURKY_SWAMP_MULCH
 	cuttree_event  2, 14, EVENT_MURKY_SWAMP_CUT_TREE_1
 	cuttree_event  6, 19, EVENT_MURKY_SWAMP_CUT_TREE_2
+	object_event 42, 10, SPRITE_N64, SPRITEMOVEDATA_STANDING_LEFT, 0, 0, -1, -1, PAL_NPC_COPY_BG_GRAY, OBJECTTYPE_COMMAND, jumptext, CruelChamberSealstoneText, EVENT_BEAT_ELITE_FOUR
+		
 
 	object_const_def
 	const MURKYSWAMP_CHERYL
@@ -259,4 +262,13 @@ MurkySwampPokemaniacText:
 
 	para "worth exploring"
 	line "anyway!"
+	done
+
+CruelChamberSealstoneText:
+	text "This stone seems"
+	line "rather odd."
+	
+	para "Perhaps something"
+	line "will happen with"
+	cont "it, eventually?"
 	done

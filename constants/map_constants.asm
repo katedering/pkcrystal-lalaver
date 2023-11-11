@@ -122,7 +122,7 @@ ENDM
 	map_const SILVER_CAVE_ROOM_3,                         10, 17 ; 66
 	map_const SILVER_CAVE_ITEM_ROOMS,                     20, 18 ; 67
 	map_const DARK_CAVE_VIOLET_ENTRANCE,                  20, 18 ; 68
-	map_const DARK_CAVE_BLACKTHORN_ENTRANCE,              15, 15 ; 69
+	map_const DARK_CAVE_BLACKTHORN_ENTRANCE,              15, 20 ; 69
 	map_const DRAGONS_DEN_1F,                             20, 45 ; 70
 	map_const DRAGONS_DEN_B1F,                            20, 18 ; 71
 	map_const DRAGON_SHRINE,                               5,  5 ; 72
@@ -703,5 +703,10 @@ ENDM
 	newgroup                                                     ; 37
 	map_const ECRUTEAK_SHRINE_OUTSIDE,                     8, 11 ;  1
 	map_const ECRUTEAK_SHRINE_INSIDE,                      6,  6 ;  2
+	
+	newgroup													 ; 38
+	map_const CRUEL_CHAMBER,                               7,  6 ;  1
+	map_const STRONG_CHAMBER,                              7,  6 ;  2
+	map_const WICKED_CHAMBER,                              7,  6 ;  3
 
-DEF NUM_MAP_GROUPS EQU const_value ; 37
+DEF NUM_MAP_GROUPS EQU const_value ; 38

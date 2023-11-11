@@ -162,4 +162,5 @@ TrainerGroups:
 	dba FedmaeGroup
 	dba CuteGroup
 	dba RocketGroup
+	dba UnknownGroup
 	assert_table_length NUM_TRAINER_CLASSES

@@ -2133,3 +2133,8 @@ RocketFinalPkmnText:
 	cont "good, trainer."
 	prompt
 
+UnknownFinalPkmnText:
+	text "Now, witness the"
+	line "power of an"
+	cont "ancient #mon!"
+	prompt

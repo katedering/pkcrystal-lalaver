@@ -195,6 +195,8 @@ Music:
 	dba Music_PaletteBattlePrism
 	dba Music_Megalovania
 	dba Music_RBYTitleScreen
+	dba Music_RBYWildBattle
 	dba Music_RBYTrainerBattle
 	dba Music_RBYGymLeaderBattle
+	dba Music_RBYFinalBattle
 	assert_table_length NUM_MUSIC_SONGS

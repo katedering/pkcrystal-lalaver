@@ -160,6 +160,7 @@ TrainerPicPointers::
 	dba FedmaePic
 	dba CutePic
 	dba RocketPic
+	dba UnknownPic
 	assert_table_length NUM_TRAINER_CLASSES
 	dba OmastarFossilPic
 	dba KabutopsFossilPic

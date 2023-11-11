@@ -11,6 +11,9 @@ MagnetTunnelInside_MapScriptHeader:
 	warp_event 27, 31, MAGNET_TUNNEL_INSIDE, 3
 	warp_event 34,  5, MAGNET_TUNNEL_INSIDE, 6
 	warp_event 34, 33, MAGNET_TUNNEL_INSIDE, 5
+	warp_event  3,  3, MAGNET_TUNNEL_INSIDE, 8
+	warp_event  7, 31, MAGNET_TUNNEL_INSIDE, 7
+	warp_event 13, 31, STRONG_CHAMBER, 1
 
 	def_coord_events
 
@@ -37,7 +40,8 @@ MagnetTunnelInside_MapScriptHeader:
 	object_event 31, 12, SPRITE_ENGINEER, SPRITEMOVEDATA_STANDING_RIGHT, 0, 0, -1, -1, 0, OBJECTTYPE_GENERICTRAINER, 4, GenericTrainerEngineerGustav, -1
 	object_event 24, 23, SPRITE_ENGINEER, SPRITEMOVEDATA_STANDING_UP, 0, 0, -1, -1, 0, OBJECTTYPE_GENERICTRAINER, 3, GenericTrainerEngineerNicolas, -1
 	tmhmball_event 19, 21, TM_GYRO_BALL, EVENT_MAGNET_TUNNEL_TM_GYRO_BALL
-
+	object_event 10, 32, SPRITE_N64, SPRITEMOVEDATA_STANDING_LEFT, 0, 0, -1, -1, PAL_NPC_COPY_BG_GRAY, OBJECTTYPE_COMMAND, jumptext, StrongChamberSealstoneText, EVENT_BEAT_ELITE_FOUR
+	
 	object_const_def
 	const MAGNETTUNNELINSIDE_STONE_1
 	const MAGNETTUNNELINSIDE_STONE_2
@@ -456,4 +460,13 @@ GenericTrainerEngineerNicolas:
 
 .BeatenText:
 	text "Shutdown!"
+	done
+
+StrongChamberSealstoneText:
+	text "This stone seems"
+	line "rather odd."
+	
+	para "Perhaps something"
+	line "will happen with"
+	cont "it, eventually?"
 	done

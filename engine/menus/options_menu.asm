@@ -580,9 +580,9 @@ Options_Typeface:
 .Serif:
 	db "Serif  @"
 .Chicago:
-	db "Chicago@"
+	db "Scribe @"
 .MICR:
-	db "MICR   @"
+	db "Captain@"
 .Unown:
 	db "Unown  @"
 

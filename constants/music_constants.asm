@@ -195,8 +195,10 @@
 	const MUSIC_PALETTE_BATTLE_PRISM           ; bf ; unused
 	const MUSIC_UNDERTALE_MEGALOVANIA          ; c0 ; unused
 	const MUSIC_RBY_TITLESCREEN                ; c1 ; unused
-	const MUSIC_RBY_TRAINERBATTLE              ; c2 ; unused
-	const MUSIC_RBY_GYMLEADERBATTLE            ; c3 ; unused
+	const MUSIC_RBY_WILDBATTLE                 ; c2 ; unused
+	const MUSIC_RBY_TRAINERBATTLE              ; c3 ; unused
+	const MUSIC_RBY_GYMLEADERBATTLE            ; c4 ; unused
+	const MUSIC_RBY_FINALBATTLE                ; c5 ; unused
 DEF NUM_MUSIC_SONGS EQU const_value
 
 ; GetMapMusic picks music for these values (see data/maps/special_map_music.asm)

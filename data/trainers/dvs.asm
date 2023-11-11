@@ -162,4 +162,5 @@ TrainerClassDVsAndPersonality:
 	db 252, PERFECT_DVS,   MALE   ; fedmae
 	db   0, $11, $11, $11, FEMALE ; cute
 	db 252, PERFECT_DVS,   FEMALE ; ex-rocket
+	db 252, PERFECT_DVS,   MALE   ; unknown
 	assert_table_length NUM_TRAINER_CLASSES

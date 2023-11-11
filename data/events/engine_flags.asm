@@ -287,5 +287,8 @@ EngineFlags:
 	engine_flag wPlayerCaught2, PLAYER_CAUGHT_MEWTWO_F
 	engine_flag wPlayerCaught2, PLAYER_CAUGHT_CELEBI_F
 	engine_flag wPlayerCaught2, PLAYER_CAUGHT_SUDOWOODO_F
+	engine_flag wPlayerCaught2, PLAYER_CAUGHT_GARTICUNO_F
+	engine_flag wPlayerCaught2, PLAYER_CAUGHT_GZAPDOS_F
+	engine_flag wPlayerCaught2, PLAYER_CAUGHT_GMOLTRES_F
 
 	assert_table_length NUM_ENGINE_FLAGS

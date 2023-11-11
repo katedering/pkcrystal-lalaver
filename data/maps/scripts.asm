@@ -114,6 +114,9 @@ SECTION "Violet Scripts", ROMX
 INCLUDE "maps/VioletCity.asm"
 INCLUDE "maps/VioletMart.asm"
 INCLUDE "maps/VioletGym.asm"
+
+SECTION "Violet Scripts 2", ROMX
+
 INCLUDE "maps/VioletNicknameSpeechHouse.asm"
 INCLUDE "maps/VioletOnixTradeHouse.asm"
 INCLUDE "maps/EarlsPokemonAcademy.asm"
@@ -1076,3 +1079,9 @@ SECTION "Routes 48-49 Scripts", ROMX
 
 INCLUDE "maps/Route48.asm"
 INCLUDE "maps/Route49.asm"
+
+SECTION "Galarian Bird Chamber Scripts", ROMX
+
+INCLUDE "maps/CruelChamber.asm"
+INCLUDE "maps/StrongChamber.asm"
+INCLUDE "maps/WickedChamber.asm"

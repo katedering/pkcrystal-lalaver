@@ -1,5 +1,4 @@
-Custom Change Log for Polished Crystal
-
+Custom Change Log for Polished Custom
 > Halved price of Game Corner Coins.
 > Changed some text in Azalea Town mart (to reflect it now selling Apricorn Balls).
 > Changed Azalea Mart - now sells all Apricorn Balls for 300 Poké each.
@@ -71,12 +70,20 @@ Custom Change Log for Polished Crystal
 === Added H-Qwilfish to Vermilion Port
 ===OTHER===
 === Added Omanyte / Kabuto (1%!) to Rock Smash rocks (good luck!)
-> Added G-Birds to Celadon coin shop 9999ea
-> Buffed Meganium
+> Buffed some Pokemon
+=== Meganium now has 113 Sp.Atk and 535 BST because why not.
+=== It also can learn Dragon Pulse now.
+=== Typhlosion can now learn Ancientpower.
+=== Feraligatr can now learn Leech Life.
+=== Significantly buffed a certain legendary 'mon.
 > Added parties to all the TODO Bulbasaur trainers on Shamouti Island, etc.
 > Added new events after some Gym Battles (free Pokemon, yay!)
 > Added new re-battleable Rocket trainer so you can always have that awesome battle music.
 > Added the "Elite Faux" trainers outside of Indigo Plateau Gate.
 === Rematch them all daily!
 === Good luck.
+> Added a new events in Ecruteak Shrine that triggers after you clear the first 8 badges.
+=== Again, good luck.
+> Added Galarian Birds as legendary encounters that unlock after beating the elite four for the first time.
+=== Can you find all three?
 Bonus! Added a 'debug battle' at the start of the game - excellent for testing things, not so great for leveling up in endgame. (maybe not?)

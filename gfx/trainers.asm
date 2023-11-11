@@ -452,6 +452,7 @@ FedmaePic: INCBIN "gfx/trainers/fedmae.2bpp.lz"
 SECTION "BonusTrainerPics2", ROMX
 CutePic: INCBIN "gfx/trainers/cute.2bpp.lz"
 RocketPic: INCBIN "gfx/trainers/rocket.2bpp.lz"
+UnknownPic: INCBIN "gfx/trainers/unknown.2bpp.lz"
 
 SECTION "OmastarFossilPic", ROMX
 OmastarFossilPic: INCBIN "gfx/trainers/omastar_fossil.2bpp.lz"
