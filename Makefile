@@ -1,6 +1,6 @@
 NAME := polished_custom
 MODIFIERS :=
-VERSION := 9bit-9a16577
+VERSION := 9bit-81ab544
 
 ROM_NAME = $(NAME)$(MODIFIERS)-$(VERSION)
 EXTENSION := gbc
