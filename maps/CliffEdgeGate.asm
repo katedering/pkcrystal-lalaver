@@ -2,6 +2,7 @@ CliffEdgeGate_MapScriptHeader:
 	def_scene_scripts
 
 	def_callbacks
+	callback MAPCALLBACK_NEWMAP, RematchAvailable
 
 	def_warp_events
 	warp_event 17, 19, CIANWOOD_CITY, 8
@@ -21,9 +22,12 @@ CliffEdgeGate_MapScriptHeader:
 	object_const_def
 	const CLIFF_EDGE_GATE_ROCKET
 	
-.RematchAvailable:
+RematchAvailable:
+    checkflag ENGINE_DAILY_CLIFF_GATE_RESET
+	iftruefwd .NoRematch
 	clearevent EVENT_BEAT_ROCKET_IN_CLIFF_GATE
 	setflag ENGINE_DAILY_CLIFF_GATE_RESET
+.NoRematch
 	endcallback
 	
 	
@@ -167,8 +171,6 @@ CliffEdgeGateRocketScript:
 	end
 
 .BattleRocket:
-	faceplayer
-	opentext
 	checkevent EVENT_INITIAL_BATTLE_ROCKET
 	iftruefwd .RematchRocket
 	writetext .BattleRocketText

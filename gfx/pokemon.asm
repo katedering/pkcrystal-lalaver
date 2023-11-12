@@ -1058,12 +1058,12 @@ UnownQuestionBackpic:  INCBIN "gfx/pokemon/unown_question/back.2bpp.lz"
 SECTION "Pikachu Pics", ROMX
 PikachuPlainFrontpic: INCBIN "gfx/pokemon/pikachu_plain/front.animated.2bpp.lz"
 PikachuSurfFrontpic:  INCBIN "gfx/pokemon/pikachu_surf/front.animated.2bpp.lz"
-PikachuPikaFrontpic:  INCBIN "gfx/pokemon/pikachu_pika/front.animated.2bpp.lz"
 PikachuSparkFrontpic: INCBIN "gfx/pokemon/pikachu_spark/front.animated.2bpp.lz"
+PikachuPikaFrontpic:  INCBIN "gfx/pokemon/pikachu_pika/front.animated.2bpp.lz"
 PikachuPlainBackpic:
 PikachuSurfBackpic:
-PikachuPikaBackpic:
 PikachuSparkBackpic:  INCBIN "gfx/pokemon/pikachu_plain/back.2bpp.lz"
+PikachuPikaBackpic:   INCBIN "gfx/pokemon/pikachu_pika/back.2bpp.lz"
 
 SECTION "PikachuFly Pics", ROMX
 PikachuFlyFrontpic: INCBIN "gfx/pokemon/pikachu_fly/front.animated.2bpp.lz"

@@ -3,6 +3,7 @@ IndigoPlateau_MapScriptHeader:
 
 	def_callbacks
 	callback MAPCALLBACK_NEWMAP, IndigoPlateauFlyPoint
+	callback MAPCALLBACK_NEWMAP, EliteFauxRematchAvailable
 
 	def_warp_events
 	warp_event 11,  5, INDIGO_PLATEAU_POKECENTER_1F, 1
@@ -29,12 +30,15 @@ IndigoPlateauFlyPoint:
 	setflag ENGINE_FLYPOINT_INDIGO_PLATEAU
 	endcallback
 
-.RematchAvailable:
+EliteFauxRematchAvailable:
+    checkflag ENGINE_DAILY_ELITE_FAUX_RESET
+    iftruefwd .NoRematch
 	clearevent EVENT_BEAT_ASH
 	clearevent EVENT_BEAT_KATE
 	clearevent EVENT_BEAT_FEDMAE
 	clearevent EVENT_BEAT_TRIP
 	setflag ENGINE_DAILY_ELITE_FAUX_RESET
+.NoRematch
 	endcallback
 
 
