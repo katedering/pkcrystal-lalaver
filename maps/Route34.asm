@@ -37,7 +37,7 @@ Route34_MapScriptHeader:
 	object_event 17, 19, SPRITE_DAYCARE_MON_2, SPRITEMOVEDATA_POKEMON, 0, 0, -1, -1, 0, OBJECTTYPE_SCRIPT, 0, DayCareMon2Script, EVENT_DAYCARE_MON_2
 	object_event 11, 48, SPRITE_ACE_TRAINER_F, SPRITEMOVEDATA_STANDING_LEFT, 0, 0, -1, -1, 0, OBJECTTYPE_TRAINER, 5, TrainerCooltrainerfIrene, -1
 	object_event  3, 48, SPRITE_ACE_TRAINER_F, SPRITEMOVEDATA_STANDING_RIGHT, 0, 0, -1, -1, 0, OBJECTTYPE_TRAINER, 3, TrainerCooltrainerfJenn, -1
-	object_event  6, 51, SPRITE_ACE_TRAINER_F, SPRITEMOVEDATA_STANDING_UP, 0, 0, -1, -1, 0, OBJECTTYPE_TRAINER, 2, TrainerCooltrainerfKate, -1
+	object_event  6, 51, SPRITE_ACE_TRAINER_F, SPRITEMOVEDATA_STANDING_UP, 0, 0, -1, -1, 0, OBJECTTYPE_TRAINER, 2, TrainerCooltrainerfKimi, -1
 	itemball_event  7, 30, NUGGET, 1, EVENT_ROUTE_34_NUGGET
 
 	object_const_def
@@ -558,12 +558,12 @@ TrainerCooltrainerfIrene:
 
 .Script:
 	endifjustbattled
-	checkevent EVENT_GOT_POWER_HERB_FROM_KATE
+	checkevent EVENT_GOT_POWER_HERB_FROM_KIMI
 	iftrue_jumptext CooltrainerfIreneAfterText2
 	jumpthistext
 
 	text "Irene: My sister"
-	line "Kate will get you"
+	line "Kimi will get you"
 	cont "for this!"
 	done
 
@@ -572,32 +572,32 @@ TrainerCooltrainerfJenn:
 
 .Script:
 	endifjustbattled
-	checkevent EVENT_GOT_POWER_HERB_FROM_KATE
+	checkevent EVENT_GOT_POWER_HERB_FROM_KIMI
 	iftrue_jumptext CooltrainerfJennAfterText2
 	jumpthistext
 
 	text "Jenn: Don't get"
 	line "cocky! My sister"
-	cont "Kate is tough!"
+	cont "Kimi is tough!"
 	done
 
-TrainerCooltrainerfKate:
-	trainer COOLTRAINERF, KATE, EVENT_BEAT_COOLTRAINERF_KATE, CooltrainerfKateSeenText, CooltrainerfKateBeatenText, 0, .Script
+TrainerCooltrainerfKimi:
+	trainer COOLTRAINERF, KIMI, EVENT_BEAT_COOLTRAINERF_KIMI, CooltrainerfKimiSeenText, CooltrainerfKimiBeatenText, 0, .Script
 
 .Script:
 	endifjustbattled
-	checkevent EVENT_GOT_POWER_HERB_FROM_KATE
-	iftrue_jumptext CooltrainerfKateAfterText
+	checkevent EVENT_GOT_POWER_HERB_FROM_KIMI
+	iftrue_jumptext CooltrainerfKimiAfterText
 	opentext
-	writetext CooltrainerfKateOfferPowerHerbText
+	writetext CooltrainerfKimiOfferPowerHerbText
 	promptbutton
 	verbosegiveitem POWER_HERB
 	iffalse_endtext
-	setevent EVENT_GOT_POWER_HERB_FROM_KATE
+	setevent EVENT_GOT_POWER_HERB_FROM_KIMI
 	jumpthisopenedtext
 
-CooltrainerfKateAfterText:
-	text "Kate: I'm sorry we"
+CooltrainerfKimiAfterText:
+	text "Kimi: I'm sorry we"
 	line "jumped you."
 
 	para "We never expected"
@@ -843,19 +843,19 @@ CooltrainerfJennAfterText2:
 	cont "stronger."
 	done
 
-CooltrainerfKateSeenText:
-	text "Kate: You sure"
+CooltrainerfKimiSeenText:
+	text "Kimi: You sure"
 	line "were mean to my"
 	cont "little sisters!"
 	done
 
-CooltrainerfKateBeatenText:
-	text "Kate: No! I can't"
+CooltrainerfKimiBeatenText:
+	text "Kimi: No! I can't"
 	line "believe I lost."
 	done
 
-CooltrainerfKateOfferPowerHerbText:
-	text "Kate: You're too"
+CooltrainerfKimiOfferPowerHerbText:
+	text "Kimi: You're too"
 	line "strong. I didn't"
 	cont "stand a chance."
 
