@@ -87,5 +87,10 @@ Custom Change Log for Polished Custom
 > Added Galarian Birds as legendary encounters that unlock after beating the elite four for the first time.
 === Can you find all three?
 > Added event pokemon after you beat Red in Mount Silver. Check his house in Pallet town.
-> Added acces to Violet Outskirts as soon as you beat Falkner. Great place to train in early game.
 Bonus! Added a 'debug battle' at the start of the game - excellent for testing things, not so great for leveling up in endgame. (maybe not?)
+
+============
+
+Changes made on Nov.13:
+
+Significantly buffed the level range of the wild pokemon and trainers on Shamouti Island (and related areas) to strenghten it's position as a true side-game/endgame area. If you tackle it as soon as you can, you'll expect to see trainers in the 55-60 range. If you wait as late as possible (16 badges), expect them to be around 85-90! Good luck!

@@ -428,6 +428,7 @@ DEF CRYS EQU __trainer_class__
 	const FOOTE
 	const DAVE
 	const KOUTA
+	const HERB
 
 	trainerclass LASS ; 32
 	const DANA1

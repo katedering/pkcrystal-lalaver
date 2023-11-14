@@ -6,6 +6,7 @@ Route40_MapScriptHeader:
 
 	def_warp_events
 	warp_event  9,  5, ROUTE_40_BATTLE_TOWER_GATE, 1
+	warp_event  7, 33, CRUEL_CHAMBER, 1
 
 	def_coord_events
 
@@ -27,6 +28,8 @@ Route40_MapScriptHeader:
 	smashrock_event  7, 11
 	smashrock_event  6, 9
 	smashrock_event  7, 8
+	object_event  7, 34, SPRITE_N64, SPRITEMOVEDATA_STANDING_LEFT, 0, 0, -1, -1, PAL_NPC_COPY_BG_GRAY, OBJECTTYPE_COMMAND, jumptext, CruelChamberSealstoneText, EVENT_BEAT_ELITE_FOUR
+
 
 	object_const_def
 	const ROUTE40_MONICA
@@ -343,4 +346,13 @@ Route40SignText:
 
 	para "Cianwood City -"
 	line "Olivine City"
+	done
+
+CruelChamberSealstoneText:
+	text "This stone seems"
+	line "rather odd."
+	
+	para "Perhaps something"
+	line "will happen with"
+	cont "it, eventually?"
 	done

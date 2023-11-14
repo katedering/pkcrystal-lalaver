@@ -199,4 +199,13 @@ Music:
 	dba Music_RBYTrainerBattle
 	dba Music_RBYGymLeaderBattle
 	dba Music_RBYFinalBattle
+	dba Music_RBYMeetRival
+	dba Music_RBYFarewellRival
+	dba Music_KantoWildBattleFRLG
+	dba Music_KantoGymLeaderFRLG
+	dba Music_KantoEliteFourFRLG
+	dba Music_WildBattleDPPt
+	dba Music_BattleFrontierBrainDPPt
+	dba Music_GiovanniBattle
+	dba Music_IcePathHGSS
 	assert_table_length NUM_MUSIC_SONGS

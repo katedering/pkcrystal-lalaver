@@ -4,7 +4,7 @@ CruelChamber_MapScriptHeader:
 	def_callbacks
 
 	def_warp_events
-	warp_event  7,  9, MURKY_SWAMP, 4
+	warp_event  7,  9, ROUTE_40, 2
 
 	def_coord_events
 

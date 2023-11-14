@@ -579,3 +579,24 @@ INCLUDE "audio/music/rby/gymleaderbattle.asm"
 
 SECTION "Song - rby/finalbattle", ROMX
 INCLUDE "audio/music/rby/finalbattle.asm"
+
+SECTION "Song - rby/meetrival + rby/farewellrival", ROMX
+INCLUDE "audio/music/rby/meetrival.asm"
+
+SECTION "Song - frlg/wildbattle", ROMX
+INCLUDE "audio/music/frlg/wildbattle.asm"
+
+SECTION "Song - frlg/gymleader + frlg/elitefour", ROMX
+INCLUDE "audio/music/frlg/FRLGGymLeader_EliteFour.asm"
+
+SECTION "Song - dppt/wildbattle", ROMX
+INCLUDE "audio/music/dppt/wildbattle.asm"
+
+SECTION "Song - dppt/frontierbrainbattle", ROMX
+INCLUDE "audio/music/dppt/frontierbrainbattle.asm"
+
+SECTION "Song - sm/giovannibattle", ROMX
+INCLUDE "audio/music/sm/giovannibattle.asm"
+
+SECTION "Song - hgss/icepath", ROMX
+INCLUDE "audio/music/hgss/icepath.asm"

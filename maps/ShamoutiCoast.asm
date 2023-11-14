@@ -131,30 +131,45 @@ GenericTrainerSightseersCyandvi1:
 	generictrainer SIGHTSEERS, CYANDVI1, EVENT_BEAT_SIGHTSEERS_CY_AND_VI, .SeenText, .BeatenText
 
 ; text > text
-	text "Cy: TODO"
+	text "Cy: You're still"
+	line "hanging around"
+	cont "here?"
+	
+	para "There's nothing"
+	line "here except some"
+	cont "old shrines."
 	done
 
 .SeenText: ; text > text
-	text "Cy: TODO"
+	text "Cy: If I beat"
+	line "you, Vi will ask"
+	cont "me out!"
 	done
 
 .BeatenText: ; text > text
-	text "Cy: TODO"
+	text "Cy: Not in front"
+	line "of Vi!"
 	done
 
 GenericTrainerSightseersCyandvi2:
 	generictrainer SIGHTSEERS, CYANDVI2, EVENT_BEAT_SIGHTSEERS_CY_AND_VI, .SeenText, .BeatenText
 
 ; text > text
-	text "Vi: TODO"
+	text "Vi: The shrines"
+	line "here have some"
+	cont "mysterious auras."
 	done
 
 .SeenText: ; text > text
-	text "Vi: TODO"
+	text "Vi: If I beat"
+	line "you, I'll ask"
+	cont "Cy out!"
 	done
 
 .BeatenText: ; text > text
-	text "Vi: TODO"
+	text "Vi: Aww, really?"
+	line "I still like you,"
+	cont "Cy, don't worry!"
 	done
 
 GenericTrainerSwimmermAshe:

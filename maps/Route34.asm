@@ -38,7 +38,7 @@ Route34_MapScriptHeader:
 	object_event 11, 48, SPRITE_ACE_TRAINER_F, SPRITEMOVEDATA_STANDING_LEFT, 0, 0, -1, -1, 0, OBJECTTYPE_TRAINER, 5, TrainerCooltrainerfIrene, -1
 	object_event  3, 48, SPRITE_ACE_TRAINER_F, SPRITEMOVEDATA_STANDING_RIGHT, 0, 0, -1, -1, 0, OBJECTTYPE_TRAINER, 3, TrainerCooltrainerfJenn, -1
 	object_event  6, 51, SPRITE_ACE_TRAINER_F, SPRITEMOVEDATA_STANDING_UP, 0, 0, -1, -1, 0, OBJECTTYPE_TRAINER, 2, TrainerCooltrainerfKimi, -1
-	itemball_event  7, 30, NUGGET, 1, EVENT_ROUTE_34_NUGGET
+	itemball_event  7, 29, NUGGET, 1, EVENT_ROUTE_34_NUGGET
 
 	object_const_def
 	const ROUTE34_RICH_BOY

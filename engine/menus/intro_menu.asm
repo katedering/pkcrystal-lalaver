@@ -1200,7 +1200,7 @@ TitleScreenEntrance:
 	ld hl, wStatusFlags
 	bit 6, [hl] ; hall of fame
 	jr z, .ok
-	ld e, MUSIC_RBY_TITLESCREEN
+	ld e, MUSIC_TITLE_XY
 .ok
 	call PlayMusic
 
