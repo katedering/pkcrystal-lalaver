@@ -438,7 +438,7 @@ Celadon3FTMMart:
 	db -1
 
 Celadon4FMart:
-	db 14 ; # items
+	db 15 ; # items
 	db POKE_DOLL
 	db ODD_SOUVENIR
 	db FIRE_STONE
@@ -450,6 +450,7 @@ Celadon4FMart:
 	db DUSK_STONE
 	db MOON_STONE
 	db SHINY_STONE
+	db LINKING_CORD
 	db EXP_SHARE
 	db LOVELY_MAIL
 	db SURF_MAIL
