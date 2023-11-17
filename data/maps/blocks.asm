@@ -1931,3 +1931,7 @@ StrongChamber_BlockData:
 SECTION "WickedChamber_BlockData", ROMX
 WickedChamber_BlockData:
 	INCBIN "maps/WickedChamber.ablk.lz"
+	
+SECTION "VioletHauntedHouse_BlockData", ROMX
+VioletHauntedHouse_BlockData:
+	INCBIN "maps/VioletHauntedHouse.ablk.lz"

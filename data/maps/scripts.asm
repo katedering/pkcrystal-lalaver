@@ -1085,3 +1085,7 @@ SECTION "Galarian Bird Chamber Scripts", ROMX
 INCLUDE "maps/CruelChamber.asm"
 INCLUDE "maps/StrongChamber.asm"
 INCLUDE "maps/WickedChamber.asm"
+
+SECTION "Bonus Map Scripts", ROMX
+
+INCLUDE "maps/VioletHauntedHouse.asm"

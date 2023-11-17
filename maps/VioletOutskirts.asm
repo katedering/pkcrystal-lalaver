@@ -6,10 +6,12 @@ VioletOutskirts_MapScriptHeader:
 
 	def_warp_events
 	warp_event 10, 12, HIDDEN_TREE_GROTTO, 1
+	warp_event 21,  9, VIOLET_HAUNTED_HOUSE, 1
 
 	def_coord_events
 
 	def_bg_events
+	bg_event 19,  9, BGEVENT_JUMPTEXT, VioletOutskirtsSignText
 	bg_event 10, 11, BGEVENT_JUMPSTD, treegrotto, HIDDENGROTTO_VIOLET_OUTSKIRTS
 	bg_event 11, 11, BGEVENT_JUMPSTD, treegrotto, HIDDENGROTTO_VIOLET_OUTSKIRTS
 
@@ -28,3 +30,7 @@ VioletOutskirtsAvalanche:
 	changeblock 6, -2, $0a
 .end
 	endcallback
+
+VioletOutskirtsSignText:
+	text "DANGER - Condemned"
+	done
