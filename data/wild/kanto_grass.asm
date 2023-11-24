@@ -199,60 +199,32 @@
 	def_grass_wildmons VICTORY_ROAD_1F
 	db 6 percent, 6 percent, 6 percent ; encounter rates: morn/day/nite
 	; morn
-	wildmon 42, GRAVELER
-	wildmon 41, RHYHORN
-	wildmon 40, ONIX
-	wildmon 41, GOLBAT
-	wildmon 43, SANDSLASH
-	wildmon 44, RHYDON
-	wildmon 44, STEELIX
-	; day
-	wildmon 42, GRAVELER
-	wildmon 41, RHYHORN
-	wildmon 40, ONIX
-	wildmon 41, GOLBAT
-	wildmon 43, SANDSLASH
-	wildmon 44, RHYDON
-	wildmon 44, STEELIX
-	; nite
+	wildmon 43, GRAVELER
+	wildmon 42, RHYHORN
+	wildmon 41, ONIX
 	wildmon 42, GOLBAT
-	wildmon 41, GRAVELER
-	wildmon 40, ONIX
-	wildmon 41, GRAVELER
-	wildmon 43, HAUNTER
-	wildmon 44, STEELIX
-	wildmon 44, RHYDON
+	wildmon 44, SANDSLASH
+	wildmon 46, RHYDON
+	wildmon 45, STEELIX
+	; day
+	wildmon 43, GRAVELER
+	wildmon 42, RHYHORN
+	wildmon 41, ONIX
+	wildmon 42, GOLBAT
+	wildmon 44, SANDSLASH
+	wildmon 46, RHYDON
+	wildmon 45, STEELIX
+	; nite
+	wildmon 43, GOLBAT
+	wildmon 42, GRAVELER
+	wildmon 41, ONIX
+	wildmon 42, GRAVELER
+	wildmon 44, HAUNTER
+	wildmon 46, STEELIX
+	wildmon 45, RHYDON
 	end_grass_wildmons
 
 	def_grass_wildmons VICTORY_ROAD_2F
-	db 6 percent, 6 percent, 6 percent ; encounter rates: morn/day/nite
-	; morn
-	wildmon 44, GRAVELER
-	wildmon 43, RHYHORN
-	wildmon 42, ONIX
-	wildmon 43, GOLBAT
-	wildmon 45, SANDSLASH
-	wildmon 47, RHYDON
-	wildmon 46, STEELIX
-	; day
-	wildmon 44, GRAVELER
-	wildmon 43, RHYHORN
-	wildmon 42, ONIX
-	wildmon 43, GOLBAT
-	wildmon 45, SANDSLASH
-	wildmon 47, RHYDON
-	wildmon 46, STEELIX
-	; nite
-	wildmon 44, GOLBAT
-	wildmon 43, GRAVELER
-	wildmon 42, ONIX
-	wildmon 43, GRAVELER
-	wildmon 45, HAUNTER
-	wildmon 47, STEELIX
-	wildmon 46, RHYDON
-	end_grass_wildmons
-
-	def_grass_wildmons VICTORY_ROAD_3F
 	db 6 percent, 6 percent, 6 percent ; encounter rates: morn/day/nite
 	; morn
 	wildmon 46, GRAVELER
@@ -278,6 +250,34 @@
 	wildmon 47, HAUNTER
 	wildmon 49, STEELIX
 	wildmon 48, RHYDON
+	end_grass_wildmons
+
+	def_grass_wildmons VICTORY_ROAD_3F
+	db 6 percent, 6 percent, 6 percent ; encounter rates: morn/day/nite
+	; morn
+	wildmon 48, GRAVELER
+	wildmon 47, RHYHORN
+	wildmon 46, ONIX
+	wildmon 47, GOLBAT
+	wildmon 48, SANDSLASH
+	wildmon 51, RHYDON
+	wildmon 50, STEELIX
+	; day
+	wildmon 48, GRAVELER
+	wildmon 47, RHYHORN
+	wildmon 46, ONIX
+	wildmon 47, GOLBAT
+	wildmon 48, SANDSLASH
+	wildmon 51, RHYDON
+	wildmon 50, STEELIX
+	; nite
+	wildmon 48, GOLBAT
+	wildmon 47, GRAVELER
+	wildmon 46, ONIX
+	wildmon 47, GRAVELER
+	wildmon 48, HAUNTER
+	wildmon 51, STEELIX
+	wildmon 50, RHYDON
 	end_grass_wildmons
 
 	def_grass_wildmons TOHJO_FALLS
