@@ -492,12 +492,10 @@ endc
 	ld b, [hl]
 	push bc
 	call CheckCosmeticCaughtMon
-	ld a, c
 	pop bc
-	push af
+	push af ; assumes flags are returned from CheckCosmeticCaughtMon
 	call SetSeenAndCaughtMon
 	pop af
-	and a
 	jr nz, .skip_pokedex
 
 	call CheckReceivedDex
@@ -732,9 +730,9 @@ endc
 	call SetPlayerTurn
 .not_shiny
 
-	ld bc, wTempMonSpecies
-	farcall CheckFaintedFrzSlp
-	jr c, .skip_cry
+	ld a, [wEnemyMonStatus]
+	and (1 << FRZ) | SLP_MASK
+	jr nz, .skip_cry
 	farcall CheckBattleEffects
 	jr c, .cry_no_anim
 	hlcoord 12, 0
