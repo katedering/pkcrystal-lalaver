@@ -410,6 +410,12 @@ RespawnOneOffs:
 	eventflagreset EVENT_GMOLTRES_GONE
 .CaughtGMoltres
 
+	ld de, ENGINE_PLAYER_CAUGHT_GHOST
+	farcall EngineFlagAction
+	jr nz, .CaughtGhost
+	eventflagreset EVENT_VIOLET_HAUNTED_HOUSE_GHOST
+.CaughtGhost
+
 	ld de, ENGINE_PLAYER_CAUGHT_MEWTWO
 	farcall EngineFlagAction
 	jr nz, .CaughtMewtwo

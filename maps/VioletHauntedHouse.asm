@@ -2,7 +2,7 @@ VioletHauntedHouse_MapScriptHeader:
 	def_scene_scripts
 
 	def_callbacks
-;	callback MAPCALLBACK_NEWMAP, VioletHauntedHouseRandomGhost
+	callback MAPCALLBACK_NEWMAP, VioletHauntedHouseRandomGhost
 
 	def_warp_events
 	warp_event  3,  7, VIOLET_OUTSKIRTS, 2
@@ -13,39 +13,45 @@ VioletHauntedHouse_MapScriptHeader:
 	def_bg_events
 
 	def_object_events
-	pokemon_event 4,  3, MISDREAVUS, SPRITEMOVEDATA_POKEMON, -1, -1, PAL_NPC_BLUE, VioletHauntedHouseGhostText, -1
+	object_event  4,  3, SPRITE_MON_ICON, SPRITEMOVEDATA_POKEMON, 0, MISDREAVUS, -1, -1, PAL_NPC_BLUE, OBJECTTYPE_SCRIPT, PLAIN_FORM, VioletHauntedHouseMisdreavus, EVENT_VIOLET_HAUNTED_HOUSE_GHOST
+
 	
 	object_const_def
-	const VIOLETHAUNTEDHOUSEGHOST
+	const VIOLETHAUNTEDHOUSE_MISDREAVUS
 
-;VioletHauntedHouseRandomGhost:
-;	random 10
-;	ifequalfwd 0, .NoGhost
-;	ifequalfwd 1, .NoGhost
-;	ifequalfwd 2, .NoGhost
-;	ifequalfwd 3, .NoGhost
-;	ifequalfwd 4, .NoGhost
-;	ifequalfwd 5, .NoGhost
-;	ifequalfwd 6, .NoGhost
-;	ifequalfwd 7, .NoGhost
-;	ifequalfwd 8, .NoGhost
-;	ifequalfwd 9, .Ghost
-;.Ghost
-;	appear VIOLETHAUNTEDHOUSEGHOST
-;	endcallback
-;.NoGhost
-;	disappear VIOLETHAUNTEDHOUSEGHOST
-;	endcallback
+VioletHauntedHouseRandomGhost:
+	random 5
+	ifequalfwd 0, .NoGhost
+	ifequalfwd 1, .NoGhost
+	ifequalfwd 2, .NoGhost
+	ifequalfwd 3, .NoGhost
+	ifequalfwd 4, .Ghost
+.Ghost
+	appear VIOLETHAUNTEDHOUSE_MISDREAVUS
+	endcallback
+.NoGhost
+	disappear VIOLETHAUNTEDHOUSE_MISDREAVUS
+	endcallback
 
-;VioletHauntedHouseGhostScript:
-;	faceplayer
-;	opentext
-;	writetext .ToDoGhostText
-;	cry MISDREAVUS
-;	pause 15
-;	closetext
-;	end
-	
-VioletHauntedHouseGhostText:
-	text "TODO"
+VioletHauntedHouseMisdreavus:
+	faceplayer
+	opentext
+	writetext GhostMisdreavusText
+	cry MISDREAVUS
+	pause 15
+	closetext
+	loadwildmon MISDREAVUS, 15
+	loadvar VAR_BATTLETYPE, BATTLETYPE_NORMAL
+	startbattle
+	disappear VIOLETHAUNTEDHOUSE_MISDREAVUS
+	setevent EVENT_VIOLET_HAUNTED_HOUSE_GHOST
+	reloadmapafterbattle
+	special CheckBattleCaughtResult
+	iffalsefwd .nocatch
+	setflag ENGINE_PLAYER_CAUGHT_GHOST
+.nocatch
+	end
+
+GhostMisdreavusText:
+	text "!!!"
 	done

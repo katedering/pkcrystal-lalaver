@@ -1086,6 +1086,6 @@ INCLUDE "maps/CruelChamber.asm"
 INCLUDE "maps/StrongChamber.asm"
 INCLUDE "maps/WickedChamber.asm"
 
-SECTION "Bonus Map Scripts", ROMX
+SECTION "Other Polished Custom Map Scripts", ROMX
 
 INCLUDE "maps/VioletHauntedHouse.asm"

@@ -396,6 +396,12 @@ Route32LyraIntroducesHiddenGrottoesOutroScript:
 	para "<PLAYER>, keep an"
 	line "eye out for more"
 	cont "Hidden Grottoes!"
+	
+	para "You may have even"
+	line "encountered one"
+	cont "before now, and"
+	cont "just didn't notice"
+	cont "it right away."
 	done
 
 .LeaveMovement1:

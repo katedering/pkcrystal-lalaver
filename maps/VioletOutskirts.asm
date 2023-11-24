@@ -32,5 +32,6 @@ VioletOutskirtsAvalanche:
 	endcallback
 
 VioletOutskirtsSignText:
-	text "DANGER - Condemned"
+	text "      DANGER      "
+	line "    Condemned!    "
 	done

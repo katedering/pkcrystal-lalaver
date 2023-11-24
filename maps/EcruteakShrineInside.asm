@@ -236,9 +236,12 @@ EcruteakShrineInsideGentlemanScript:
 
 .NotWorthyText
 	text "………I sense a"
-	line "strong aura of"
-	cont "strength from"
-	cont "you, trainer."
+	line "strong aura coming"
+	cont "from within you,"
+	cont "trainer."
+	
+	para "But it is yet to"
+	line "be fully realized."
 	
 	para "Come back when"
 	line "you've bested"
