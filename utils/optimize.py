@@ -97,6 +97,11 @@ patterns = {
 	# Good: inc|dec a (unless you need to set the carry flag)
 	(lambda line1, prev: re.match(r'(?:add|sub) (?:a, )?[%\$&]?0*1$', line1.code)),
 ],
+'a *= 2': [
+	# Bad: sla a
+	# Good: add a
+	(lambda line1, prev: line1.code == 'sla a'),
+],
 'a = ~a': [
 	# Bad: xor $ff
 	# Good: cpl
@@ -337,15 +342,15 @@ patterns = {
 	(lambda line2, prev: line2.code in {'inc hl', 'dec hl'}),
 ],
 '*hl++|*hl-- = b|c|d|e': [
-	# Bad: ld [hl], b|c|d|e / inc|dec hl (unless you can't use a)
-	# Good: ld [hli|hld], a / ld b|c|d|e, a
-	(lambda line1, prev: re.match(r'ld \[hl\], [bcde]', line1.code)),
-	(lambda line2, prev: line2.code in {'inc hl', 'dec hl'}),
-],
-'b|c|d|e = *hl++|*hl--': [
 	# Bad: ld [hl], b|c|d|e|h|l / inc|dec hl (unless you can't use a)
 	# Good: ld a, b|c|d|e|h|l / ld [hli|hld], a
 	(lambda line1, prev: re.match(r'ld \[hl\], [bcdehl]', line1.code)),
+	(lambda line2, prev: line2.code in {'inc hl', 'dec hl'}),
+],
+'b|c|d|e = *hl++|*hl--': [
+	# Bad: ld b|c|d|e, [hl] / inc|dec hl (unless you can't use a)
+	# Good: ld a, [hli|hld] / ld b|c|d|e, a
+	(lambda line1, prev: re.match(r'ld [bcde], \[hl\]', line1.code)),
 	(lambda line2, prev: line2.code in {'inc hl', 'dec hl'}),
 ],
 'a == 0': [
@@ -586,6 +591,17 @@ patterns = {
 	(lambda line2, prev: line2.code in {'inc a', 'dec a'}),
 	(lambda line3, prev: re.match(r'ld \[w.*?\], a', line3.code)
 		and line3.code.split(", ")[0].lstrip("ld ") == prev[0].code.split(", ")[-1]),
+],
+'Trailing string space': [
+	# Bad: text "Hello! " (unless it's followed by a text command)
+	# Good: text "Hello!"
+	(lambda line1, prev: re.match(r'(?:' + '|'.join([
+		'text', 'next1?', 'line', 'page', 'para', 'cont', 'prompt'
+		]) + r')\s*"[^"]* "', line1.code)),
+	(lambda line2, prev: not re.match(r'(?:' + '|'.join([
+		'text_', 'sound_', 'start_asm', 'deciram', 'interpret_data', 'limited_interpret_data',
+		'link_wait_button', 'current_day', 'stop_compressing_text',
+		]) + r')', line2.code))
 ],
 }
 
