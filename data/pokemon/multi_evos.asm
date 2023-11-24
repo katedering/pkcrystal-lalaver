@@ -18,6 +18,7 @@ MultipleEvolutions:
 	multi_evo PIKACHU
 	multi_evo PIKACHU, PIKACHU_FLY_FORM, EVOLVE_PIKACHU
 	multi_evo PIKACHU, PIKACHU_SURF_FORM, EVOLVE_PIKACHU
+	multi_evo PIKACHU, PIKACHU_RED_FORM, EVOLVE_PIKACHU
 	multi_evo GLOOM
 	multi_evo POLIWHIRL
 	multi_evo SLOWPOKE

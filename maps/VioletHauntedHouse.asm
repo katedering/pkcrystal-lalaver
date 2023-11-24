@@ -13,19 +13,21 @@ VioletHauntedHouse_MapScriptHeader:
 	def_bg_events
 
 	def_object_events
-	object_event  4,  3, SPRITE_MON_ICON, SPRITEMOVEDATA_POKEMON, 0, MISDREAVUS, -1, -1, PAL_NPC_BLUE, OBJECTTYPE_SCRIPT, PLAIN_FORM, VioletHauntedHouseMisdreavus, EVENT_VIOLET_HAUNTED_HOUSE_GHOST
+	object_event  4,  3, SPRITE_MON_ICON, SPRITEMOVEDATA_POKEMON, 0, MISDREAVUS, -1, -1, PAL_NPC_YELLOW, OBJECTTYPE_SCRIPT, PLAIN_FORM, VioletHauntedHouseMisdreavus, EVENT_VIOLET_HAUNTED_HOUSE_GHOST
 
 	
 	object_const_def
 	const VIOLETHAUNTEDHOUSE_MISDREAVUS
 
 VioletHauntedHouseRandomGhost:
-	random 5
-	ifequalfwd 0, .NoGhost
-	ifequalfwd 1, .NoGhost
-	ifequalfwd 2, .NoGhost
-	ifequalfwd 3, .NoGhost
-	ifequalfwd 4, .Ghost
+    checktime 1 << MORN
+	iftruefwd .NoGhost
+	checktime 1 << DAY
+	iftruefwd .NoGhost
+	checktime 1 << EVE
+	iftruefwd .NoGhost
+	checktime 1 << NITE
+	iftruefwd .Ghost
 .Ghost
 	appear VIOLETHAUNTEDHOUSE_MISDREAVUS
 	endcallback
@@ -41,7 +43,7 @@ VioletHauntedHouseMisdreavus:
 	pause 15
 	closetext
 	loadwildmon MISDREAVUS, 15
-	loadvar VAR_BATTLETYPE, BATTLETYPE_NORMAL
+	loadvar VAR_BATTLETYPE, BATTLETYPE_SHINY
 	startbattle
 	disappear VIOLETHAUNTEDHOUSE_MISDREAVUS
 	setevent EVENT_VIOLET_HAUNTED_HOUSE_GHOST

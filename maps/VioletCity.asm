@@ -207,6 +207,14 @@ VioletCityLassText:
 
 	para "had no effect on"
 	line "ghosts."
+	
+	para "I've also heard"
+	line "that there's a"
+	cont "ghost that lives"
+	cont "north of town…"
+	
+	para "but that it only"
+	line "appears at night."
 	done
 
 VioletCityCooltrainerM1Text:

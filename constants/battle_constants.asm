@@ -108,6 +108,7 @@ DEF STAT_SKIPTEXT  EQU 1 << STAT_SKIPTEXT_F
 	const BATTLETYPE_FORCEITEM
 	const BATTLETYPE_RED_GYARADOS
 	const BATTLETYPE_LEGENDARY
+	const BATTLETYPE_SHINY
 
 ; BattleVarPairs indexes (see home/battle_vars.asm)
 	const_def

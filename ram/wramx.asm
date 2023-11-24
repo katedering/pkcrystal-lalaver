@@ -635,12 +635,15 @@ wBattleType::
 ; $04 headbutt/rock smash
 ; $05 roaming
 ; $06 contest
-; $07 ghost
-; $08 inverse
-; $09 shiny
-; $0a force Item1
+; $07 safari
+; $08 ghost
+; $09 grotto
+; $0a inverse
 ; $0b trap
-; $0c legendary
+; $0a force Item1
+; $0c red gyarados
+; $0d legendary
+; $0e shiny
 	db
 
 wOtherTrainerID::
