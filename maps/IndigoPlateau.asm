@@ -28,8 +28,6 @@ IndigoPlateau_MapScriptHeader:
 
 IndigoPlateauFlyPoint:
 	setflag ENGINE_FLYPOINT_INDIGO_PLATEAU
-	endcallback
-
 EliteFauxRematchAvailable:
     checkflag ENGINE_DAILY_ELITE_FAUX_RESET
     iftruefwd .NoRematch

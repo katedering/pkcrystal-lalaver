@@ -73,6 +73,7 @@ MomEventScript:
 	addcellnum PHONE_MOM
 	setscene $1
 	setevent EVENT_PLAYERS_HOUSE_MOM_1
+	setevent EVENT_VIOLET_OUTSKIRTS_BLOCKED
 	clearevent EVENT_PLAYERS_HOUSE_MOM_2
 	writetext MomPokegearText
 	promptbutton

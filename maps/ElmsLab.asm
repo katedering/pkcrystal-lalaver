@@ -1091,7 +1091,10 @@ ElmDirectionsText2:
 	done
 
 ElmDirectionsText3:
-	text "<PLAYER>, I'm"
+	text "Also, Lala says"
+	line "hello as well!"
+	
+	para "<PLAYER>, We're"
 	line "counting on you!"
 	done
 
