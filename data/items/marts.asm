@@ -391,7 +391,7 @@ VermilionMart:
 	db -1
 
 Celadon2FMart1:
-	db 12 ; # items
+	db 13 ; # items
 	db POTION
 	db SUPER_POTION
 	db HYPER_POTION
@@ -404,6 +404,7 @@ Celadon2FMart1:
 	db FULL_HEAL
 	db REVIVE
 	db MAX_REVIVE
+	db MINT_LEAF
 	db -1
 
 Celadon2FMart2:
