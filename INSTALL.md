@@ -1,6 +1,6 @@
 # Install Guide
 
-If you just want to play Polished Crystal, use one of the .ips patches as described in [README.md](README.md#download-and-play). To build a ROM yourself from the source code, follow these instructions.
+If you just want to play Polished Custom, grab the latest released ROM from the Releases page. To build a ROM yourself from the source code, follow these instructions.
 
 > You know it's sitting back and looking at it that you realize that Gamefreak is actually really good devs.  
 > Like you have Pokemon and it's a simple formula "How can you fuck it up?" and then all of these Romhacks basically go "Like this."
@@ -17,14 +17,13 @@ In the installer, select the following packages: `git`, `python`, `make`, and `g
 In the **Cygwin terminal**:
 
 ```bash
-git clone https://github.com/Rangi42/polishedcrystal.git
-cd polishedcrystal
+git clone https://github.com/katedering/polished_custom.git
+cd polished_custom
 mkdir rgbds
 ```
 
-Then download [**rgbds**](https://rgbds.gbdev.io/). If you're building Polished Crystal 2.2.0, get rgbds version 0.3.9. If you're building the 3.0.0 beta, you'll need version **0.6.1**. Extract the archive and put all the .exe and .dll files in polishedcrystal/rgbds.
-
-To build **polishedcrystal.gbc**:
+Then download [**rgbds**](https://rgbds.gbdev.io/). Get the latest version.
+To build **polished_custom.gbc**:
 
 ```bash
 make
@@ -55,11 +54,11 @@ cd rgbds
 sudo make install
 cd ..
 
-git clone https://github.com/Rangi42/polishedcrystal.git
-cd polishedcrystal
+git clone https://github.com/katedering/polished_custom.git
+cd polished_custom
 ```
 
-To build **polishedcrystal.gbc**:
+To build **polished_custom.gbc**:
 
 ```bash
 make
@@ -84,11 +83,11 @@ xcode-select --install
 
 brew install rgbds
 
-git clone https://github.com/Rangi42/polishedcrystal.git
-cd polishedcrystal
+git clone https://github.com/katedering/polished_custom.git
+cd polished_custom
 ```
 
-To build **polishedcrystal.gbc**:
+To build **polished_custom.gbc**:
 
 ```bash
 make
