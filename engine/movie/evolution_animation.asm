@@ -168,11 +168,14 @@ EvolutionAnimation:
 	ret
 
 .cancel_evo
-	ld a, $1
+	ld a, TRUE
 	ld [wEvolutionCanceled], a
 
 	ld a, [wEvolutionOldSpecies]
 	ld [wPlayerHPPal], a
+
+	ld e, MUSIC_NONE
+	call PlayMusic
 
 	call .GetColoredCGBLayout
 	call ClearSpriteAnims
@@ -297,7 +300,7 @@ EvolutionAnimation:
 	add hl, bc
 	ld a, [wJumptableIndex]
 	and %1110
-	sla a
+	add a
 	pop de
 	add e
 	ld [hl], a
