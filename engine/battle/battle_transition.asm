@@ -75,6 +75,9 @@ endc
 	call DmgToCgbBGPals
 	call DelayFrame
 
+	ld hl, rIE
+	res LCD_STAT, [hl]
+
 	xor a
 	ldh [hLCDCPointer], a
 	ldh [hLYOverrideStart], a
@@ -83,8 +86,6 @@ endc
 
 	ld a, BANK(wEnemyMon)
 	ldh [rSVBK], a
-	ld hl, rIE
-	res LCD_STAT, [hl]
 
 	pop af
 	ldh [hVBlank], a
@@ -225,6 +226,8 @@ StartTrainerBattle_SetUpForWavyOutro:
 
 	call StartTrainerBattle_NextScene
 
+	ld hl, rIE
+	set LCD_STAT, [hl]
 	ld a, LOW(rSCX)
 	ldh [hLCDCPointer], a
 	xor a
@@ -234,8 +237,6 @@ StartTrainerBattle_SetUpForWavyOutro:
 	xor a
 	ld [wBattleTransitionCounter], a
 	ld [wBattleTransitionSineWaveOffset], a
-	ld hl, rIE
-	set LCD_STAT, [hl]
 	ret
 
 StartTrainerBattle_SineWave:
@@ -526,9 +527,9 @@ StartTrainerBattle_LoadPokeBallGraphics:
 	jr z, .got_offset
 	ld a, [wTimeOfDayPal]
 	and %00000011
-	sla a
-	sla a
-	sla a
+	add a
+	add a
+	add a
 .got_offset
 	ldh [hTimeOfDayPalOffset], a
 
@@ -597,7 +598,7 @@ StartTrainerBattle_LoadPokeBallGraphics:
 ; Loading is done bit by bit
 	and a
 	jr z, .done
-	sla a
+	add a
 	jr nc, .no_load
 
 	; poke ball tile; use PAL_BG_GRAY, bank 0, no flips or priority

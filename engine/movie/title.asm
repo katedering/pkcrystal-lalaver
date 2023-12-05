@@ -166,6 +166,8 @@ endc
 	rst ByteFill
 
 ; Let LCD Stat know we're messing around with SCX
+	ld hl, rIE
+	set LCD_STAT, [hl]
 	ld a, rSCX - rJOYP
 	ldh [hLCDCPointer], a
 
@@ -215,10 +217,10 @@ SuicuneFrameIterator:
 
 	ld a, c
 	and 3 << 3
-	sla a
+	add a
 	swap a
 	ld e, a
-	ld d, $0
+	ld d, 0
 	ld hl, .Frames
 	add hl, de
 	ld d, [hl]
