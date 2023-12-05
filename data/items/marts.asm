@@ -80,7 +80,7 @@ VioletMart:
 	db -1
 
 AzaleaMart:
-	db 12 ; # items
+	db 10 ; # items
 	db LURE_BALL
 	db FRIEND_BALL
 	db FAST_BALL
@@ -90,8 +90,6 @@ AzaleaMart:
 	db CHARCOAL
 	db SUPER_POTION
 	db FULL_HEAL
-	db SILVER_LEAF
-	db GOLD_LEAF
 	db FLOWER_MAIL
 	db -1
 
@@ -184,7 +182,7 @@ Goldenrod5FTMMart:
 	db -1
 
 GoldenrodHarborMart:
-	db 9 ; # items
+	db 12 ; # items
 	db ETHER
 	db ELIXIR
 	db DESTINY_KNOT
@@ -192,8 +190,11 @@ GoldenrodHarborMart:
 	db WIDE_LENS
 	db ZOOM_LENS
 	db BRIGHTPOWDER
-	db SURF_MAIL
 	db LINKING_CORD
+	db MIRROR_HERB
+	db SILVER_LEAF
+	db GOLD_LEAF
+	db SURF_MAIL
 	db -1
 
 UndergroundMart:
