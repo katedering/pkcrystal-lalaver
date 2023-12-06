@@ -1932,6 +1932,34 @@
 	wildmon LEVEL_FROM_BADGES + 1, HOUNDOUR
 	end_grass_wildmons
 
+	def_grass_wildmons CHERRYGROVE_BAY
+	db 10 percent, 10 percent, 10 percent ; encounter rates: morn/day/nite
+	; morn
+	wildmon LEVEL_FROM_BADGES - 2, EKANS, ARBOK_JOHTO_FORM
+	wildmon LEVEL_FROM_BADGES - 1, SENTRET
+	wildmon LEVEL_FROM_BADGES + 1, PIDGEY
+	wildmon LEVEL_FROM_BADGES + 0, MAREEP
+	wildmon LEVEL_FROM_BADGES + 1, MAREEP
+	wildmon LEVEL_FROM_BADGES + 0, SUNKERN
+	wildmon LEVEL_FROM_BADGES + 1, SUNKERN
+	; day
+	wildmon LEVEL_FROM_BADGES - 2, EKANS, ARBOK_JOHTO_FORM
+	wildmon LEVEL_FROM_BADGES - 1, SENTRET
+	wildmon LEVEL_FROM_BADGES + 1, PIDGEY
+	wildmon LEVEL_FROM_BADGES + 0, MAREEP
+	wildmon LEVEL_FROM_BADGES + 1, MAREEP
+	wildmon LEVEL_FROM_BADGES + 0, SUNKERN
+	wildmon LEVEL_FROM_BADGES + 1, SUNKERN
+	; nite
+	wildmon LEVEL_FROM_BADGES - 2, WOOPER
+	wildmon LEVEL_FROM_BADGES - 1, RATTATA
+	wildmon LEVEL_FROM_BADGES + 1, HOOTHOOT
+	wildmon LEVEL_FROM_BADGES + 0, MAREEP
+	wildmon LEVEL_FROM_BADGES + 1, MAREEP
+	wildmon LEVEL_FROM_BADGES + 0, GASTLY
+	wildmon LEVEL_FROM_BADGES + 1, GASTLY
+	end_grass_wildmons
+
 	def_grass_wildmons ROUTE_32_COAST
 	db 10 percent, 10 percent, 10 percent ; encounter rates: morn/day/nite
 	; morn
