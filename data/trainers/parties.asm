@@ -2431,14 +2431,14 @@ BugCatcherGroup:
 	db "Arnie@"
 	db TRAINERTYPE_NORMAL
 	; party
-	dbp 15, VENONAT
+	dbp 16, VENONAT
 	db -1 ; end
 
 	; BUG_CATCHER
 	db "Arnie@"
 	db TRAINERTYPE_NORMAL
 	; party
-	dbp 19, VENONAT
+	dbp 20, VENONAT
 	db -1 ; end
 
 	; BUG_CATCHER
@@ -2586,9 +2586,9 @@ CamperGroup:
 	db "Ivan@"
 	db TRAINERTYPE_NORMAL
 	; party
-	dbp 10, DIGLETT
-	dbp 10, ZUBAT
-	dbp 14, DIGLETT
+	dbp 11, DIGLETT
+	dbp 11, ZUBAT
+	dbp 15, DIGLETT
 	db -1 ; end
 
 	; CAMPER
@@ -2885,7 +2885,7 @@ endc
 	db "Kim@"
 	db TRAINERTYPE_NORMAL
 	; party
-	dbp 15, VULPIX
+	dbp 17, VULPIX
 	db -1 ; end
 
 	; PICNICKER
@@ -4602,8 +4602,8 @@ OfficerMGroup:
 	db "Dirk@"
 	db TRAINERTYPE_NORMAL
 	; party
-	dbp 14, GROWLITHE
-	dbp 14, MACHOP
+	dbp 15, GROWLITHE
+	dbp 15, MACHOP
 	db -1 ; end
 
 
@@ -4759,16 +4759,16 @@ PokemaniacGroup:
 	db "Issac@"
 	db TRAINERTYPE_MOVES
 	; party
-	dbp 12, LICKITUNG
-		db LICK, SUPERSONIC, CUT, NO_MOVE
+	dbp 15, LICKITUNG
+		db LICK, SUPERSONIC, CUT, WRAP
 	db -1 ; end
 
 	; POKEMANIAC
 	db "Donald@"
 	db TRAINERTYPE_NORMAL
 	; party
-	dbp 11, SLOWPOKE
-	dbp 11, NIDORAN_M
+	dbp 13, SLOWPOKE
+	dbp 13, NIDORAN_M
 	db -1 ; end
 
 	; POKEMANIAC
@@ -4804,8 +4804,8 @@ CosplayerGroup:
 	db "Clara@"
 	db TRAINERTYPE_NORMAL
 	; party
-	dbp 11, VULPIX
-	dbp 11, VULPIX
+	dbp 14, VULPIX
+	dbp 14, VULPIX
 	db -1 ; end
 
 	; COSPLAYER
@@ -4850,8 +4850,8 @@ SuperNerdGroup:
 	db "Eric@"
 	db TRAINERTYPE_NORMAL
 	; party
-	dbp 11, GRIMER
-	dbp 12, PORYGON
+	dbp 13, GRIMER
+	dbp 14, PORYGON
 	db -1 ; end
 
 	; SUPER_NERD
@@ -4891,10 +4891,10 @@ SuperNerdGroup:
 	db "Teru@"
 	db TRAINERTYPE_NORMAL
 	; party
-	dbp 7, MAGNEMITE
-	dbp 11, VOLTORB
-	dbp 7, MAGNEMITE
 	dbp 9, MAGNEMITE
+	dbp 13, VOLTORB
+	dbp 9, MAGNEMITE
+	dbp 11, MAGNEMITE
 	db -1 ; end
 
 	; SUPER_NERD
@@ -6831,9 +6831,9 @@ BreederGroup:
 	db "Theresa@"
 	db TRAINERTYPE_ITEM | TRAINERTYPE_PERSONALITY
 	; party
-	dbp 14, MAGBY, FEMALE
+	dbp 15, MAGBY, FEMALE
 		db EVIOLITE, ABILITY_1 | NAT_NEUTRAL
-	dbp 14, ELEKID, FEMALE
+	dbp 16, ELEKID, FEMALE
 		db EVIOLITE, SHINY_MASK | ABILITY_1 | NAT_NEUTRAL
 	db -1 ; end
 
@@ -11873,4 +11873,3 @@ UnknownGroup:
 	    db LEFTOVERS, FAKE_PERFECT_DVS, ABILITY_1 | NAT_SATK_UP_ATK_DOWN
 		db TOXIC, SHADOW_BALL, FLAMETHROWER, CURSE
 	db -1 ; end
-
