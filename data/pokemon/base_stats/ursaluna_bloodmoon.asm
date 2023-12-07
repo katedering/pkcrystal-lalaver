@@ -7,7 +7,7 @@
 	db ALWAYS_ITEM_2, LUM_BERRY ; held items
 	dn GENDER_F0, HATCH_MEDIUM_FAST ; gender ratio, step cycles to hatch
 
-	abilities_for URSALUNA_BLOODMOON, MINDS_EYE, MINDS_EYE, MINDS_EYE
+	abilities_for URSALUNA_BLOODMOON, GUTS, BULLETPROOF, UNNERVE
 	db GROWTH_MEDIUM_FAST ; growth rate
 	dn EGG_NONE, EGG_NONE ; egg groups
 

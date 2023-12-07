@@ -5106,9 +5106,10 @@ TeddiursaEvosAttacks:
 	db -1 ; no more level-up moves
 
 UrsaringEvosAttacks:
-	evo_data EVOLVE_ITEM, MOON_STONE, URSALUNA
-	evo_data EVOLVE_LOCATION, SINJOH_RUINS, URSALUNA
-	evo_data EVOLVE_LOCATION, MYSTRI_STAGE, URSALUNA
+	evo_data EVOLVE_ITEM, MOON_STONE, URSALUNA, PLAIN_FORM
+	evo_data EVOLVE_ITEM, DUSK_STONE, URSALUNA, URSALUNA_BLOODMOON_FORM
+	evo_data EVOLVE_LOCATION, SINJOH_RUINS, URSALUNA, PLAIN_FORM
+	evo_data EVOLVE_LOCATION, MYSTRI_STAGE, URSALUNA, PLAIN_FORM
 	db -1 ; no more evolutions
 	db 1, GUNK_SHOT ; HGSS tutor move
 	db 1, THIEF ; Covet → TM move
@@ -6436,7 +6437,7 @@ KleavorEvosAttacks:
 	db 57, SWORDS_DANCE
 	db -1 ; no more level-up moves
 
-UrsalunaEvosAttacks:
+UrsalunaPlainEvosAttacks:
 	db -1 ; no more evolutions
 	db 1, BULLDOZE ; evolution move
 	db 1, GUNK_SHOT ; HGSS tutor move
