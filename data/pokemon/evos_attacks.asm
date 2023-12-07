@@ -6437,7 +6437,7 @@ KleavorEvosAttacks:
 	db 57, SWORDS_DANCE
 	db -1 ; no more level-up moves
 
-UrsalunaPlainEvosAttacks:
+UrsalunaEvosAttacks:
 	db -1 ; no more evolutions
 	db 1, BULLDOZE ; evolution move
 	db 1, GUNK_SHOT ; HGSS tutor move
