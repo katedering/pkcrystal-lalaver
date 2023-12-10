@@ -20,6 +20,8 @@ VioletHauntedHouse_MapScriptHeader:
 	const VIOLETHAUNTEDHOUSE_MISDREAVUS
 
 VioletHauntedHouseRandomGhost:
+	checkevent EVENT_VIOLET_HAUNTED_HOUSE_GHOST
+	iftruefwd .NoGhost
     checktime 1 << MORN
 	iftruefwd .NoGhost
 	checktime 1 << DAY
@@ -40,13 +42,13 @@ VioletHauntedHouseMisdreavus:
 	opentext
 	writetext GhostMisdreavusText
 	cry MISDREAVUS
+	setevent EVENT_VIOLET_HAUNTED_HOUSE_GHOST
 	pause 15
 	closetext
 	loadwildmon MISDREAVUS, 15
 	loadvar VAR_BATTLETYPE, BATTLETYPE_SHINY
 	startbattle
 	disappear VIOLETHAUNTEDHOUSE_MISDREAVUS
-	setevent EVENT_VIOLET_HAUNTED_HOUSE_GHOST
 	reloadmapafterbattle
 	special CheckBattleCaughtResult
 	iffalsefwd .nocatch

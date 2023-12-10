@@ -530,7 +530,7 @@ BattleAnim_SendOutMon:
 
 .Shiny:
 	anim_1gfx ANIM_GFX_SPEED
-	anim_bgp $1b
+	anim_bgeffect ANIM_BG_FLASH_INVERTED, $0, $4, $3
 	anim_bgeffect ANIM_BG_CYCLE_OBPALS_GRAY_AND_YELLOW, $0, $2, $0
 	anim_sound 0, 0, SFX_SHINE
 	anim_obj ANIM_OBJ_SHINY,   6, 0,  12, 0, $0
