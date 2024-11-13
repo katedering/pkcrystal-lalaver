@@ -1,5 +1,5 @@
 
-NAME := shimmer-crystal
+NAME := crystal-gleam
 MODIFIERS :=
 VERSION := 9bit-72d5dc4
 
