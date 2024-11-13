@@ -1,5 +1,5 @@
 
-NAME := polished_custom
+NAME := shimmer-crystal
 MODIFIERS :=
 VERSION := 9bit-72d5dc4
 
