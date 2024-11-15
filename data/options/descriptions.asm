@@ -1,3 +1,5 @@
+; These are in the same order as GetInitialOptionPointer.Pointers,
+; not the *_OPT bit order!
 InitialOptionDescriptions:
 	table_width 2, InitialOptionDescriptions
 	dw .InitialOptionDesc_Natures
@@ -5,10 +7,10 @@ InitialOptionDescriptions:
 	dw .InitialOptionDesc_PSS
 	dw .InitialOptionDesc_EVs
 	dw .InitialOptionDesc_ExpScaling
+	dw .InitialOptionDesc_AffectionBonus
 	dw .InitialOptionDesc_ColorVariation
 	dw .InitialOptionDesc_PerfectIVs
 	dw .InitialOptionDesc_TradedMon
-	dw .InitialOptionDesc_NuzlockeMode
 	assert_table_length NUM_INITIAL_OPTIONS
 
 .InitialOptionDesc_Natures:
@@ -72,16 +74,37 @@ InitialOptionDescriptions:
 	line "Gen 5 and 7."
 	prompt
 
+.InitialOptionDesc_AffectionBonus:
+	text "Your #mon will"
+	line "gain benefits in"
+	cont "battle when they"
+
+	para "are close friends"
+	line "with you."
+
+	para "Introduced in"
+	line "Gen 6."
+	prompt
+
 .InitialOptionDesc_ColorVariation:
-	text "Both normal and"
-	line "shiny #mon"
+	text "Individual #-"
+	line "mon, both regular"
+	cont "and shiny, will"
 
 	para "have their colors"
-	line "subtly varied"
-	cont "based on IVs."
+	line "subtly varied."
+
+	para "The variation is"
+	line "pseudorandom, not"
+
+	para "correlated with"
+	line "stat quality."
 
 	para "Inspired by"
-	line "Stadium."
+	line "Stadium's color"
+
+	para "variation based"
+	line "on nicknames."
 	prompt
 
 .InitialOptionDesc_PerfectIVs:
@@ -100,18 +123,4 @@ InitialOptionDescriptions:
 
 	para "but Exp. Points"
 	line "won't be boosted."
-	prompt
-
-.InitialOptionDesc_NuzlockeMode:
-	text "Only the first"
-	line "new species you"
-
-	para "encounter per"
-	line "area may be cap-"
-
-	para "tured (as well"
-	line "as any shinies)."
-
-	para "#mon cannot"
-	line "be revived."
 	prompt

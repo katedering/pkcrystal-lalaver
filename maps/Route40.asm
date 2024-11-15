@@ -349,10 +349,6 @@ Route40SignText:
 	done
 
 CruelChamberSealstoneText:
-	text "This stone seems"
-	line "rather odd."
-	
-	para "Perhaps something"
-	line "will happen with"
-	cont "it, eventually?"
+	text "An odd stone"
+	line "blocks your path."
 	done

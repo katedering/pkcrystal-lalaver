@@ -153,6 +153,11 @@ SetBattlePal_Pokepic:
 	pop bc
 	pop hl
 
+	; no color variation for trainer pics (assumes temp species == 0 for trainers!)
+	ld a, [hl]
+	and a
+	ret z
+
 	push de
 	ld a, 6
 .loop
@@ -256,13 +261,13 @@ _CGB_FinishBattleScreenLayout:
 	xor a ; PAL_BATTLE_BG_PLAYER
 	call FillBoxWithByte
 
-	hlcoord 10, 0, wAttrmap
-	lb bc, 7, 10
+	hlcoord 11, 0, wAttrmap
+	lb bc, 7, 9
 	ld a, PAL_BATTLE_BG_ENEMY
 	call FillBoxWithByte
 
 	hlcoord 0, 0, wAttrmap
-	lb bc, 4, 10
+	lb bc, 4, 11
 	ld a, PAL_BATTLE_BG_ENEMY_HP
 	call FillBoxWithByte
 
@@ -277,6 +282,7 @@ _CGB_FinishBattleScreenLayout:
 	call FillBoxWithByte
 
 	ld a, PAL_BATTLE_BG_EXP_GENDER
+	ldcoord_a 0, 1, wAttrmap
 	ldcoord_a 1, 1, wAttrmap
 	ldcoord_a 8, 1, wAttrmap
 	ldcoord_a 18, 8, wAttrmap

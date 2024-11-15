@@ -345,5 +345,5 @@ PokedexDataPointerTable:
 	dba TaurosPaldeanPokedexEntry
 	dba TaurosPaldeanFirePokedexEntry
 	dba TaurosPaldeanWaterPokedexEntry
-	
+
 	assert_table_length NUM_EXT_POKEMON
