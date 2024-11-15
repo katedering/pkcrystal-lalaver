@@ -7,7 +7,7 @@ GoldenrodPokecomCenter1F_MapScriptHeader:
 	def_warp_events
 	warp_event  6, 15, GOLDENROD_CITY, 15
 	warp_event  7, 15, GOLDENROD_CITY, 15
-	warp_event  1,  6, GOLDENROD_POKECOM_CENTER_OFFICE, 2
+;	warp_event  1,  6, GOLDENROD_POKECOM_CENTER_OFFICE, 2
 	warp_event  0, 15, POKECENTER_2F, 1
 
 	def_coord_events
@@ -31,6 +31,7 @@ GoldenrodPokecomCenter1F_MapScriptHeader:
 	bg_event 29,  9, BGEVENT_LEFT, JudgeMachineScript
 	bg_event 29, 10, BGEVENT_LEFT, JudgeMachineScript
 	bg_event 24,  3, BGEVENT_ITEM + RARE_CANDY, EVENT_GOLDENROD_POKECOM_CENTER_1F_HIDDEN_RARE_CANDY
+	bg_event  1,  6, BGEVENT_JUMPTEXT, GoldenrodPokecenter1FLockedDoorText
 
 	def_object_events
 	object_event 23, 10, SPRITE_ENGINEER, SPRITEMOVEDATA_STANDING_RIGHT, 0, 0, -1, -1, PAL_NPC_PURPLE, OBJECTTYPE_SCRIPT, 0, JudgeMachineEngineerScript, EVENT_JUDGE_MACHINE_ENGINEER
@@ -473,4 +474,11 @@ GoldenrodPokecenter1FGrampsText:
 
 	para "here makes me feel"
 	line "younger!"
+	done
+
+GoldenrodPokecenter1FLockedDoorText:
+	text "The door's locked."
+	
+	para "I wonder what"
+	line "goes on in there…"
 	done

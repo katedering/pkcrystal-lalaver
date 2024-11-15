@@ -231,7 +231,7 @@ wWalkingDirection:: db
 wFacingDirection:: db
 wWalkingX:: db
 wWalkingY:: db
-wWalkingTile:: db
+wWalkingTileCollision:: db
 	ds 6
 wPlayerTurningDirection:: db
 
@@ -358,11 +358,11 @@ wBattlePlayerAction::
 wSolvedUnownPuzzle::
 	db
 
-wVramState::
+wStateFlags::
 ; bit 0: overworld sprite updating on/off
-; bit 6: something to do with text
-; bit 7: on when surf initiates
-;        flickers when climbing waterfall
+; bit 1: last 12 sprite OAM structs reserved
+; bit 6: in text state
+; bit 7: in scripted movement
 	db
 
 wBattleResult::
@@ -492,8 +492,10 @@ wTempMonSlot:: db
 wDexCacheValid:: db
 wDexCacheSeen:: dw
 wDexCacheOwn:: dw
+wDexPrevCursorPos:: db
+wDexPrevOffset:: db
 
-	ds 34 ; unused
+	ds 32 ; unused
 
 wOverworldMapAnchor:: dw
 wMetatileStandingY:: db
@@ -635,15 +637,12 @@ wBattleType::
 ; $04 headbutt/rock smash
 ; $05 roaming
 ; $06 contest
-; $07 safari
-; $08 ghost
-; $09 grotto
-; $0a inverse
-; $0b trap
+; $07 ghost
+; $08 inverse
+; $09 shiny
 ; $0a force Item1
-; $0c red gyarados
-; $0d legendary
-; $0e shiny
+; $0b trap
+; $0c legendary
 	db
 
 wOtherTrainerID::
@@ -798,7 +797,7 @@ wScriptFlags1::
 	db
 wScriptFlags2::
 	db
-wScriptFlags3::
+wEnabledPlayerEvents::
 ; bit 0: count steps
 ; bit 1: xy triggers
 ; bit 2: warps and connections
@@ -1174,7 +1173,7 @@ wPlayerCaught2:: db
 
 wUsedObjectPals:: db
 for n, 8
-wLoadedObjPal{d:n}:: db 
+wLoadedObjPal{d:n}:: db
 endr
 wNeededPalIndex:: db
 
@@ -1199,8 +1198,8 @@ wOWState:: dw
 wCurMapSceneScriptPointer:: dw
 
 wCurCaller:: dw
-wCurMapWarpCount:: db
-wCurMapWarpsPointer:: dw
+wCurMapWarpEventCount:: db
+wCurMapWarpEventsPointer:: dw
 wCurMapCoordEventCount:: db
 wCurMapCoordEventsPointer:: dw
 wCurMapBGEventCount:: db
@@ -1247,7 +1246,8 @@ wHiddenGrottoContents::
 ; dbw content type, content id
 	ds NUM_HIDDEN_GROTTOES * 3
 
-	ds 2 ; unused
+wLastMapYCoord:: db ; current y coordinate relative to top-left corner of the previous map
+wLastMapXCoord:: db ; current x coordinate relative to top-left corner of previous map
 
 wCurHiddenGrotto:: db
 
@@ -1420,10 +1420,7 @@ wRoamMon1:: roam_struct wRoamMon1
 wRoamMon2:: roam_struct wRoamMon2
 wRoamMon3:: roam_struct wRoamMon3
 
-wRoamMons_CurMapNumber:: db
-wRoamMons_CurMapGroup:: db
-wRoamMons_LastMapNumber:: db
-wRoamMons_LastMapGroup:: db
+	ds 4 ; previously used
 
 wBestMagikarpLengthMm::
 wBestMagikarpLengthMmHi:: db
@@ -1507,6 +1504,16 @@ wPokeDB1UsedEntriesEnd::
 
 wPokeDB2UsedEntries:: flag_array MONDB_ENTRIES
 wPokeDB2UsedEntriesEnd::
+
+
+SECTION "Sprites Backup", WRAMX
+
+wShadowOAMBackup::
+; wShadowOAMSpriteBackup00 - wShadowOAMSpriteBackup39
+for n, NUM_SPRITE_OAM_STRUCTS
+wShadowOAMSpriteBackup{02d:n}:: sprite_oam_struct wShadowOAMSpriteBackup{02d:n}
+endr
+wShadowOAMBackupEnd::
 
 
 SECTION UNION "Metatiles", WRAMX
@@ -1762,6 +1769,8 @@ wAbilityTiles:: ds 22 tiles
 ; + 1 to include the "'s"
 wAbilityPkmn:: ds MON_NAME_LENGTH + 1
 wAbilityName:: ds 20
+NEXTU
+wWeatherScratch:: ds SCREEN_HEIGHT_PX
 ENDU
 
 

@@ -879,9 +879,11 @@ NotVeryEffectiveText:
 	prompt
 
 TookDownWithItText:
-	text "<TARGET>"
-	line "took <USER>"
-	cont "down with it!"
+	text "<TARGET>'s"
+	line "bond took"
+
+	para "<USER>"
+	line "down with it!"
 	prompt
 
 RageBuildingText:
@@ -1451,6 +1453,64 @@ IgnoredOrders2Text:
 BecameHealthyText:
 	text "<USER>"
 	line "became healthy!"
+	prompt
+
+PlayerAffectionEndureText:
+	text "<USER>"
+	line "toughed it out so"
+
+	para "<PLAYER>"
+	line "wouldn't feel sad!"
+	prompt
+
+EnemyAffectionEndureText:
+	text "<USER>"
+	line "toughed it out so"
+
+	para "<ENEMY>"
+	line "wouldn't feel sad!"
+	prompt
+
+PlayerAffectionEvasionText:
+	text "<USER>"
+	line "avoided the move"
+
+	para "in time with"
+	line "<PLAYER>'s"
+	cont "shout!"
+	prompt
+
+EnemyAffectionEvasionText:
+	text "<USER>"
+	line "avoided the move"
+
+	para "in time with"
+	line "<ENEMY>'s"
+	cont "shout!"
+	prompt
+
+PlayerAffectionSelfCureText:
+	text "<USER>"
+	line "became healthy so"
+
+	para "<PLAYER>"
+	line "wouldn't worry!"
+	prompt
+
+EnemyAffectionSelfCureText:
+	text "<USER>"
+	line "became healthy so"
+
+	para "<ENEMY>"
+	line "wouldn't worry!"
+	prompt
+
+AffectionCriticalText: ; same for both player and enemy
+	text "<USER>"
+	line "landed a critical"
+
+	para "hit, wishing to be"
+	line "praised!"
 	prompt
 
 NotifyAirBalloonText:
@@ -2089,41 +2149,3 @@ LawrenceFinalPkmnText:
 ReiFinalPkmnText:
 	text "I'm not done yet."
 	prompt
-
-KateFinalPkmnText:
-	text "Such power…"
-
-	para "You truly are a"
-	line "great trainer."
-	prompt
-	
-AshFinalPkmnText:
-	text "This is great!"
-	
-	para "You're really"
-	line "strong!"
-	prompt
-	
-TripFinalPkmnText:
-	text "…"
-	
-	para "……"
-	
-	para "………"
-	
-	para "………!"
-	
-	para "Impressive!"
-	prompt
-	
-FedmaeFinalPkmnText:
-	text "…I see…"
-	prompt
-	
-CuteFinalPkmnText:
-	text "Almost done!"
-	
-	para "Are you enjoying"
-	line "the battle?"
-	prompt
-

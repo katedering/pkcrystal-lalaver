@@ -3263,7 +3263,7 @@ SECTION "_InitialOptionsText", ROMX
 _InitialOptionsText::
 	text "Please choose how"
 	line "you want to play"
-	cont "Polished Crystal."
+	cont "Crystal Gleam."
 	prompt
 
 SECTION "_ElmText1", ROMX
@@ -4398,20 +4398,6 @@ Text_MonCantBeCaught::
 	line "be caught!"
 	prompt
 
-SECTION "Text_NuzlockeBallFailure", ROMX
-Text_NuzlockeBallFailure::
-	text "You already"
-	line "encountered a"
-	cont "#mon here."
-	prompt
-
-SECTION "Text_NuzlockeReviveFailure", ROMX
-Text_NuzlockeReviveFailure::
-	text "You can't revive"
-	line "#mon in"
-	cont "Nuzlocke mode!"
-	prompt
-
 SECTION "_ItemUsedText", ROMX
 _ItemUsedText::
 	text "<PLAYER> used the"
@@ -4555,17 +4541,17 @@ WonderTradePromptText::
 
 SECTION "WonderTradeCantTradeSpikyEaredPichuText", ROMX
 WonderTradeCantTradeSpikyEaredPichuText::
-    text "This Pichu appears"
-    line "to have traveled"
-    cont "through time."
+	text "This Pichu appears"
+	line "to have traveled"
+	cont "through time."
 
-    para "It would be risky"
-    line "to transfer it,"
+	para "It would be risky"
+	line "to transfer it,"
 
-    para "so it's best for"
-    line "Pichu to stay"
-    cont "where it is."
-    prompt
+	para "so it's best for"
+	line "Pichu to stay"
+	cont "where it is."
+	prompt
 
 ;SECTION "WonderTradeCantTradeEggText", ROMX
 ;WonderTradeCantTradeEggText::

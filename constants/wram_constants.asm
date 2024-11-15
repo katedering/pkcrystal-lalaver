@@ -65,7 +65,7 @@ DEF NUM_FRAMES EQU const_value
 ; wTextboxFlags::
 	const_def
 	const FAST_TEXT_DELAY_F  ; 0
-	const NO_TEXT_DELAY_F    ; 1
+	const TEXT_DELAY_F       ; 1
 	const NO_LINE_SPACING_F  ; 2
 	const USE_BG_MAP_WIDTH_F ; 3
 
@@ -96,8 +96,8 @@ DEF NUM_FONTS EQU const_value
 	const COLOR_VARY_OPT   ; 2
 	const PERFECT_IVS_OPT  ; 3
 	const TRADED_AS_OT_OPT ; 4
-	const NUZLOCKE_MODE    ; 5
-	const SCALED_EXP       ; 6
+	const AFFECTION_OPT    ; 5
+	const SCALED_EXP_OPT   ; 6
 	const PSS_OPT          ; 7
 
 DEF ABILITIES_OPTMASK EQU 1 << ABILITIES_OPT
@@ -141,6 +141,12 @@ DEF FACE_DOWN  EQU 8
 DEF FACE_UP    EQU 4
 DEF FACE_LEFT  EQU 2
 DEF FACE_RIGHT EQU 1
+
+; wStateFlags
+DEF SPRITE_UPDATES_DISABLED_F             EQU 0
+DEF LAST_12_SPRITE_OAM_STRUCTS_RESERVED_F EQU 1
+DEF TEXT_STATE_F                          EQU 6
+DEF SCRIPTED_MOVEMENT_STATE_F             EQU 7
 
 ; wPokemonWithdrawDepositParameter::
 DEF PC_WITHDRAW       EQU 0
@@ -497,7 +503,14 @@ DEF CAUGHT_BIRDS_MASK  EQU (1 << PLAYER_CAUGHT_ARTICUNO_F) | (1 << PLAYER_CAUGHT
 
 ; wPalFlags
 	const_def
-	const NO_DYN_PAL_APPLY_F   ; 0
-	const SCAN_OBJECTS_FIRST_F ; 1
-	const USE_DAYTIME_PAL_F    ; 2
-	const DISABLE_DYN_PAL_F    ; 3
+	const NO_DYN_PAL_APPLY_ONCE_F        ; 0
+	const SCAN_OBJECTS_FIRST_F           ; 1
+	const USE_DAYTIME_PAL_F              ; 2
+	const DISABLE_DYN_PAL_F              ; 3
+	const NO_DYN_PAL_APPLY_UNTIL_RESET_F ; 4
+	const MAP_CONNECTION_PAL_F           ; 5
+DEF NO_DYN_PAL_APPLY EQU (1 << NO_DYN_PAL_APPLY_ONCE_F) | (1 << NO_DYN_PAL_APPLY_UNTIL_RESET_F)
+
+; wMapSetupFlags
+	const_def
+	const MAPSETUP_CONNECTION_F ; 0

@@ -204,7 +204,9 @@ Music:
 	dba Music_KantoWildBattleFRLG
 	dba Music_KantoGymLeaderFRLG
 	dba Music_KantoEliteFourFRLG
+	dba Music_SeviiIslands
 	dba Music_WildBattleDPPt
+	dba Music_BattleCynthia
 	dba Music_BattleFrontierBrainDPPt
 	dba Music_GiovanniBattle
 	dba Music_IcePathHGSS

@@ -32,12 +32,11 @@ EcruteakShrineOutsideHoothootText:
 	done
 
 EcruteakShrineOutsideSageText:
-	text "On New Year's Eve,"
-	line "people visit this"
-
-	para "shrine and make"
-	line "wishes for their"
-	cont "future."
+	text "People say this"
+	line "shrine's energy"
+	
+	para "affects a certain"
+	line "kind of #mon."
 	done
 
 EcruteakShrineOutsideStatueText:
