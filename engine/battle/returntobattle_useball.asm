@@ -16,7 +16,7 @@ _ReturnToBattle_UseBall:
 	call CloseWindow
 	call LoadStandardMenuHeader
 	call ApplyTilemapInVBlank
-	call SetDefaultBGPAndOBP
+	call SetPalettes
 	farcall LoadPlayerStatusIcon
 	farcall LoadEnemyStatusIcon
 	farjp FinishBattleAnim

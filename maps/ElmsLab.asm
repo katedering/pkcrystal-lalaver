@@ -202,7 +202,7 @@ CyndaquilPokeBallScript:
 	checkevent EVENT_GOT_A_POKEMON_FROM_ELM
 	iftrue_jumptext ElmPokeBallText
 	turnobject ELMSLAB_ELM, DOWN
-	reanchormap
+	refreshscreen
 	pokepic CYNDAQUIL
 	cry CYNDAQUIL
 	waitbutton
@@ -242,7 +242,7 @@ TotodilePokeBallScript:
 	checkevent EVENT_GOT_A_POKEMON_FROM_ELM
 	iftrue_jumptext ElmPokeBallText
 	turnobject ELMSLAB_ELM, DOWN
-	reanchormap
+	refreshscreen
 	pokepic TOTODILE
 	cry TOTODILE
 	waitbutton
@@ -280,7 +280,7 @@ ChikoritaPokeBallScript:
 	checkevent EVENT_GOT_A_POKEMON_FROM_ELM
 	iftrue_jumptext ElmPokeBallText
 	turnobject ELMSLAB_ELM, DOWN
-	reanchormap
+	refreshscreen
 	pokepic CHIKORITA
 	cry CHIKORITA
 	waitbutton
@@ -457,7 +457,7 @@ ElmAskBattleScript:
 	setevent EVENT_BATTLED_PROF_ELM
 	startbattle
 	reloadmap
-	special HealParty
+	special HealPartyEvenForNuzlocke
 	jumptextfaceplayer ElmAfterBattleText
 
 ElmGiveTicketScript:
@@ -623,7 +623,7 @@ LyraBattleScript:
 	turnobject PLAYER, DOWN
 	applymovement ELMSLAB_LYRA, LyraLeavesMovement
 	disappear ELMSLAB_LYRA
-	special HealParty
+	special HealPartyEvenForNuzlocke
 	setscene $5
 	playmapmusic
 	end
@@ -1094,7 +1094,7 @@ ElmDirectionsText3:
 	text "Also, Lala says"
 	line "hello as well!"
 	
-	para "<PLAYER>, we're"
+	para "<PLAYER>, We're"
 	line "counting on you!"
 	done
 

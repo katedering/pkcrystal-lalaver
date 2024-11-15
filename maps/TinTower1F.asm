@@ -197,12 +197,12 @@ TinTower1FSage5Script:
 	promptbutton
 	verbosegivekeyitem RAINBOW_WING
 	closetext
-	reanchormap
+	refreshscreen
 	earthquake 72
 	waitsfx
 	playsound SFX_STRENGTH
 	changeblock 8, 2, $20
-	refreshmap
+	reloadmappart
 	setevent EVENT_GOT_RAINBOW_WING
 	closetext
 	opentext

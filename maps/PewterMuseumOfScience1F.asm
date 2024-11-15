@@ -226,7 +226,7 @@ Museum1FReceptionistScript:
 	done
 
 KabutopsFossilSignpostScript:
-	reanchormap
+	refreshscreen
 	trainerpic KABUTOPS_FOSSIL
 	waitbutton
 	closepokepic
@@ -240,7 +240,7 @@ KabutopsFossilSignpostScript:
 	done
 
 OmastarFossilSignpostScript:
-	reanchormap
+	refreshscreen
 	trainerpic OMASTAR_FOSSIL
 	waitbutton
 	closepokepic
@@ -254,7 +254,7 @@ OmastarFossilSignpostScript:
 	done
 
 AerodactylFossilSignpostScript:
-	reanchormap
+	refreshscreen
 	trainerpic AERODACTYL_FOSSIL
 	waitbutton
 	closepokepic

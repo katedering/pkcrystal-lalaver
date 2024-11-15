@@ -36,10 +36,10 @@ PokeGear:
 	ld a, $1
 	ldh [hInMenu], a
 	ld [wInPokegear], a
-	ld a, [wStateFlags]
+	ld a, [wVramState]
 	push af
 	xor a
-	ld [wStateFlags], a
+	ld [wVramState], a
 	call .InitTilemap
 	call DelayFrame
 .loop
@@ -58,7 +58,7 @@ PokeGear:
 	call PlaySFX
 	call WaitSFX
 	pop af
-	ld [wStateFlags], a
+	ld [wVramState], a
 	pop af
 	ldh [hInMenu], a
 	pop af
@@ -105,7 +105,7 @@ PokeGear:
 	call InitPokegearTilemap
 	ld a, CGB_POKEGEAR_PALS
 	call GetCGBLayout
-	call SetDefaultBGPAndOBP
+	call SetPalettes
 	ld a, %11100100
 	jmp DmgToCgbObjPal0
 
@@ -1190,10 +1190,10 @@ _TownMap:
 	ld a, $1
 	ldh [hInMenu], a
 
-	ld a, [wStateFlags]
+	ld a, [wVramState]
 	push af
 	xor a
-	ld [wStateFlags], a
+	ld [wVramState], a
 
 	call ClearBGPalettes
 	call ClearTileMap
@@ -1223,7 +1223,7 @@ _TownMap:
 	ld [wTownMapCursorObjectPointer + 1], a
 	ld a, CGB_POKEGEAR_PALS
 	call GetCGBLayout
-	call SetDefaultBGPAndOBP
+	call SetPalettes
 	ld a, %11100100
 	call DmgToCgbObjPal0
 	call DelayFrame
@@ -1244,7 +1244,7 @@ _TownMap:
 .resume
 	call .loop
 	pop af
-	ld [wStateFlags], a
+	ld [wVramState], a
 	pop af
 	ldh [hInMenu], a
 	pop af
@@ -1492,7 +1492,7 @@ _FlyMap:
 	call FlyMap
 	ld a, CGB_FLY_MAP
 	call GetCGBLayout
-	call SetDefaultBGPAndOBP
+	call SetPalettes
 .loop
 	call JoyTextDelay
 	ld hl, hJoyPressed

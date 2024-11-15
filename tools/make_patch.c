@@ -103,14 +103,12 @@ int parse_number(const char *input, int base) {
 
 void parse_symbol_value(char *input, int *restrict bank, int *restrict address) {
 	char *colon = strchr(input, ':');
-	if (colon) {
-		*colon++ = '\0';
-		*bank = parse_number(input, 16);
-		*address = parse_number(colon, 16);
-	} else {
-		*bank = 0;
-		*address = parse_number(input, 16);
+	if (!colon) {
+		error_exit("Error: Cannot parse bank+address: \"%s\"\n", input);
 	}
+	*colon++ = '\0';
+	*bank = parse_number(input, 16);
+	*address = parse_number(colon, 16);
 }
 
 void parse_symbols(const char *filename, struct Symbol **symbols) {
@@ -342,6 +340,8 @@ struct Buffer *process_template(const char *template_filename, const char *patch
 
 	// The ROM checksum will always differ
 	buffer_append(patches, &(struct Patch){0x14e, 2});
+	// The build timestamp (see home.asm) will always differ
+	buffer_append(patches, &(struct Patch){0x3fd7, 41});
 
 	// Fill in the template
 	const struct Symbol *current_hook = NULL;

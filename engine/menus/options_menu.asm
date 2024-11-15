@@ -20,7 +20,7 @@ OptionsMenu:
 	ld [wJumptableIndex], a
 	ld a, CGB_PLAIN
 	call GetCGBLayout
-	call SetDefaultBGPAndOBP
+	call SetPalettes
 
 .joypad_loop
 	call JoyTextDelay

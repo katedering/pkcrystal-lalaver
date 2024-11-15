@@ -299,19 +299,19 @@ GoldenrodGameCornerLeftTheirDrinkScript:
 GoldenrodGameCornerSlotsMachineScript:
 	random 6
 	ifequalfwd 0, GoldenrodGameCornerLuckySlotsMachineScript
-	reanchormap
+	refreshscreen
 	setval FALSE
 	special Special_SlotMachine
 	endtext
 
 GoldenrodGameCornerLuckySlotsMachineScript:
-	reanchormap
+	refreshscreen
 	setval TRUE
 	special Special_SlotMachine
 	endtext
 
 GoldenrodGameCornerCardFlipMachineScript:
-	reanchormap
+	refreshscreen
 	special Special_CardFlip
 	endtext
 

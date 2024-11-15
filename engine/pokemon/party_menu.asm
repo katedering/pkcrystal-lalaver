@@ -11,7 +11,7 @@ SelectTradeOrDayCareMon:
 	call ApplyTilemapInVBlank
 	ld a, CGB_PARTY_MENU
 	call GetCGBLayout
-	call SetDefaultBGPAndOBP
+	call SetPalettes
 	call DelayFrame
 	call PartyMenuSelect
 	jmp ReturnToMapWithSpeechTextbox
@@ -38,7 +38,7 @@ BT_SwapRentals:
 	call ApplyTilemapInVBlank
 	ld a, CGB_PARTY_MENU
 	call GetCGBLayout
-	call SetDefaultBGPAndOBP
+	call SetPalettes
 	call DelayFrame
 	call PartyMenuSelect
 	jmp c, .return
@@ -49,7 +49,7 @@ BT_SwapRentals:
 	ld de, .TradeWhichPKMN
 	rst PlaceString
 	call ApplyTilemapInVBlank
-	call SetDefaultBGPAndOBP
+	call SetPalettes
 	call DelayFrame
 	call PartyMenuSelect
 	jr c, .loop
@@ -187,7 +187,7 @@ BT_PartySelect:
 	call ApplyTilemapInVBlank
 	ld a, CGB_PARTY_MENU
 	call GetCGBLayout
-	call SetDefaultBGPAndOBP
+	call SetPalettes
 	call DelayFrame
 	call PartyMenuSelect
 	jr c, .return
@@ -529,7 +529,7 @@ InitPartyMenuLayout:
 	call InitPartyMenuWithCancel
 	call InitPartyMenuGFX
 	call WritePartyMenuTilemap
-	jmp PlacePartyMenuText
+	jmp PrintPartyMenuText
 
 LoadPartyMenuGFX:
 	call LoadFontsBattleExtra
@@ -1147,7 +1147,7 @@ InitPartySwap:
 
 	call InitPartyMenuNoCancel
 	call WritePartyMenuTilemap
-	call PlacePartyMenuText
+	call PrintPartyMenuText
 
 	hlcoord 0, 1
 	ld bc, 20 * 2
@@ -1238,7 +1238,7 @@ PartyMenuSelect:
 	scf
 	ret
 
-PlacePartyMenuText:
+PrintPartyMenuText:
 	hlcoord 0, 14
 	lb bc, 2, 18
 	call Textbox

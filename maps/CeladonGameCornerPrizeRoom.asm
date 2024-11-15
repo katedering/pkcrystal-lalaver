@@ -4,6 +4,9 @@ DEF CELADONGAMECORNERPRIZEROOM_TM68_COINS EQU 7500
 DEF CELADONGAMECORNERPRIZEROOM_MR__MIME_COINS EQU 3333
 DEF CELADONGAMECORNERPRIZEROOM_EEVEE_COINS    EQU 6666
 DEF CELADONGAMECORNERPRIZEROOM_PORYGON_COINS  EQU 9999
+;CELADONGAMECORNERPRIZEROOM_ARTICUNO_COINS EQU 50000
+;CELADONGAMECORNERPRIZEROOM_ZAPDOS_COINS    EQU 50000
+;CELADONGAMECORNERPRIZEROOM_MOLTRES_COINS  EQU 50000
 
 CeladonGameCornerPrizeRoom_MapScriptHeader:
 	def_scene_scripts
@@ -23,6 +26,7 @@ CeladonGameCornerPrizeRoom_MapScriptHeader:
 	object_event  5,  1, SPRITE_CLERK, SPRITEMOVEDATA_STANDING_DOWN, 0, 0, -1, -1, PAL_NPC_GREEN, OBJECTTYPE_SCRIPT, 0, CeladonGameCornerPokemonVendor, -1
 	object_event  0,  3, SPRITE_GENTLEMAN, SPRITEMOVEDATA_STANDING_DOWN, 0, 0, -1, -1, PAL_NPC_RED, OBJECTTYPE_COMMAND, jumptextfaceplayer, CeladonGameCornerPrizeRoomGentlemanText, -1
 	object_event  5,  5, SPRITE_PHARMACIST, SPRITEMOVEDATA_WALK_UP_DOWN, 1, 0, -1, -1, PAL_NPC_BLUE, OBJECTTYPE_COMMAND, jumptextfaceplayer, CeladonGameCornerPrizeRoomPharmacistText, -1
+;    object_event  7,  3, SPRITE_ROCKET_GIRL, SPRITEMOVEDATA_SPINRANDOM_SLOW, 0, 0, -1, -1, PAL_NPC_RED, OBJECTTYPE_SCRIPT, 0, CeladonGameCornerPokemonVendor2, -1
 
 CeladonGameCornerTMVendor:
 	faceplayer
@@ -200,10 +204,94 @@ CeladonGameCornerPokemonVendor:
 	db "Porygon    {d:CELADONGAMECORNERPRIZEROOM_PORYGON_COINS}@"
 	db "Cancel@"
 
+;CeladonGameCornerPokemonVendor2:
+;	faceplayer
+;	opentext
+;	writetext CeladonPrizeRoom_PrizeVendorIntroText
+;	waitbutton
+;	checkkeyitem COIN_CASE
+;	iffalse_jumpopenedtext CeladonPrizeRoom_NoCoinCaseText
+;.loop
+;	writetext CeladonPrizeRoom_AskWhichPrizeText
+;	special Special_DisplayCoinCaseBalance
+;	loadmenu .MenuDataHeader
+;	verticalmenu
+;	closewindow
+;	ifequalfwd $1, .articuno
+;	ifequalfwd $2, .zapdos
+;	ifequalfwd $3, .moltres
+;	jumpopenedtext CeladonPrizeRoom_ComeAgainText
+;
+;.articuno
+;	checkcoins CELADONGAMECORNERPRIZEROOM_ARTICUNO_COINS
+;	ifequal $2, CeladonPrizeRoom_notenoughcoins
+;	getmonname ARTICUNO, $0
+;	scall CeladonPrizeRoom_askbuy
+;	iffalse_jumpopenedtext CeladonPrizeRoom_ComeAgainText
+;	waitsfx
+;	playsound SFX_TRANSACTION
+;	writetext CeladonPrizeRoom_HereYouGoText
+;	waitbutton
+;	givepoke ARTICUNO, GALARIAN_FORM, 50
+;	iffalse_jumpopenedtext CeladonPrizeRoom_NotEnoughRoomText
+;	setval ARTICUNO
+;	special Special_GameCornerPrizeMonCheckDex
+;	takecoins CELADONGAMECORNERPRIZEROOM_ARTICUNO_COINS
+;	sjump .loop
+;
+;.zapdos
+;	checkcoins CELADONGAMECORNERPRIZEROOM_ZAPDOS_COINS
+;	ifequal $2, CeladonPrizeRoom_notenoughcoins
+;	getmonname ZAPDOS, $0
+;	scall CeladonPrizeRoom_askbuy
+;	iffalse_jumpopenedtext CeladonPrizeRoom_ComeAgainText
+;	waitsfx
+;	playsound SFX_TRANSACTION
+;	writetext CeladonPrizeRoom_HereYouGoText
+;	waitbutton
+;	givepoke ZAPDOS, GALARIAN_FORM, 50
+;	iffalse_jumpopenedtext CeladonPrizeRoom_NotEnoughRoomText
+;	setval ZAPDOS
+;	special Special_GameCornerPrizeMonCheckDex
+;	takecoins CELADONGAMECORNERPRIZEROOM_ZAPDOS_COINS
+;	sjump .loop
+;
+;.moltres
+;	checkcoins CELADONGAMECORNERPRIZEROOM_MOLTRES_COINS
+;	ifequal $2, CeladonPrizeRoom_notenoughcoins
+;	getmonname MOLTRES, $0
+;	scall CeladonPrizeRoom_askbuy
+;	iffalse_jumpopenedtext CeladonPrizeRoom_ComeAgainText
+;	waitsfx
+;	playsound SFX_TRANSACTION
+;	writetext CeladonPrizeRoom_HereYouGoText
+;	waitbutton
+;	givepoke MOLTRES, GALARIAN_FORM, 50
+;	iffalse_jumpopenedtext CeladonPrizeRoom_NotEnoughRoomText
+;	setval MOLTRES
+;	special Special_GameCornerPrizeMonCheckDex
+;	takecoins CELADONGAMECORNERPRIZEROOM_MOLTRES_COINS
+;	sjump .loop
+;
+;.MenuDataHeader:
+;	db $40 ; flags
+;	db 02, 00 ; start coords
+;	db 11, 17 ; end coords
+;	dw .MenuData2
+;	db 1 ; default option
+;
+;.MenuData2:
+;	db $80 ; flags
+;	db 4 ; items
+;	db "Articuno?  {d:CELADONGAMECORNERPRIZEROOM_ARTICUNO_COINS}@"
+;	db "Zapdos?    {d:CELADONGAMECORNERPRIZEROOM_ZAPDOS_COINS}@"
+;	db "Moltres?   {d:CELADONGAMECORNERPRIZEROOM_MOLTRES_COINS}@"
+;	db "Cancel@"
+;
 CeladonGameCornerPrizeRoomGentlemanText:
 	text "I wanted Porygon,"
-	line "but I was short by"
-	cont "100 coins…"
+	line "but I didn't have"
+	cont "enough coins…"
 	done
 
 CeladonGameCornerPrizeRoomPharmacistText:

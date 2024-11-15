@@ -54,13 +54,13 @@ RuinsofAlphKabutoChamberWallOpenScript:
 	pause 30
 	playsound SFX_STRENGTH
 	changeblock 4, 0, $25
-	refreshmap
+	reloadmappart
 	earthquake 50
 	setscene $1
 	endtext
 
 MapRuinsofAlphKabutoChamberSignpost2Script:
-	reanchormap
+	refreshscreen
 	setval $0
 	special Special_UnownPuzzle
 	closetext
@@ -77,7 +77,7 @@ MapRuinsofAlphKabutoChamberSignpost2Script:
 	showemote EMOTE_SHOCK, PLAYER, 15
 	changeblock 2, 2, $14
 	changeblock 4, 2, $15
-	refreshmap
+	reloadmappart
 	playsound SFX_STRENGTH
 	earthquake 80
 	applyonemovement PLAYER, skyfall_top
@@ -109,11 +109,8 @@ RuinsOfAlphKabutoChamberScientistScript:
 	jumptextfaceplayer RuinsOfAlphResearchCenterScientist1Text_GotAllUnown
 
 MapRuinsofAlphKabutoChamberSignpost3Script:
-	opentext
 	unowntypeface
-	writetext RuinsOfAlphKabutoChamberDescriptionText
-	waitbutton
-	closetext
+	showtext RuinsOfAlphKabutoChamberDescriptionText
 	restoretypeface
 	special RefreshSprites
 	end

@@ -37,7 +37,6 @@
 	const SFX_TRANSACTION                 ; 22
 	const SFX_EXIT_BUILDING               ; 23
 	const SFX_BUMP                        ; 24
-	const SFX_THUNDER_OW                  ; d5
 	const SFX_SAVE                        ; 25
 	const SFX_POKEFLUTE                   ; 26
 	const SFX_ELEVATOR_END                ; 27
@@ -211,8 +210,4 @@
 	const SFX_TWINKLE                     ; ce
 	const SFX_PUDDLE                      ; cf
 	const SFX_ABILITYSLIDEOUT             ; d0
-	const SFX_CRITICAL_CAPTURE            ; d1
-	const SFX_STAT_UP                     ; d2
-	const SFX_STAT_DOWN                   ; d3
-	const SFX_GRAVITY                     ; d4
 DEF NUM_SFX EQU const_value

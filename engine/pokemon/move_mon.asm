@@ -266,6 +266,8 @@ endr
 	jr z, .not_shiny
 	cp BATTLETYPE_GROTTO
 	jr z, .not_shiny
+	cp BATTLETYPE_SHINY
+	jr z, .shiny
 
 .shiny_check
 	call Random
@@ -373,7 +375,7 @@ endr
 	dec a
 	ld a, BASE_HAPPINESS
 	jr z, .set_happiness
-	ld a, MAX_RETURN_HAPPINESS
+	ld a, $ff
 .set_happiness
 	ld [de], a
 	inc de
@@ -623,7 +625,7 @@ RetrieveBreedmon:
 	ld a, [wPartyCount]
 	dec a
 	ld [wCurPartyMon], a
-	call HealPartyMon
+	call HealPartyMonEvenForNuzlocke
 	ld a, [wCurPartyLevel]
 	ld d, a
 	farcall CalcExpAtLevel

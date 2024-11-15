@@ -123,7 +123,7 @@ CheckPokeItem::
 	push bc
 	push de
 	farcall SelectMonFromParty
-	ld a, $2 ; refused
+	ld a, $2
 	jr c, .pop_return
 
 	ld a, [wCurPartyMon]
@@ -132,7 +132,7 @@ CheckPokeItem::
 	rst AddNTimes
 	ld d, [hl]
 	call ItemIsMail
-	ld a, $3 ; no mail
+	ld a, $3
 	jr nc, .pop_return
 
 	ld a, BANK(sPartyMail)
@@ -157,7 +157,7 @@ CheckPokeItem::
 	cp "@"
 	jr z, .done
 	cp c
-	ld a, FALSE ; no-optimize a = 0 (wrong mail)
+	ld a, FALSE
 	jr nz, .close_sram_return
 	inc hl
 	inc de
@@ -168,12 +168,12 @@ CheckPokeItem::
 
 .done
 	farcall CheckCurPartyMonFainted
-	ld a, $4 ; last mon
+	ld a, $4
 	jr c, .close_sram_return
 	xor a
 	ld [wPokemonWithdrawDepositParameter], a
 	predef RemoveMonFromParty
-	ld a, TRUE ; right mail
+	ld a, TRUE
 
 .close_sram_return
 	call CloseSRAM
@@ -475,9 +475,9 @@ MailboxPC:
 	farcall InitPartyMenuWithCancel
 	farcall InitPartyMenuGFX
 	farcall WritePartyMenuTilemap
-	farcall PlacePartyMenuText
+	farcall PrintPartyMenuText
 	call ApplyTilemapInVBlank
-	call SetDefaultBGPAndOBP
+	call SetPalettes
 	call DelayFrame
 	farcall PartyMenuSelect
 	jr c, .exit2

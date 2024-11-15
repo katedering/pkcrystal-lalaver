@@ -589,14 +589,8 @@ INCLUDE "audio/music/frlg/wildbattle.asm"
 SECTION "Song - frlg/gymleader + frlg/elitefour", ROMX
 INCLUDE "audio/music/frlg/FRLGGymLeader_EliteFour.asm"
 
-SECTION "Song - frlg/seviiIslands", ROMX
-INCLUDE "audio/music/frlg/seviiIslands.asm"
-
 SECTION "Song - dppt/wildbattle", ROMX
 INCLUDE "audio/music/dppt/wildbattle.asm"
-
-SECTION "Song - dppt/battleCynthia", ROMX
-INCLUDE "audio/music/dppt/battleCynthia.asm"
 
 SECTION "Song - dppt/frontierbrainbattle", ROMX
 INCLUDE "audio/music/dppt/frontierbrainbattle.asm"
@@ -606,5 +600,3 @@ INCLUDE "audio/music/sm/giovannibattle.asm"
 
 SECTION "Song - hgss/icepath", ROMX
 INCLUDE "audio/music/hgss/icepath.asm"
-
-ENDSECTION

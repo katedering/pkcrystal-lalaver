@@ -160,7 +160,7 @@ SnowtopMountainOutsideStopPanningScript:
 	applymovement PLAYER, SnowtopMountainOutsideStopPanningMovement
 	disappear SNOWTOPMOUNTAINOUTSIDE_PLAYER
 	showtext SnowtopMountainOutsideWhatAViewText
-	refreshmap
+	reloadmappart
 	loadmem wPanningAroundTinyMap, FALSE
 	end
 

@@ -110,7 +110,7 @@ Buena:
 	turnobject PLAYER, RIGHT
 	showtext RadioTower2FBuenaEveryoneSayPasswordText
 	turnobject RADIOTOWER2F_BUENA, DOWN
-	reanchormap
+	refreshscreen
 	special SpecialBuenasPassword
 	closetext
 	iffalsefwd .WrongAnswer

@@ -14,9 +14,7 @@ HandleStoneTableAction::
 	ld hl, OBJECT_MAP_OBJECT_INDEX
 	add hl, de
 	ld a, [hl]
-	cp UNASSOCIATED_OBJECT
-	jr z, .nope
-	cp TEMP_OBJECT
+	cp $ff
 	jr z, .nope
 
 	ld l, a
@@ -58,11 +56,11 @@ HandleStoneTableAction::
 	ret
 
 .check_on_warp
-	ld hl, wCurMapWarpEventsPointer
+	ld hl, wCurMapWarpsPointer
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
-	ld a, [wCurMapWarpEventCount]
+	ld a, [wCurMapWarpCount]
 	and a
 	jr z, .nope2
 
@@ -77,7 +75,7 @@ HandleStoneTableAction::
 	jr nz, .not_on_warp
 	pop af
 	ld d, a
-	ld a, [wCurMapWarpEventCount]
+	ld a, [wCurMapWarpCount]
 	sub d
 	inc a
 	scf

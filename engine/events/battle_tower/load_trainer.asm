@@ -29,6 +29,7 @@ NewRentalTeam:
 	ld a, [wBattleFactorySwapCount]
 	ld c, 6
 	call SimpleDivide
+	ld b, a
 
 	ld a, 5 ; same as for trainer 6 (0-indexed).
 	push bc
@@ -481,7 +482,7 @@ BT_AppendOTMon:
 	; Happiness is always 255
 	ld hl, MON_HAPPINESS
 	add hl, de
-	ld [hl], MAX_RETURN_HAPPINESS
+	ld [hl], 255
 
 	; Clear status conditions
 	ld hl, MON_STATUS

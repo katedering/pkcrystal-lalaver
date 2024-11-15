@@ -57,7 +57,7 @@ HallOfFame_FadeOutMusic:
 	ld [wMusicFade], a
 	farcall FadeOutPalettes
 	xor a
-	ld [wStateFlags], a
+	ld [wVramState], a
 	ldh [hMapAnims], a
 	ret
 
@@ -242,7 +242,7 @@ AnimateHOFMonEntrance:
 	ldh [hBGMapMode], a
 	ld a, CGB_PLAYER_OR_MON_FRONTPIC_PALS
 	call GetCGBLayout
-	call SetDefaultBGPAndOBP
+	call SetPalettes
 	call HOF_SlideBackpic
 	hlcoord 0, 0
 	ld bc, SCREEN_WIDTH * SCREEN_HEIGHT
@@ -371,7 +371,7 @@ _HallOfFamePC:
 	call ApplyTilemapInVBlank
 	ld a, CGB_PLAYER_OR_MON_FRONTPIC_PALS
 	call GetCGBLayout
-	call SetDefaultBGPAndOBP
+	call SetPalettes
 	decoord 6, 5
 	ld c, $6
 	predef HOF_AnimateFrontpic
@@ -523,7 +523,7 @@ HOF_AnimatePlayerPic:
 	ld [wCurPartySpecies], a
 	ld a, CGB_PLAYER_OR_MON_FRONTPIC_PALS
 	call GetCGBLayout
-	call SetDefaultBGPAndOBP
+	call SetPalettes
 	call HOF_SlideBackpic
 	xor a
 	ld [wBoxAlignment], a

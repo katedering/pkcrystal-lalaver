@@ -1,8 +1,8 @@
 TrainerCard:
-	ld a, [wStateFlags]
+	ld a, [wVramState]
 	push af
 	xor a
-	ld [wStateFlags], a
+	ld [wVramState], a
 	ld hl, wOptions1
 	ld a, [hl]
 	push af
@@ -27,7 +27,7 @@ TrainerCard:
 	pop af
 	ld [wOptions1], a
 	pop af
-	ld [wStateFlags], a
+	ld [wVramState], a
 	ret
 
 .InitRAM:
@@ -56,7 +56,7 @@ TrainerCard:
 	call ApplyTilemapInVBlank
 	ld a, CGB_TRAINER_CARD
 	call GetCGBLayout
-	call SetDefaultBGPAndOBP
+	call SetPalettes
 	call ApplyTilemapInVBlank
 	ld hl, wJumptableIndex
 	xor a
@@ -87,7 +87,7 @@ TrainerCard_Page1_LoadGFX:
 
 	ld a, CGB_TRAINER_CARD
 	call GetCGBLayout
-	call SetDefaultBGPAndOBP
+	call SetPalettes
 	call ApplyTilemapInVBlank
 
 	ld de, CardStatusGFX
@@ -120,7 +120,7 @@ TrainerCard_Page2_LoadGFX:
 
 	ld a, CGB_TRAINER_CARD_2
 	call GetCGBLayout
-	call SetDefaultBGPAndOBP
+	call SetPalettes
 	call ApplyTilemapInVBlank
 
 	ld de, CardBadgesGFX
@@ -187,7 +187,7 @@ TrainerCard_Page3_LoadGFX:
 
 	ld a, CGB_TRAINER_CARD_3
 	call GetCGBLayout
-	call SetDefaultBGPAndOBP
+	call SetPalettes
 	call ApplyTilemapInVBlank
 
 	ld de, CardBadgesGFX

@@ -30,7 +30,7 @@ GoldenrodMuseum1F_MapScriptHeader:
 
 
 GoldenrodMuseum1FLodestoneSignpostScript:
-	reanchormap
+	refreshscreen
 	trainerpic METEORITE
 	waitbutton
 	closepokepic

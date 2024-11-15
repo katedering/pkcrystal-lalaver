@@ -187,7 +187,7 @@ CeladonUniversity2FWestwoodsOfficeSignText:
 	done
 
 CeladonUniversity2FMagikarpSign:
-	reanchormap
+	refreshscreen
 	pokepic MAGIKARP, MAGIKARP_ORCA_FORM
 	cry MAGIKARP
 	waitbutton
@@ -199,7 +199,7 @@ CeladonUniversity2FMagikarpSign:
 	done
 
 CeladonUniversity2FCuboneSign:
-	reanchormap
+	refreshscreen
 	trainerpic CUBONE_ARMOR
 	waitbutton
 	closepokepic

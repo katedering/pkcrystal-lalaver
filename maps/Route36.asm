@@ -750,13 +750,13 @@ Route36AdvancedTips1Text:
 Route36AdvancedTips2Text:
 	text "Advanced Tips!"
 
-	para "Treating your"
-	line "#mon with hair-"
-	cont "cuts, blessings or"
+	para "Your #mon will"
+	line "become happier if"
+	cont "you treat them to"
 
-	para "massages can make"
-	line "them help you out"
+	para "haircuts, bless-"
+	line "ings, massages, or"
 
-	para "in battles due to"
-	line "their affection!"
+	para "having their photo"
+	line "taken!"
 	done

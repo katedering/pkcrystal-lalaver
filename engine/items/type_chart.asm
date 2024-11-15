@@ -4,10 +4,10 @@ _TypeChart:
 	ld a, $1
 	ldh [hInMenu], a
 
-	ld a, [wStateFlags]
+	ld a, [wVramState]
 	push af
 	xor a
-	ld [wStateFlags], a
+	ld [wVramState], a
 
 	call ClearBGPalettes
 	call ClearTileMap
@@ -64,7 +64,7 @@ _TypeChart:
 
 	call ApplyAttrAndTilemapInVBlank
 
-	call SetDefaultBGPAndOBP
+	call SetPalettes
 
 	ld a, %11100100
 	call DmgToCgbObjPal0
@@ -85,7 +85,7 @@ _TypeChart:
 	ldh [rLCDC], a
 
 	pop af
-	ld [wStateFlags], a
+	ld [wVramState], a
 
 	pop af
 	ldh [hInMenu], a

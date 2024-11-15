@@ -23,7 +23,7 @@ OaksLab_MapScriptHeader:
 	bg_event  8,  7, BGEVENT_JUMPSTD, difficultbookshelf
 	bg_event  9,  7, BGEVENT_JUMPSTD, difficultbookshelf
 	bg_event  4,  0, BGEVENT_JUMPTEXT, OaksLabPoster1Text
-	bg_event  5,  0, BGEVENT_JUMPTEXT, OaksLabPoster2Text
+	bg_event  5,  0, BGEVENT_JUMPTEXT, OaksLabPoster2Text	
 	bg_event  0,  1, BGEVENT_JUMPTEXT, OaksLabPCText
 
 	def_object_events
@@ -91,18 +91,19 @@ Oak:
 	writetext OakYesKantoBadgesText
 	promptbutton
 .CheckPokedex:
-	checkkeyitem CATCH_CHARM
+	checkevent EVENT_GOT_CATCH_CHARM_FROM_OAK
 	iftruefwd .GotCatchCharm
 	writetext OakLabCatchMoreText
 	promptbutton
 	verbosegivekeyitem CATCH_CHARM
+	setevent EVENT_GOT_CATCH_CHARM_FROM_OAK
 	writetext OakLabCatchCharmText
 	waitbutton
 .GotCatchCharm
 	writetext OakLabDexCheckText
 	waitbutton
 	special ProfOaksPCBoot
-	checkkeyitem OVAL_CHARM
+	checkevent EVENT_GOT_OVAL_CHARM_FROM_OAK
 	iftruefwd .NoOvalCharm
 	setval16 NUM_POKEMON
 	special CountSeen
@@ -110,10 +111,11 @@ Oak:
 	writetext OakLabSeenAllText
 	promptbutton
 	verbosegivekeyitem OVAL_CHARM
+	setevent EVENT_GOT_OVAL_CHARM_FROM_OAK
 	writetext OakLabOvalCharmText
 	waitbutton
 .NoOvalCharm
-	checkkeyitem SHINY_CHARM
+	checkevent EVENT_GOT_SHINY_CHARM_FROM_OAK
 	iftruefwd .NoShinyCharm
 	setval16 NUM_POKEMON
 	special CountCaught
@@ -121,6 +123,7 @@ Oak:
 	writetext OakLabCaughtAllText
 	promptbutton
 	verbosegivekeyitem SHINY_CHARM
+	setevent EVENT_GOT_SHINY_CHARM_FROM_OAK
 	writetext OakLabShinyCharmText
 	waitbutton
 .NoShinyCharm

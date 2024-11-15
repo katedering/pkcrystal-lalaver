@@ -302,7 +302,7 @@ ClearPCItemScreen:
 	lb bc, 4, 18
 	call Textbox
 	call ApplyAttrAndTilemapInVBlank
-	jmp SetDefaultBGPAndOBP ; load regular palettes?
+	jmp SetPalettes ; load regular palettes?
 
 PlayerWithdrawItemMenu:
 	call LoadStandardMenuHeader

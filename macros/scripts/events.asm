@@ -508,9 +508,9 @@ MACRO opentext
 	db opentext_command
 ENDM
 
-	const reanchormap_command
-MACRO reanchormap
-	db reanchormap_command
+	const refreshscreen_command
+MACRO refreshscreen
+	db refreshscreen_command
 ENDM
 
 	const closetext_command
@@ -815,9 +815,9 @@ MACRO reloadmap
 	db reloadmap_command
 ENDM
 
-	const refreshmap_command
-MACRO refreshmap
-	db refreshmap_command
+	const reloadmappart_command
+MACRO reloadmappart
+	db reloadmappart_command
 ENDM
 
 	const usestonetable_command

@@ -116,6 +116,7 @@ INCLUDE "maps/VioletMart.asm"
 INCLUDE "maps/VioletGym.asm"
 
 SECTION "Violet Scripts 2", ROMX
+
 INCLUDE "maps/VioletNicknameSpeechHouse.asm"
 INCLUDE "maps/VioletOnixTradeHouse.asm"
 INCLUDE "maps/EarlsPokemonAcademy.asm"
@@ -1085,8 +1086,6 @@ INCLUDE "maps/CruelChamber.asm"
 INCLUDE "maps/StrongChamber.asm"
 INCLUDE "maps/WickedChamber.asm"
 
-SECTION "Other Custom Map Scripts", ROMX
+SECTION "Other Polished Custom Map Scripts", ROMX
 
 INCLUDE "maps/VioletHauntedHouse.asm"
-
-ENDSECTION

@@ -1,9 +1,9 @@
 Special_CelebiShrineEvent:
 	call DelayFrame
-	ld a, [wStateFlags]
+	ld a, [wVramState]
 	push af
 	xor a
-	ld [wStateFlags], a
+	ld [wVramState], a
 
 	ld a, PAL_OW_GREEN
 	farcall CopySpritePalToOBPal7
@@ -39,14 +39,9 @@ Special_CelebiShrineEvent:
 	call GetCelebiSpriteTile
 	inc d
 	push de
-
-	ldh a, [hUsedOAMIndex]
-	; a = (NUM_SPRITE_OAM_STRUCTS - 4) * SPRITEOAMSTRUCT_LENGTH - a
-	cpl
-	add (NUM_SPRITE_OAM_STRUCTS - 4) * SPRITEOAMSTRUCT_LENGTH + 1
-
+	ld a, $90
 	ld [wCurSpriteOAMAddr], a
-	farcall DoNextFrameForAllSprites_OW
+	farcall DoNextFrameForAllSprites
 	call CelebiEvent_CountDown
 	ld c, 2
 	call DelayFrames
@@ -56,7 +51,7 @@ Special_CelebiShrineEvent:
 
 .done
 	pop af
-	ld [wStateFlags], a
+	ld [wVramState], a
 
 	ld hl, wShadowOAM + 2
 	xor a

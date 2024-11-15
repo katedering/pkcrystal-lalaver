@@ -39,7 +39,6 @@ SFX:
 	fardw Sfx_Transaction
 	fardw Sfx_ExitBuilding
 	fardw Sfx_Bump
-	fardw Sfx_Thunder_OW
 	fardw Sfx_Save
 	fardw Sfx_Pokeflute
 	fardw Sfx_ElevatorEnd
@@ -212,8 +211,4 @@ SFX:
 	fardw Sfx_Twinkle
 	fardw Sfx_Puddle
 	fardw Sfx_AbilitySlideout
-	fardw Sfx_CriticalCapture
-	fardw Sfx_StatUp
-	fardw Sfx_StatDown
-	fardw Sfx_Gravity
 	assert_table_length NUM_SFX

@@ -147,7 +147,7 @@ CheckCriticalCapture:
 	inc d
 	jr .loop
 .got_multiplier
-	; Catch Charm doubles capture rate
+	; Catch Charm doubles capture rate (Unverified for SwSh!)
 	ld a, [wCurItem]
 	push af
 	ld a, CATCH_CHARM
@@ -372,12 +372,9 @@ LoveBallMultiplier:
 FastBallMultiplier:
 ; multiply catch rate by 4 if enemy mon has base speed 100+
 	ld a, [wOTPartyMon1Species]
-	ld c, a
-	ld a, [wOTPartyMon1Form]
-	ld b, a
-	call GetSpeciesAndFormIndex
+	dec a
 	ld hl, BaseData + BASE_SPE
-	ld a, BASE_DATA_SIZE
+	ld bc, BASE_DATA_SIZE
 	rst AddNTimes
 	ld a, BANK(BaseData)
 	call GetFarByte

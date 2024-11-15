@@ -39,8 +39,8 @@ WaitScript:
 WaitScriptMovement:
 	call StopScript
 
-	ld hl, wStateFlags
-	bit SCRIPTED_MOVEMENT_STATE_F, [hl]
+	ld hl, wVramState
+	bit 7, [hl]
 	ret nz
 
 	farcall UnfreezeAllObjects
@@ -129,7 +129,7 @@ ScriptCommandTable:
 	dw Script_itemnotify                 ; 46
 	dw Script_pocketisfull               ; 47
 	dw Script_opentext                   ; 48
-	dw Script_reanchormap                ; 49
+	dw Script_refreshscreen              ; 49
 	dw Script_closetext                  ; 4a
 	dw Script_farwritetext               ; 4b
 	dw Script_writetext                  ; 4c
@@ -179,7 +179,7 @@ ScriptCommandTable:
 	dw Script_changemapblocks            ; 78
 	dw Script_changeblock                ; 79
 	dw Script_reloadmap                  ; 7a
-	dw Script_refreshmap              ; 7b
+	dw Script_reloadmappart              ; 7b
 	dw Script_usestonetable              ; 7c
 	dw Script_playmusic                  ; 7d
 	dw Script_encountermusic             ; 7e
@@ -870,7 +870,7 @@ Script_playsound:
 	jmp WaitPlaySFX
 
 Script_warpsound:
-	ld a, [wPlayerTileCollision]
+	ld a, [wPlayerTile]
 	ld de, SFX_ENTER_DOOR
 	cp COLL_DOOR
 	jr z, .play
@@ -968,7 +968,7 @@ Script_faceplayer:
 	ld e, a
 	ldh a, [hLastTalked]
 	ld d, a
-	jr ApplyObjectFacing
+	jr ApplyPersonFacing
 
 Script_faceobject:
 	call GetScriptByte
@@ -992,7 +992,7 @@ Script_faceobject:
 	add a
 	ld e, a
 	ld d, c
-	jr ApplyObjectFacing
+	jr ApplyPersonFacing
 
 Script_turnobject:
 	call GetScriptByte
@@ -1007,7 +1007,7 @@ Script_turnobject:
 	ld e, a
 	; fallthrough
 
-ApplyObjectFacing::
+ApplyPersonFacing::
 	ld a, d
 	push de
 	call CheckObjectVisibility
@@ -1026,8 +1026,8 @@ ApplyObjectFacing::
 	pop de
 	ld a, e
 	call SetSpriteDirection
-	ld hl, wStateFlags
-	bit TEXT_STATE_F, [hl]
+	ld hl, wVramState
+	bit 6, [hl]
 	jr nz, .text_state
 	call LoadMapPart
 	hlcoord 0, 0
@@ -1277,7 +1277,7 @@ Script_reloadmapafterbattle:
 	jr z, .done
 	ld b, BANK(Script_SpecialBillCall)
 	ld de, Script_SpecialBillCall
-	call LoadMemScript
+	call LoadScriptBDE
 .done
 	; fallthrough
 
@@ -1576,6 +1576,7 @@ Script_setval:
 	ldh [hScriptVar], a
 	ret
 
+Script_setmonval:
 Script_setval16:
 	call Script_setval
 	call GetScriptByte
@@ -1587,6 +1588,22 @@ Script_addval:
 	ld hl, hScriptVar
 	add [hl]
 	ld [hl], a
+	ret
+
+Script_addval16:
+	call GetScriptByte
+	ld c, a
+	call GetScriptByte
+	ld b, a
+	ld hl, hScriptVar
+	ld a, [hli]
+	ld l, [hl]
+	ld h, a
+	add hl, bc
+	ld a, h
+	ldh [hScriptVar], a
+	ld a, l
+	ldh [hScriptVar+1], a
 	ret
 
 Script_random:
@@ -2209,7 +2226,7 @@ Script_changeblock:
 	ld [hl], a
 	jmp BufferScreen
 
-Script_refreshmap::
+Script_reloadmappart::
 	xor a
 	ldh [hBGMapMode], a
 	call LoadMapPart
@@ -2260,10 +2277,8 @@ Script_pause:
 	jr z, .loop
 	ld [wScriptDelay], a
 .loop
-rept 2
-	farcall DoOverworldWeather
-	call DelayFrame
-endr
+	ld c, 2
+	call DelayFrames
 	ld hl, wScriptDelay
 	dec [hl]
 	jr nz, .loop

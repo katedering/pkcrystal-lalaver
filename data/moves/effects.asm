@@ -3,6 +3,50 @@ INCLUDE "data/moves/effects_pointers.asm"
 MoveEffects: ; used only for BANK(MoveEffects)
 
 NormalHit:
+AerialAce:
+Aeroblast:
+AquaJet:
+AquaTail:
+AuraSphere:
+BulletPunch:
+Crabhammer:
+CrossChop:
+Cut:
+Dazzlingleam:
+DragonClaw:
+DrillPeck:
+Extremespeed:
+FeintAttack:
+HiJumpKick:
+HornAttack:
+HydroPump:
+HyperVoice:
+IceShard:
+KarateChop:
+MachPunch:
+Megahorn:
+MegaKick:
+NightSlash:
+Peck:
+PowerGem:
+PowerWhip:
+Psystrike:
+QuickAttack:
+RazorLeaf:
+RockThrow:
+Scratch:
+SeedBomb:
+ShadowClaw:
+Slash:
+StoneEdge:
+Strength:
+Surf:
+Swift:
+Tackle:
+VineWhip:
+WaterGun:
+WingAttack:
+XScissor:
 	checkobedience
 	usedmovetext
 	doturn
@@ -46,6 +90,12 @@ SuckerPunch:
 	endmove
 
 LeechHit:
+Absorb:
+MegaDrain:
+LeechLife:
+GigaDrain:
+DrainKiss:
+DrainPunch:
 	checkobedience
 	usedmovetext
 	doturn
@@ -67,6 +117,8 @@ LeechHit:
 	posthiteffects
 	endmove
 
+UTurn:
+VoltSwitch:
 SwitchHit:
 	checkobedience
 	usedmovetext
@@ -90,6 +142,13 @@ SwitchHit:
 	endmove
 
 MultiHit:
+Bonemerang:
+CometPunch:
+DoubleKick:
+DoubleSlap:
+PinMissile:
+IcicleSpear:
+RockBlast:
 	checkobedience
 	usedmovetext
 	doturn
@@ -117,6 +176,11 @@ MultiHit:
 	endmove
 
 RecoilHit:
+DoubleEdge:
+Struggle:
+TakeDown:
+WildCharge:
+BraveBird:
 	checkobedience
 	usedmovetext
 	doturn
@@ -139,6 +203,18 @@ RecoilHit:
 	endmove
 
 FlinchHit:
+AirSlash:
+Astonish:
+Bite:
+DarkPulse:
+Extrasensory:
+Headbutt:
+HyperFang:
+IcicleCrash:
+IronHead:
+RockSlide:
+Waterfall:
+ZenHeadbutt:
 	checkobedience
 	usedmovetext
 	doturn
@@ -162,6 +238,10 @@ FlinchHit:
 	endmove
 
 PoisonHit:
+PoisonSting:
+SludgeBomb:
+PoisonJab:
+GunkShot:
 	checkobedience
 	usedmovetext
 	doturn
@@ -185,6 +265,10 @@ PoisonHit:
 	endmove
 
 BurnHit:
+Ember:
+FirePunch:
+Flamethrower:
+FireBlast:
 	checkobedience
 	usedmovetext
 	doturn
@@ -208,6 +292,13 @@ BurnHit:
 	endmove
 
 ParalyzeHit:
+Lick:
+Thundershock:
+Spark:
+Thunderpunch:
+Dragonbreath:
+Thunderbolt:
+ZapCannon:
 	checkobedience
 	usedmovetext
 	doturn
@@ -278,6 +369,9 @@ SleepHit:
 	endmove
 
 FreezeHit:
+IcePunch:
+IceBeam:
+Blizzard:
 	checkobedience
 	usedmovetext
 	doturn
@@ -301,6 +395,12 @@ FreezeHit:
 	endmove
 
 ConfuseHit:
+Confusion:
+DizzyPunch:
+Psybeam:
+Dynamicpunch:
+WaterPulse:
+Hurricane:
 	checkobedience
 	usedmovetext
 	doturn
@@ -324,6 +424,7 @@ ConfuseHit:
 	endmove
 
 AttackUpHit:
+MetalClaw:
 	checkobedience
 	usedmovetext
 	doturn
@@ -347,6 +448,7 @@ AttackUpHit:
 	endmove
 
 DefenseUpHit:
+SteelWing:
 	checkobedience
 	usedmovetext
 	doturn
@@ -370,6 +472,7 @@ DefenseUpHit:
 	endmove
 
 SpeedUpHit:
+FlameCharge:
 	checkobedience
 	usedmovetext
 	doturn
@@ -393,6 +496,7 @@ SpeedUpHit:
 	endmove
 
 AllUpHit:
+Ancientpower:
 	checkobedience
 	usedmovetext
 	doturn
@@ -420,6 +524,7 @@ AllUpHit:
 	endmove
 
 AttackDownHit:
+AuroraBeam:
 	checkobedience
 	usedmovetext
 	doturn
@@ -443,6 +548,8 @@ AttackDownHit:
 	endmove
 
 DefenseDownHit:
+Crunch:
+IronTail:
 	checkobedience
 	usedmovetext
 	doturn
@@ -489,6 +596,9 @@ BrickBreak:
 	endmove
 
 SpeedDownHit:
+IcyWind:
+BubbleBeam:
+Bulldoze:
 	checkobedience
 	usedmovetext
 	doturn
@@ -512,6 +622,7 @@ SpeedDownHit:
 	endmove
 
 SpecialAttackDownHit:
+Moonblast:
 	checkobedience
 	usedmovetext
 	doturn
@@ -535,6 +646,14 @@ SpecialAttackDownHit:
 	endmove
 
 SpecialDefenseDownHit:
+Acid:
+BugBuzz:
+EarthPower:
+EnergyBall:
+FlashCannon:
+FocusBlast:
+PsychicM:
+ShadowBall:
 	checkobedience
 	usedmovetext
 	doturn
@@ -558,6 +677,8 @@ SpecialDefenseDownHit:
 	endmove
 
 AccuracyDownHit:
+MudSlap:
+Octazooka:
 	checkobedience
 	usedmovetext
 	doturn
@@ -627,6 +748,11 @@ CloseCombat:
 	endmove
 
 StaticDamage:
+Sonicboom:
+DragonRage:
+NightShade:
+SeismicToss:
+SuperFang:
 	checkobedience
 	usedmovetext
 	doturn
@@ -643,6 +769,7 @@ StaticDamage:
 	endmove
 
 DoPoison:
+Poisonpowder:
 	checkobedience
 	usedmovetext
 	doturn
@@ -669,6 +796,7 @@ Toxic:
 	endmove
 
 DoBurn:
+WillOWisp:
 	checkobedience
 	usedmovetext
 	doturn
@@ -683,6 +811,9 @@ DoBurn:
 	endmove
 
 DoParalyze:
+StunSpore:
+ThunderWave:
+Glare:
 	checkobedience
 	usedmovetext
 	doturn
@@ -696,6 +827,10 @@ DoParalyze:
 	endmove
 
 DoSleep:
+SleepPowder:
+Hypnosis:
+Sing:
+Spore:
 	checkobedience
 	usedmovetext
 	doturn
@@ -721,6 +856,9 @@ DoFreeze:
 	endmove
 
 DoConfuse:
+Supersonic:
+ConfuseRay:
+SweetKiss:
 	checkobedience
 	usedmovetext
 	doturn
@@ -775,12 +913,14 @@ AccuracyUp:
 	endmove
 
 EvasionUp:
+DoubleTeam:
 	checkobedience
 	usedmovetext
 	doturn
 	forceraisestat EVASION
 	endmove
 
+CriticalUp:
 FocusEnergy:
 	checkobedience
 	usedmovetext
@@ -789,6 +929,7 @@ FocusEnergy:
 	endmove
 
 AttackUp2:
+SwordsDance:
 	checkobedience
 	usedmovetext
 	doturn
@@ -796,6 +937,7 @@ AttackUp2:
 	endmove
 
 DefenseUp2:
+Barrier:
 	checkobedience
 	usedmovetext
 	doturn
@@ -803,6 +945,7 @@ DefenseUp2:
 	endmove
 
 SpeedUp2:
+Agility:
 	checkobedience
 	usedmovetext
 	doturn
@@ -810,6 +953,7 @@ SpeedUp2:
 	endmove
 
 SpecialAttackUp2:
+NastyPlot:
 	checkobedience
 	usedmovetext
 	doturn
@@ -817,6 +961,7 @@ SpecialAttackUp2:
 	endmove
 
 SpecialDefenseUp2:
+Amnesia:
 	checkobedience
 	usedmovetext
 	doturn
@@ -904,6 +1049,7 @@ ShellSmash:
 	endmove
 
 AttackDown:
+Growl:
 	checkobedience
 	usedmovetext
 	doturn
@@ -915,6 +1061,7 @@ AttackDown:
 	endmove
 
 DefenseDown:
+Leer:
 	checkobedience
 	usedmovetext
 	doturn
@@ -926,6 +1073,7 @@ DefenseDown:
 	endmove
 
 SpeedDown:
+StringShot:
 	checkobedience
 	usedmovetext
 	doturn
@@ -959,6 +1107,8 @@ SpecialDefenseDown:
 	endmove
 
 AccuracyDown:
+Smokescreen:
+Flash:
 	checkobedience
 	usedmovetext
 	doturn
@@ -981,6 +1131,7 @@ EvasionDown:
 	endmove
 
 AttackDown2:
+Charm:
 	checkobedience
 	usedmovetext
 	doturn
@@ -992,6 +1143,7 @@ AttackDown2:
 	endmove
 
 DefenseDown2:
+Screech:
 	checkobedience
 	usedmovetext
 	doturn
@@ -1003,6 +1155,7 @@ DefenseDown2:
 	endmove
 
 SpeedDown2:
+ScaryFace:
 	checkobedience
 	usedmovetext
 	doturn
@@ -1058,6 +1211,7 @@ EvasionDown2:
 	endmove
 
 ResetStats:
+Haze:
 	checkobedience
 	usedmovetext
 	doturn
@@ -1072,6 +1226,8 @@ Safeguard:
 	endmove
 
 Screen:
+Reflect:
+LightScreen:
 	checkobedience
 	usedmovetext
 	doturn
@@ -1086,6 +1242,8 @@ TrickRoom:
 	endmove
 
 Heal:
+Recover:
+Rest:
 	checkobedience
 	usedmovetext
 	doturn
@@ -1101,6 +1259,9 @@ Roost:
 	endmove
 
 Rampage:
+Thrash:
+PetalDance:
+Outrage:
 	checkobedience
 	usedmovetext
 	doturn
@@ -1124,6 +1285,10 @@ Rampage:
 	endmove
 
 Trap:
+Wrap:
+Bind:
+FireSpin:
+Whirlpool:
 	checkobedience
 	usedmovetext
 	doturn
@@ -1264,13 +1429,12 @@ KnockOff:
 	conditionalboost
 	moveanim
 	failuretext
-	knockoff FALSE
 	applydamage
 	criticaltext
 	supereffectivetext
+	knockoff
 	postfainteffects
 	posthiteffects
-	knockoff TRUE
 	endmove
 
 BugBite:
@@ -1287,11 +1451,10 @@ BugBite:
 	damagevariation
 	moveanim
 	failuretext
-	bugbite FALSE
+	bugbite ; before applydamage to steal HP berries before they take effect
 	applydamage
 	criticaltext
 	supereffectivetext
-	bugbite TRUE
 	postfainteffects
 	posthiteffects
 	endmove
@@ -1334,6 +1497,7 @@ Substitute:
 	endmove
 
 HyperBeam:
+GigaImpact:
 	checkobedience
 	usedmovetext
 	doturn
@@ -1481,7 +1645,6 @@ Reversal:
 	hastarget
 	checkhit
 	checkpriority
-	critical
 	constantdamage
 	stab
 	moveanim
@@ -1600,6 +1763,7 @@ PerishSong:
 	checkobedience
 	usedmovetext
 	doturn
+	checkpriority
 	perishsong
 	endmove
 
@@ -1658,6 +1822,11 @@ Swagger:
 	confusetarget
 	endmove
 
+Acrobatics:
+Avalanche:
+Facade:
+Hex:
+Venoshock:
 ConditionalBoostHit:
 	checkobedience
 	usedmovetext

@@ -13,8 +13,6 @@
 StartMenu::
 
 	call ClearWindowData
-	call BackupSprites
-	call ClearSpritesUnderStartMenu
 
 	ld de, SFX_MENU
 	call PlaySFX
@@ -42,9 +40,6 @@ StartMenu::
 	jr .Select
 
 .Reopen:
-	call RestoreSprites
-	farcall LoadWeatherPal
-	call ClearSpritesUnderStartMenu
 	call UpdateSprites
 	call UpdateTimePals
 	call .SetUpMenuItems
@@ -79,7 +74,6 @@ StartMenu::
 	ld a, 1
 	ldh [hOAMUpdate], a
 	call LoadFrame
-	call RestoreSprites
 	pop af
 	ldh [hOAMUpdate], a
 .ReturnEnd:
@@ -321,7 +315,6 @@ StartMenu_Quit:
 	text_end
 
 StartMenu_Save:
-	call ClearSprites
 	call BufferScreen
 	farcall SaveMenu
 	jr nc, .saved
@@ -365,7 +358,7 @@ StartMenu_Pokegear:
 	jr nz, _ExitStartMenuAndDoScript
 	call CloseSubmenu
 	call ApplyTilemapInVBlank
-	call SetDefaultBGPAndOBP
+	call SetPalettes
 	call DelayFrame
 	xor a
 	ret
@@ -402,9 +395,9 @@ StartMenu_Pokemon:
 	ld a, A_BUTTON | B_BUTTON | SELECT
 	ld [wMenuJoypadFilter], a
 	farcall WritePartyMenuTilemap
-	farcall PlacePartyMenuText
+	farcall PrintPartyMenuText
 	call ApplyTilemapInVBlank
-	call SetDefaultBGPAndOBP ; load regular palettes?
+	call SetPalettes ; load regular palettes?
 	call DelayFrame
 	farcall PartyMenuSelect
 	jr c, .return ; if cancelled or pressed B
@@ -438,36 +431,3 @@ StartMenu_Pokemon:
 	call ExitAllMenus
 	pop af
 	ret
-
-ClearSpritesUnderStartMenu:
-	ld de, wShadowOAMSprite00XCoord
-	ld h, d
-	ld l, e
-	ld c, NUM_SPRITE_OAM_STRUCTS
-.loop
-	; Check if XCoord >= 10 * TILE_WIDTH,
-	; which is the starting x-coord of the start menu.
-	ld a, [hl]
-	cp 10 * TILE_WIDTH
-	jr nc, .clear_sprite
-; fallthrough
-.next
-	ld hl, SPRITEOAMSTRUCT_LENGTH
-	add hl, de
-	ld e, l
-	dec c
-	jr nz, .loop
-	ldh a, [hOAMUpdate]
-	push af
-	ld a, TRUE
-	ldh [hOAMUpdate], a
-	call DelayFrame
-	pop af
-	ldh [hOAMUpdate], a
-	ret
-
-.clear_sprite
-	dec l
-	ld [hl], OAM_YCOORD_HIDDEN
-	inc l
-	jr .next

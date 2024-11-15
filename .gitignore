@@ -7,7 +7,6 @@
 *.2bpp
 *.2bpp.vram*
 *.lz
-*.widths
 gfx/pokemon/*/*.dimensions
 gfx/pokemon/*/*.animated.tilemap
 gfx/pokemon/*/bitmask.asm
@@ -61,9 +60,7 @@ bank_ends.txt
 # local tools
 rgbds/
 deploy.sh
-
-# extras
-*.bak
-*.bak
-*.bak
-Makefile1
+cmd.lnk
+*.ss1
+bug.mp4
+polishedcrystal-3.0.0-beta_9bit-c434324b-0.png

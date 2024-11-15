@@ -15,12 +15,8 @@ ENDM
 
 	const anim_obj_command ; d0
 MACRO anim_obj
-if HIGH(\1)
-	db anim_hiobj_command
-else
 	db anim_obj_command
-endc
-	db LOW(\1) ; object
+	db \1 ; object
 	if _NARG == 4
 		db \2 ; x
 		db \3 ; y
@@ -139,10 +135,7 @@ MACRO anim_cry
 	db \1 ; pitch
 ENDM
 
-	const anim_checkcriticalcapture_command ; e2
-MACRO anim_checkcriticalcapture
-	db anim_checkcriticalcapture_command
-ENDM
+	const_skip ; e2
 
 	const anim_oamon_command ; e3
 MACRO anim_oamon
@@ -164,10 +157,7 @@ MACRO anim_beatup
 	db anim_beatup_command
 ENDM
 
-	const anim_clearopponenthud_command ; e7
-MACRO anim_clearopponenthud
-	db anim_clearopponenthud_command
-ENDM
+	const_skip ; e7
 
 	const anim_updateactorpic_command ; e8
 MACRO anim_updateactorpic
@@ -188,8 +178,7 @@ MACRO anim_setobjpal
 	db \2 ; battle pal
 ENDM
 
-	; eb is reserved for $1xx anim objects, don't use!
-	const anim_hiobj_command ; eb
+	const_skip ; eb
 
 	const_skip ; ec
 

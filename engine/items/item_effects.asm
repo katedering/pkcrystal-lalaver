@@ -336,7 +336,23 @@ PokeBallEffect:
 	jmp z, Ball_MonCantBeCaughtMessage
 
 	; Everything below this are regular wild battles
+	farcall DoesNuzlockeModePreventCapture
+if !DEF(DEBUG)
+	jmp c, Ball_NuzlockeFailureMessage
+else
+	jr nc, .NoNuzlockeCheck
 
+	ld hl, .DebugNuzlockeBypassMessage
+	call PrintText
+	jr .NoNuzlockeCheck
+
+.DebugNuzlockeBypassMessage:
+	text "(Debug) Nuzlocke"
+	line "mode bypassed."
+	prompt
+endc
+
+.NoNuzlockeCheck
 	ld a, [wEnemySubStatus3] ; BATTLE_VARS_SUBSTATUS3_OPP
 	and 1 << SUBSTATUS_FLYING | 1 << SUBSTATUS_UNDERGROUND
 	jmp nz, Ball_MonIsHiddenMessage
@@ -564,15 +580,22 @@ PokeBallEffect:
 	ld a, [wPartyCount]
 	dec a
 	ld [wCurPartyMon], a
-	call HealPartyMon
+	call HealPartyMonEvenForNuzlocke
 .SkipPartyMonHealBall:
 
+	ld a, [wInitialOptions]
+	bit NUZLOCKE_MODE, a
+	jr nz, .AlwaysNickname
+
 	call GetPartyPokemonName
+
 	ld hl, Text_AskNicknameNewlyCaughtMon
 	call PrintText
+
 	call YesNoBox
 	jmp c, .return_from_capture
 
+.AlwaysNickname:
 	ld a, [wPartyCount]
 	dec a
 	ld [wCurPartyMon], a
@@ -620,12 +643,19 @@ PokeBallEffect:
 	ld [wTempMonHappiness], a
 .SkipBoxMonFriendBall:
 
+	ld a, [wInitialOptions]
+	bit NUZLOCKE_MODE, a
+	jr nz, .AlwaysNicknameBox
+
 	call GetPartyPokemonName
+
 	ld hl, Text_AskNicknameNewlyCaughtMon
 	call PrintText
+
 	call YesNoBox
 	jr c, .SkipBoxMonNickname
 
+.AlwaysNicknameBox:
 	xor a
 	ld [wCurPartyMon], a
 	ld a, TEMPMON
@@ -748,7 +778,7 @@ PokeBallEffect:
 
 	ld a, CGB_BATTLE_COLORS
 	call GetCGBLayout
-	call SetDefaultBGPAndOBP
+	call SetPalettes
 	xor a
 
 .toss
@@ -1185,6 +1215,10 @@ GetItemHealingAction:
 	db -1,       PARTYMENUTEXT_HEAL_ALL
 
 RevivalHerb:
+	ld a, [wInitialOptions]
+	bit NUZLOCKE_MODE, a
+	jmp nz, Revive_NuzlockeFailureMessage
+
 	ld b, PARTYMENUACTION_HEALING_ITEM
 	call UseItem_SelectMon
 	jmp c, ItemNotUsed_ExitMenu
@@ -1198,6 +1232,10 @@ RevivalHerb:
 	jmp LooksBitterMessage
 
 ReviveEffect:
+	ld a, [wInitialOptions]
+	bit NUZLOCKE_MODE, a
+	jmp nz, Revive_NuzlockeFailureMessage
+
 	ld b, PARTYMENUACTION_HEALING_ITEM
 	call UseItem_SelectMon
 	jmp c, ItemNotUsed_ExitMenu
@@ -1338,7 +1376,7 @@ UseItem_SelectMon2:
 	push bc
 	farcall InitPartyMenuWithCancel
 	farcall WritePartyMenuTilemap
-	farcall PlacePartyMenuText
+	farcall PrintPartyMenuText
 	farcall PartyMenuSelect
 	pop bc
 	pop de
@@ -1458,7 +1496,7 @@ UseItem_GetMaxHPParameter:
 ChoosePkmnToUseItemOn:
 	farcall InitPartyMenuLayout
 	call ApplyTilemapInVBlank
-	call SetDefaultBGPAndOBP
+	call SetPalettes
 	call DelayFrame
 	farjp PartyMenuSelect
 
@@ -1474,7 +1512,7 @@ ItemActionText:
 	farcall WritePartyMenuTilemap
 	farcall PrintPartyMenuActionText
 	call ApplyTilemapInVBlank
-	call SetDefaultBGPAndOBP
+	call SetPalettes
 	call DelayFrame
 	pop af
 	pop bc
@@ -2478,6 +2516,10 @@ SweetHoney:
 	jr _UseDisposableItemIfEffectSucceeded
 
 SacredAsh:
+	ld a, [wInitialOptions]
+	bit NUZLOCKE_MODE, a
+	jr nz, Revive_NuzlockeFailureMessage
+
 	farcall _SacredAsh
 	; fallthrough
 
@@ -2544,7 +2586,22 @@ Ball_MonIsHiddenMessage:
 
 Ball_MonCantBeCaughtMessage:
 	ld hl, Ball_MonCantBeCaughtText
-	; fallthrough
+	jr ItemWasntUsedMessage
+
+Revive_NuzlockeFailureMessage:
+	ld hl, Revive_NuzlockeFailureText
+	jr ItemWasntUsedMessage
+
+Ball_NuzlockeFailureMessage:
+	ld hl, Ball_NuzlockeFailureText
+	call PrintText
+
+	ld a, [wCurItem]
+	and a ; PARK_BALL?
+	ret z
+	cp SAFARI_BALL
+	ret z
+	jr _ItemWasntUsedMessage
 
 ItemWasntUsedMessage:
 	; Item wasn't used.
@@ -2681,6 +2738,16 @@ Ball_MonIsHiddenText:
 Ball_MonCantBeCaughtText:
 	; The #MON can't be caught!
 	text_far Text_MonCantBeCaught
+	text_end
+
+Ball_NuzlockeFailureText:
+	; You already encountered a #MON here.
+	text_far Text_NuzlockeBallFailure
+	text_end
+
+Revive_NuzlockeFailureText:
+	; You can't revive #MON in NUZLOCKE mode!
+	text_far Text_NuzlockeReviveFailure
 	text_end
 
 UsedItemText:

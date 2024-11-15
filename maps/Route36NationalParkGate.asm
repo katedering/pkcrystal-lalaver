@@ -96,18 +96,12 @@ Route36NationalParkGateLeftTheContestEarly:
 	closetext
 	special Special_FadeBlackQuickly
 	special Special_ReloadSpritesNoPalettes
-	callasm DisableDynPalUpdates
 	scall .CopyContestants
 	disappear ROUTE36NATIONALPARKGATE_OFFICER1
 	appear ROUTE36NATIONALPARKGATE_OFFICER2
 	applymovement PLAYER, Route36NationalParkGatePlayerWaitWithContestantsMovement
 	pause 15
-	callasm SetBlackObjectPals
-	callasm ClearSavedObjPals
-	callasm EnableDynPalUpdatesNoApply
-	callasm _UpdateSprites
-	callasm DelayFrame
-	callasm FadeInPalettes
+	special Special_FadeInQuickly
 	jumpstd bugcontestresults
 
 .GoBackToContest:

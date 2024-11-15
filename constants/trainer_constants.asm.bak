@@ -428,7 +428,6 @@ DEF CRYS EQU __trainer_class__
 	const FOOTE
 	const DAVE
 	const KOUTA
-	const HERB
 
 	trainerclass LASS ; 32
 	const DANA1
@@ -1132,10 +1131,7 @@ DEF CRYS EQU __trainer_class__
 	trainerclass FEDMAE
 	
 	trainerclass CUTE
-	
-	trainerclass ROCKET
-	
-	trainerclass UNKNOWN
+
 DEF NUM_TRAINER_CLASSES EQU __trainer_class__ - 1
 
 	trainerclass OMASTAR_FOSSIL ; 9a

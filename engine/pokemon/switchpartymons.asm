@@ -29,7 +29,7 @@ _SwitchPartyMons:
 	ld de, $4
 	ld c, $4
 .gfx_loop
-	ld [hl], OAM_YCOORD_HIDDEN
+	ld [hl], $a0
 	add hl, de
 	dec c
 	jr nz, .gfx_loop

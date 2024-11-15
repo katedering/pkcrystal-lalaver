@@ -61,7 +61,7 @@ Credits::
 	ldh [hLCDCPointer], a
 
 	call GetCreditsPalette
-	call SetDefaultBGPAndOBP
+	call SetPalettes
 	ldh a, [hVBlank]
 	push af
 	ld a, $5
@@ -313,7 +313,7 @@ ParseCredits:
 	xor a
 	ld [wCreditsBorderFrame], a ; frame
 	call GetCreditsPalette
-	call SetDefaultBGPAndOBP ; update hw pal registers
+	call SetPalettes ; update hw pal registers
 	jr .loop
 
 .clear
@@ -610,7 +610,7 @@ DecompressCreditsGFX:
 	ld hl, CreditsSequence1GFX
 .ok
 	ld b, BANK("Credits Graphics")
-	assert wDecompressedCreditsGFX == STARTOF(WRAMX)
+	assert wDecompressedCreditsGFX == WRAM1_Begin
 	jmp FarDecompressInB
 
 INCLUDE "data/credits_script.asm"

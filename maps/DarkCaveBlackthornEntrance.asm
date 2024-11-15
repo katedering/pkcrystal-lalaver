@@ -62,6 +62,10 @@ DarkCaveBlackthornEntrancePharmacistScript:
 	done
 
 WickedChamberSealstoneText:
-	text "An odd stone"
-	line "blocks your path."
+	text "This stone seems"
+	line "rather odd."
+	
+	para "Perhaps something"
+	line "will happen with"
+	cont "it, eventually?"
 	done

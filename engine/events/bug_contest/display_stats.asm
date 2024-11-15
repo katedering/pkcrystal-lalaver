@@ -77,7 +77,7 @@ DisplayCaughtContestMonStats:
 	call ApplyTilemapInVBlank
 	ld a, CGB_PLAIN
 	call GetCGBLayout
-	jmp SetDefaultBGPAndOBP
+	jmp SetPalettes
 
 .Health:
 	db "Health@"

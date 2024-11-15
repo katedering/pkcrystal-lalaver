@@ -206,10 +206,7 @@ ENDU
 hScriptBank:: db
 hScriptPos:: dw
 
-hUsedWeatherSpriteIndex:: db
-hUsedOAMIndex:: db
-
-	ds 7 ; unused
+	ds 9 ; unused
 
 hLCDInterruptFunction::
 hFunctionJump::     db ; $c3 jp

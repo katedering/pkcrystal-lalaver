@@ -23,7 +23,7 @@ HandleStoneTable::
 	cp SPRITEMOVEDATA_STRENGTH_BOULDER
 	jr nz, .next
 
-	ld hl, OBJECT_TILE_COLLISION
+	ld hl, OBJECT_TILE
 	add hl, de
 	ld a, [hl]
 	cp COLL_HOLE

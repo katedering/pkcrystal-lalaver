@@ -32,8 +32,6 @@ MapSetupScript_Warp:
 	mapsetup EnterMapSpawnPoint
 	mapsetup LoadMapAttributes
 	mapsetup HandleNewMap
-	mapsetup ClearWeather
-	mapsetup SetCurrentWeather
 	mapsetup SpawnPlayer
 	mapsetup RefreshPlayerCoords
 	mapsetup GetMapScreenCoords
@@ -43,7 +41,6 @@ MapSetupScript_Warp:
 	mapsetup DecompressMetatiles
 	mapsetup LoadMapTimeOfDay
 	mapsetup LoadMapObjects
-	mapsetup GrottoUpdatePlayerTallGrassFlags
 	mapsetup EnableLCD
 	mapsetup LoadMapPalettes
 	mapsetup SpawnInFacingDown
@@ -60,8 +57,6 @@ MapSetupScript_BadWarp:
 	mapsetup EnterMapSpawnPoint
 	mapsetup LoadMapAttributes
 	mapsetup HandleNewMap
-	mapsetup ClearWeather
-	mapsetup SetCurrentWeather
 	mapsetup SpawnPlayer
 	mapsetup RefreshPlayerCoords
 	mapsetup GetMapScreenCoords
@@ -88,22 +83,20 @@ MapSetupScript_BadWarp:
 MapSetupScript_Connection:
 	mapsetup SuspendMapAnims
 	mapsetup EnterMapConnection
-	mapsetup LoadMapAttributes_Connection
+	mapsetup LoadMapAttributes
 	mapsetup HandleNewMap
-	mapsetup SetCurrentWeather
 	mapsetup RefreshPlayerCoords
 	mapsetup LoadBlockData
 	mapsetup LoadMapTileset
 	mapsetup SaveScreen
 	mapsetup DeferredLoadMapGraphics
 	mapsetup DecompressMetatiles
-	mapsetup DisableDynPalUpdates
-	mapsetup LoadMapObjects_Connection
+	mapsetup LoadMapObjects
 	mapsetup FadeToMapMusic
 	mapsetup LoadMapPalettes
-	mapsetup EnableDynPalUpdatesNoApply
-	mapsetup MapConnOWFadePalettesInit
+	mapsetup EnableDynPalUpdates
 	mapsetup InitMapNameSign
+	mapsetup ApplyMapPalettes
 	mapsetup LoadWildMonData
 	mapsetup UpdateRoamMons
 	mapsetup ActivateMapAnims
@@ -118,8 +111,6 @@ MapSetupScript_Train:
 	mapsetup LoadMapAttributes
 	mapsetup GetWarpDestCoords
 	mapsetup HandleNewMap
-	mapsetup ClearWeather
-	mapsetup SetCurrentWeather
 	mapsetup RefreshPlayerCoords
 	mapsetup LoadBlockData
 	mapsetup BufferScreen
@@ -131,7 +122,6 @@ MapSetupScript_Train:
 	mapsetup FadeOutMapMusic
 	mapsetup EnableLCD
 	mapsetup LoadMapObjects
-	mapsetup GrottoUpdatePlayerTallGrassFlags
 	mapsetup LoadMapPalettes
 	mapsetup EnableDynPalUpdatesNoApply
 	mapsetup RefreshMapSprites
@@ -143,7 +133,6 @@ MapSetupScript_Train:
 	db -1 ; end
 
 MapSetupScript_ReloadMap:
-	mapsetup ClearWeather
 	mapsetup FadeMapMusicAndPalettes
 	mapsetup ClearBGPalettes
 	mapsetup DisableLCD
@@ -204,8 +193,6 @@ MapSetupScript_Continue:
 	mapsetup RefreshMapSprites
 	mapsetup PlayMapMusicBike
 	mapsetup FadeInPalettes
-	mapsetup ClearWeather
-	mapsetup SetCurrentWeather
 	mapsetup ActivateMapAnims
 	mapsetup LoadWildMonData
 	db -1 ; end

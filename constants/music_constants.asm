@@ -204,12 +204,10 @@
 	const MUSIC_FRLG_WILDBATTLE                ; c8 ; unused
 	const MUSIC_FRLG_GYMLEADER                 ; c9 ; unused
 	const MUSIC_FRLG_ELITEFOUR                 ; ca ; unused
-	const MUSIC_FRLG_SEVIIISLANDS              ; cb ; unused
-	const MUSIC_DPPT_WILDBATTLE                ; cc ; unused
-	const MUSIC_DPPT_BATTLECYNTHIA             ; cd ; unused
-	const MUSIC_DPPT_FRONTIERBRAIN             ; ce ; unused
-	const MUSIC_SM_GIOVANNIBATTLE              ; cf ; unused
-	const MUSIC_HGSS_ICEPATH                   ; d0 ; unused
+	const MUSIC_DPPT_WILDBATTLE                ; cb ; unused
+	const MUSIC_DPPT_FRONTIERBRAIN             ; cc ; unused
+	const MUSIC_SM_GIOVANNIBATTLE              ; cd ; unused
+	const MUSIC_HGSS_ICEPATH                   ; ce ; unused
 DEF NUM_MUSIC_SONGS EQU const_value
 
 ; GetMapMusic picks music for these values (see data/maps/special_map_music.asm)

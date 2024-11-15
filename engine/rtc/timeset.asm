@@ -23,7 +23,7 @@ InitClock:
 	call LoadStandardFont
 	call BlackOutScreen
 	call ApplyTilemapInVBlank
-	call SetDefaultBGPAndOBP
+	call SetPalettes
 	ld c, 10
 	call DelayFrames
 if !DEF(DEBUG)

@@ -4,7 +4,6 @@ MACRO fishmon_map
 ENDM
 
 FishMonMaps:
-	fishmon_map ROUTE_2_SOUTH, FISHGROUP_RIVER
 	fishmon_map ROUTE_6, FISHGROUP_POND
 	fishmon_map ROUTE_10_NORTH, FISHGROUP_RIVER
 	fishmon_map ROUTE_12_NORTH, FISHGROUP_QWILFISH

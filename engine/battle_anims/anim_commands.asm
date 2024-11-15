@@ -192,16 +192,12 @@ ClearActorHUD:
 	and a
 	jr z, ClearPlayerHUD
 	; fallthrough
+
 ClearEnemyHUD:
 	hlcoord 0, 0
 	lb bc, 3, 11
 	jmp ClearBox
 
-BattleAnimCmd_ClearOpponentHUD:
-	ldh a, [hBattleTurn]
-	and a
-	jr z, ClearEnemyHUD
-	; fallthrough
 ClearPlayerHUD:
 	hlcoord 11, 7
 	lb bc, 5, 9
@@ -284,16 +280,16 @@ BattleAnimCommands::
 	dw BattleAnimCmd_ResetObp0
 	dw BattleAnimCmd_Sound
 	dw BattleAnimCmd_Cry
-	dw BattleAnimCmd_CheckCriticalCapture
+	dw DoNothing
 	dw BattleAnimCmd_OAMOn
 	dw BattleAnimCmd_OAMOff
 	dw BattleAnimCmd_ClearObjs
 	dw BattleAnimCmd_BeatUp
-	dw BattleAnimCmd_ClearOpponentHUD
+	dw DoNothing
 	dw BattleAnimCmd_UpdateActorPic
 	dw BattleAnimCmd_SetBgPal
 	dw BattleAnimCmd_SetObjPal
-	dw BattleAnimCmd_HiObj
+	dw DoNothing
 	dw DoNothing
 	dw DoNothing
 	dw BattleAnimCmd_IfParamAnd
@@ -531,15 +527,8 @@ BattleAnimCmd_IfParamAnd:
 	ld [hl], d
 	ret
 
-BattleAnimCmd_HiObj:
-; index, x, y, param
-	ld d, 1
-	jr BattleAnimCmd_LowObj
 BattleAnimCmd_Obj:
 ; index, x, y, param
-	ld d, 0
-	; fallthrough
-BattleAnimCmd_LowObj:
 	call GetBattleAnimByte
 	ld [wBattleAnimTemp0], a
 	call GetBattleAnimByte
@@ -816,14 +805,6 @@ BattleAnimCmd_CheckPokeball:
 	ld [wBattleAnimVar], a
 	ret
 
-BattleAnimCmd_CheckCriticalCapture:
-	ld hl, wBuffer2
-	ld a, BANK(wBuffer2)
-	call GetFarWRAMByte
-	and $10
-	ld [wBattleAnimVar], a
-	ret
-
 BattleAnimCmd_Transform:
 	ldh a, [rSVBK]
 	push af
@@ -900,7 +881,7 @@ SetBattleAnimPal:
 	ld b, a
 .finish
 	call .SetPaletteData
-	jmp SetDefaultBGPAndOBP
+	jmp SetPalettes
 
 .UserPal:
 	ldh a, [hBattleTurn]
@@ -1282,23 +1263,65 @@ BattleAnim_SetBGPals:
 	ldh [rBGP], a
 	ldh a, [rSVBK]
 	push af
-	ld a, BANK(wBGPals1)
+	ld a, $5
 	ldh [rSVBK], a
+if !DEF(MONOCHROME)
+	ld a, b
+	ld c, %00011011 ; 0, 1, 2, 3 (cycle inverts)
+	cp c
+	jr z, .invert
+	ldh a, [rBGP]
+	cp %01010101 ; 1, 1, 1, 1 (invert once)
+	jr z, .invert
+	cp c
+	jr nz, .no_invert
+.invert
+	cp c
+	ld c, 7 palettes
+	ld hl, wBGPals1
+	ld a, [hl]
+	jr z, .loop_invert_BGPals
+	and a
+	jr z, .already_inverted
+.loop_invert_BGPals
+	cpl
+	ld [hli], a
+	dec c
+	ld a, [hl]
+	jr nz, .loop_invert_BGPals
+	ld c, 2 palettes
+	ld hl, wOBPals1
+.loop_invert_OBPals
+	ld a, [hl]
+	cpl
+	ld [hli], a
+	dec c
+	jr nz, .loop_invert_OBPals
+.already_inverted
+	ld a, %11100100
+.no_invert
+	push af
+else
+	ldh a, [rBGP]
+endc
 	ld hl, wBGPals2
 	ld de, wBGPals1
-	ldh a, [rBGP]
 	ld b, a
 	ld c, 7
 	call CopyPals
 	ld hl, wOBPals2
 	ld de, wOBPals1
+if !DEF(MONOCHROME)
+	pop af
+else
 	ldh a, [rBGP]
+endc
 	ld b, a
 	ld c, 2
 	call CopyPals
 	pop af
 	ldh [rSVBK], a
-	ld a, TRUE
+	ld a, $1
 	ldh [hCGBPalUpdate], a
 	ret
 
@@ -1333,7 +1356,7 @@ BattleAnim_UpdateOAM_All:
 	ld b, h
 	push hl
 	push de
-	farcall DoBattleAnimFrame
+	call DoBattleAnimFrame
 	call BattleAnimOAMUpdate
 	pop de
 	pop hl

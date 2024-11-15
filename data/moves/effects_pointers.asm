@@ -60,7 +60,7 @@ MoveEffectsPointers:
 	dw ShellSmash
 	dw AttackDown
 	dw DefenseDown
-	dw SpeedDown
+	dw StringShot
 	dw SpecialAttackDown
 	dw SpecialDefenseDown
 	dw AccuracyDown
@@ -74,8 +74,8 @@ MoveEffectsPointers:
 	dw EvasionDown2
 	dw ResetStats
 	dw Safeguard
-	dw Screen
-	dw Screen
+	dw Reflect
+	dw LightScreen
 	dw Heal
 	dw Rampage
 	dw Trap
@@ -85,7 +85,7 @@ MoveEffectsPointers:
 	dw Conversion
 	dw PayDay
 	dw TriAttack
-	dw StaticDamage
+	dw SuperFang
 	dw Transform
 	dw Substitute
 	dw HyperBeam

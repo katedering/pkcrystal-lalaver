@@ -55,7 +55,7 @@ NamingScreen:
 	call .GetNamingScreenSetup
 	call ApplyTilemapInVBlank
 	call WaitTop
-	call SetDefaultBGPAndOBP
+	call SetPalettes
 	jmp NamingScreen_InitNameEntry
 
 .GetNamingScreenSetup:
@@ -854,7 +854,7 @@ _ComposeMailMessage:
 	call GetCGBLayout
 	call ApplyTilemapInVBlank
 	call WaitTop
-	call SetDefaultBGPAndOBP
+	call SetPalettes
 	call NamingScreen_InitNameEntry
 	ld hl, wNamingScreenDestinationPointer
 	ld a, [hli]

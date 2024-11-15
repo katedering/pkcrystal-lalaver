@@ -53,13 +53,13 @@ RuinsOfAlphHoOhChamberWallOpenScript:
 	pause 30
 	playsound SFX_STRENGTH
 	changeblock 4, 0, $25
-	refreshmap
+	reloadmappart
 	earthquake 50
 	setscene $1
 	endtext
 
 MapRuinsofAlphHoOhChamberSignpost2Script:
-	reanchormap
+	refreshscreen
 	setval $3
 	special Special_UnownPuzzle
 	closetext
@@ -75,7 +75,7 @@ MapRuinsofAlphHoOhChamberSignpost2Script:
 	showemote EMOTE_SHOCK, PLAYER, 15
 	changeblock 2, 2, $14
 	changeblock 4, 2, $15
-	refreshmap
+	reloadmappart
 	playsound SFX_STRENGTH
 	earthquake 80
 	applyonemovement PLAYER, skyfall_top
@@ -86,11 +86,8 @@ MapRuinsofAlphHoOhChamberSignpost2Script:
 	end
 
 MapRuinsofAlphHoOhChamberSignpost3Script:
-	opentext
 	unowntypeface
-	writetext RuinsOfAlphHoOhChamberDescriptionText
-	waitbutton
-	closetext
+	showtext RuinsOfAlphHoOhChamberDescriptionText
 	restoretypeface
 	special RefreshSprites
 	end

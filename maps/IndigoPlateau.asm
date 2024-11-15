@@ -728,7 +728,7 @@ IndigoPlateauTripScript:
 	cont "me? I must warn"
 	cont "you, while my"
 	cont "sister is more"
-	cont "of a braggart,"
+	cont "of a braggart…"
 	
 	para "My own #mon"
 	line "have been trained"
@@ -746,7 +746,7 @@ IndigoPlateauTripScript:
 	cont "me? I must warn"
 	cont "you, while my"
 	cont "sister is more"
-	cont "of a braggart,"
+	cont "of a braggart…"
 	
 	para "My own #mon"
 	line "have been trained"
@@ -764,7 +764,7 @@ IndigoPlateauTripScript:
 	cont "me? I must warn"
 	cont "you, while my"
 	cont "sister is more"
-	cont "of a braggart,"
+	cont "of a braggart…"
 	
 	para "My own party"
 	line "have reached the"

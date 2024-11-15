@@ -379,5 +379,4 @@ INCLUDE "data/pokemon/base_stats/wooper_paldean.asm"
 INCLUDE "data/pokemon/base_stats/tauros_paldean.asm"
 INCLUDE "data/pokemon/base_stats/tauros_paldean_fire.asm"
 INCLUDE "data/pokemon/base_stats/tauros_paldean_water.asm"
-
 	assert_table_length NUM_EXT_POKEMON

@@ -267,8 +267,9 @@ StartTrainerBattle_SineWave:
 	ld [bc], a
 	inc bc
 	pop de
-	inc e
-	inc e
+	ld a, e
+	add 2
+	ld e, a
 	pop af
 	dec a
 	jr nz, .loop

@@ -47,8 +47,8 @@ _Init::
 	ldh a, [hCGB]
 	push af
 	xor a
-	ld hl, STARTOF(HRAM)
-	ld bc, SIZEOF(HRAM)
+	ld hl, HRAM_Begin
+	ld bc, HRAM_End - HRAM_Begin
 	rst ByteFill
 	pop af
 	ldh [hCGB], a

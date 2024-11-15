@@ -100,9 +100,9 @@ ReleaseTheBeasts:
 	setevent EVENT_BURNED_TOWER_MORTY
 	setevent EVENT_BURNED_TOWER_1F_EUSINE
 	appear BURNEDTOWERB1F_EUSINE
-	reanchormap
+	refreshscreen
 	changeblock 6, 14, $1b
-	refreshmap
+	reloadmappart
 	closetext
 	setscene $1
 	end

@@ -1,5 +1,5 @@
-CollisionPermissionTable::
-	table_width 1, CollisionPermissionTable
+TileCollisionTable::
+	table_width 1, TileCollisionTable
 	db LAND_TILE  ; COLL_FLOOR
 	db WALL_TILE  ; COLL_VOID
 	db LAND_TILE  ; COLL_COAST_SAND

@@ -3,7 +3,7 @@ MainMenu:
 	farcall NewGame_ClearTileMapEtc
 	ld a, CGB_PLAIN
 	call GetCGBLayout
-	call SetDefaultBGPAndOBP
+	call SetPalettes
 	xor a ; FALSE
 	ld [wGameTimerPaused], a
 	call MainMenu_GetWhichMenu

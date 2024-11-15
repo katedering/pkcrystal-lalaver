@@ -21,7 +21,7 @@ InitDisplayForLeafCredits:
 	call EnableLCD
 FinishDisplayForEndgame:
 	call ApplyAttrAndTilemapInVBlank
-	jmp SetDefaultBGPAndOBP
+	jmp SetPalettes
 
 ClearDisplayForEndgame:
 	call ClearBGPalettes

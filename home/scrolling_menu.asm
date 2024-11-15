@@ -17,12 +17,12 @@ ScrollingMenu::
 	ret
 
 .UpdatePalettes:
-	ld hl, wStateFlags
-	bit SPRITE_UPDATES_DISABLED_F, [hl]
+	ld hl, wVramState
+	bit 0, [hl]
 	jmp nz, UpdateTimePals
 	; fallthrough
 
-SetDefaultBGPAndOBP::
+SetPalettes::
 	push de
 	ld a, %11100100
 	call DmgToCgbBGPals

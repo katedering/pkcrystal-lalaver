@@ -6,7 +6,7 @@ _Squirtbottle:
 	ret
 
 .SquirtbottleScript:
-	refreshmap
+	reloadmappart
 	special UpdateTimePals
 	callasm .CheckCanUseSquirtbottle
 	iffalsefwd .NothingHappenedScript

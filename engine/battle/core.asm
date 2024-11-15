@@ -98,7 +98,7 @@ DoBattle:
 	call AutomaticBattleWeather
 	call SpikesDamageBoth ; for Air Balloon
 	call BoostGiovannisArmoredMewtwo
-	call RunBothEntryAbilities
+	call RunBothActivationAbilities
 	jr BattleTurn
 
 WildFled_EnemyFled_LinkBattleCanceled:
@@ -493,7 +493,7 @@ ParsePlayerAction:
 	ld de, wBGPals1 palette PAL_BATTLE_BG_TYPE_CAT
 	ld bc, 1 palettes
 	call FarCopyColorWRAM
-	call SetDefaultBGPAndOBP
+	call SetPalettes
 	ld a, [wCurPlayerMove]
 	inc a ; cp STRUGGLE
 	call nz, PlayClickSFX
@@ -667,15 +667,9 @@ PerformMove:
 	xor a
 	ld [wDamageTaken], a
 	ld [wDamageTaken + 1], a
-
 	ld a, BATTLE_VARS_SUBSTATUS2_OPP
 	call GetBattleVarAddr
 	res SUBSTATUS_IN_ABILITY, [hl]
-
-	ld a, BATTLE_VARS_SUBSTATUS4_OPP
-	call GetBattleVarAddr
-	res SUBSTATUS_PENDING_ITEMLOSS, [hl]
-
 	ld a, BATTLE_VARS_SUBSTATUS2
 	call GetBattleVarAddr
 	res SUBSTATUS_IN_ABILITY, [hl]
@@ -972,7 +966,7 @@ ForceDeferredSwitch:
 .regular_spikes
 	call SpikesDamage
 .done_spikes
-	call RunEntryAbilities
+	call RunActivationAbilities
 
 .all_done
 	xor a
@@ -1020,7 +1014,7 @@ GetPlayerSwitchTarget:
 	call ClearSprites
 	ld a, CGB_BATTLE_COLORS
 	call GetCGBLayout
-	call SetDefaultBGPAndOBP
+	call SetPalettes
 	ld a, [wCurPartyMon]
 	inc a
 	ld [wPlayerSwitchTarget], a
@@ -1325,7 +1319,7 @@ endr
 
 	ld a, CGB_BATTLE_COLORS
 	call GetCGBLayout
-	call SetDefaultBGPAndOBP
+	call SetPalettes
 
 .wild
 	; For enemy, we need to mark as seen and set base exp unless link/BT
@@ -1811,10 +1805,6 @@ SubtractHP:
 HandleUserHealingItems:
 	call HasUserFainted
 	ret z
-	ld a, BATTLE_VARS_SUBSTATUS4
-	call GetBattleVar
-	bit SUBSTATUS_PENDING_ITEMLOSS, a
-	ret nz
 	push bc
 	call HandleHPHealingItem
 	call UseHeldStatusHealingItem
@@ -2106,14 +2096,14 @@ SuppressUserNeutralizingGas:
 	ld [hl], -1
 
 	; Unless opponent also has Neutralizing Gas or Unnerve, (re-)run its
-	; entry abilities. Yes, this means that it might run more than once.
+	; activation abilities. Yes, this means that it might run more than once.
 	call GetOpponentAbility
 	cp NEUTRALIZING_GAS
 	ret z
 	cp UNNERVE
 	ret z
 	call SwitchTurn
-	call RunEntryAbilities
+	call RunActivationAbilities
 	jmp SwitchTurn
 
 CheckEnemyTrainerDefeated:
@@ -2318,8 +2308,6 @@ AddBattleMoneyToAccount:
 	ret
 
 PlayVictoryMusic:
-	ld a, 1
-	ld [wBattleEnded], a
 	push de
 	ld e, MUSIC_NONE
 	call PlayMusic
@@ -2437,9 +2425,9 @@ SetUpBattlePartyMenu: ; switch to fullscreen menu?
 
 JumpToPartyMenuAndPrintText:
 	farcall WritePartyMenuTilemap
-	farcall PlacePartyMenuText
+	farcall PrintPartyMenuText
 	call ApplyTilemapInVBlank
-	call SetDefaultBGPAndOBP
+	call SetPalettes
 	jmp DelayFrame
 
 SelectBattleMon:
@@ -2564,7 +2552,7 @@ LostBattle:
 ; Greyscale
 	ld a, CGB_BATTLE_GRAYSCALE
 	call GetCGBLayout
-	call SetDefaultBGPAndOBP
+	call SetPalettes
 	jr .end
 
 .LostLinkBattle:
@@ -2828,7 +2816,7 @@ OfferSwitch:
 	call _LoadStatusIcons
 	call DelayFrame
 	call GetMemCGBLayout
-	call SetDefaultBGPAndOBP
+	call SetPalettes
 	call SafeLoadTempTileMapToTileMap
 	pop af
 	jr c, OfferSwitch
@@ -3153,8 +3141,8 @@ PostBattleTasks::
 	pop bc
 	ret
 
-RunBothEntryAbilities:
-; runs both pokémon's entry abilities (Intimidate, etc.).
+RunBothActivationAbilities:
+; runs both pokémon's activation abilities (Intimidate, etc.).
 ; The faster Pokémon activates abilities first. This mostly
 ; just matter for weather abilities.
 	; Only show Neutralizing Gas message once.
@@ -3173,20 +3161,20 @@ RunBothEntryAbilities:
 	ldh a, [hBattleTurn]
 	push af
 	call SetFastestTurn
-	farcall RunEntryAbilitiesInner
+	farcall RunActivationAbilitiesInner
 	call SwitchTurn
 .single_run
-	farcall RunEntryAbilitiesInner
+	farcall RunActivationAbilitiesInner
 	pop af
 	ldh [hBattleTurn], a
 	ret
 
-RunEntryAbilities:
+RunActivationAbilities:
 ; Trace will, on failure, copy a later switched in Pokémon's
 ; Ability. To handle this correctly without redundancy except
 ; on double switch-ins or similar, we need to do some extra
 ; handling around it.
-	farcall RunEntryAbilitiesInner
+	farcall RunActivationAbilitiesInner
 	call HasUserFainted
 	call nz, HasOpponentFainted
 	ret z
@@ -3199,7 +3187,7 @@ RunEntryAbilities:
 	ret nz
 	; invert whose turn it is to properly handle abilities.
 	call SwitchTurn
-	farcall RunEntryAbilitiesInner
+	farcall RunActivationAbilitiesInner
 	jmp SwitchTurn
 
 SpikesDamage_CheckMoldBreaker:
@@ -3843,17 +3831,9 @@ CheckDanger:
 	ld a, [hli]
 	or [hl]
 	jr z, .no_danger
-
-	; Do nothing if the battle is over (this can be called after a battle).
-	ld a, [wBattleEnded]
-	and a
-	ret nz
-
-	; Disables low health alarm (used in case we are fainted or similar).
 	ld a, [wBattleLowHealthAlarm]
 	and a
 	ret nz
-
 	ld a, [wPlayerHPPal]
 	cp HP_RED
 	jr z, .danger
@@ -4377,7 +4357,7 @@ BattleMenu_SafariBall:
 	and BATTLERESULT_BITMASK
 	ld [wBattleResult], a
 	call ClearWindowData
-	call SetDefaultBGPAndOBP
+	call SetPalettes
 	scf
 	ret
 
@@ -4441,7 +4421,7 @@ BattleMenuPKMN_Loop:
 	call CloseWindow
 	call LoadTileMapToTempTileMap
 	call GetMemCGBLayout
-	call SetDefaultBGPAndOBP
+	call SetPalettes
 	jmp BattleMenu
 
 .GetMenu:
@@ -4548,11 +4528,6 @@ UserCanSwitch:
 	ld a, b
 	cp HELD_SHED_SHELL
 	ret z
-if !DEF(FAITHFUL)
-	call GetTrueUserAbility
-	cp RUN_AWAY
-	ret z
-endc
 	call CheckIfUserIsGhostType
 	ret z
 	farcall CheckIfTrappedByAbility
@@ -4613,7 +4588,7 @@ TryPlayerSwitch:
 	call GetMonBackpic
 	call CloseWindow
 	call GetMemCGBLayout
-	jmp SetDefaultBGPAndOBP
+	jmp SetPalettes
 
 BattleMenu_Run:
 	call ClearSprites
@@ -5135,9 +5110,6 @@ MoveSelectionScreen:
 	call StdBattleTextbox
 .start_over
 	call SafeLoadTempTileMapToTileMap
-	ld c, 2
-	call DelayFrames
-	call LoadWeatherIconSprite
 	jmp MoveSelectionScreen
 
 .pressed_up
@@ -5176,7 +5148,6 @@ MoveSelectionScreen:
 	jmp MoveSelectionScreen
 
 .struggle
-	call ClearSprites
 	ld a, STRUGGLE
 	ld [wCurPlayerMove], a
 	ld hl, BattleText_PkmnHasNoMovesLeft
@@ -5205,7 +5176,7 @@ MoveSelectionScreen:
 	pop hl
 	call BattleMoveDescTextbox
 	call WaitPressAorB_BlinkCursor
-	jmp .start_over
+	jr .start_over
 
 SetChoiceLock:
 ; Set choice lock to move choice c (0-3)
@@ -5452,7 +5423,7 @@ MoveInfoBox:
 
 .icons
 	farcall LoadBattleCategoryAndTypePals
-	call SetDefaultBGPAndOBP
+	call SetPalettes
 	ld hl, CategoryIconGFX
 	ld bc, 2 tiles
 	ld a, [wPlayerMoveStruct + MOVE_CATEGORY]
@@ -6373,7 +6344,7 @@ FinishBattleAnim:
 	push af
 	ld a, CGB_BATTLE_COLORS
 	call GetCGBLayout
-	call SetDefaultBGPAndOBP
+	call SetPalettes
 	call DelayFrame
 	jmp PopAFBCDEHL
 
@@ -6427,13 +6398,13 @@ GiveExperiencePoints:
 	ld a, [wEnemyMonBaseExp]
 	ldh [hMultiplicand + 2], a
 	ld a, [wInitialOptions]
-	bit SCALED_EXP_OPT, a
+	bit SCALED_EXP, a
 	call nz, GetNewBaseExp
 	ld a, [wEnemyMonLevel]
 	ldh [hMultiplier], a
 	call Multiply
 	ld a, [wInitialOptions]
-	bit SCALED_EXP_OPT, a
+	bit SCALED_EXP, a
 	ld a, 7
 	jr z, .got_exp_divisor
 	ld a, 5
@@ -6795,7 +6766,7 @@ GiveExperiencePoints:
 
 .done_sharing_exp
 	ld a, [wInitialOptions]
-	bit SCALED_EXP_OPT, a
+	bit SCALED_EXP, a
 	jr z, .done_scaling
 
 	; Level multiplier
@@ -7767,12 +7738,9 @@ StartBattle:
 
 	ld a, [wTimeOfDayPal]
 	push af
-	farcall ClearWeather
 	call BattleIntro
 	call DoBattle
 	call ExitBattle
-	farcall LoadWeatherGraphics
-	farcall LoadWeatherPal
 	pop af
 	ld [wTimeOfDayPal], a
 	scf
@@ -8105,7 +8073,7 @@ DisplayLinkRecord:
 	call ApplyAttrAndTilemapInVBlank
 	ld a, CGB_PLAIN
 	call GetCGBLayout
-	call SetDefaultBGPAndOBP
+	call SetPalettes
 	ld c, 8
 	call DelayFrames
 	jmp WaitPressAorB_BlinkCursor
@@ -8545,7 +8513,7 @@ InitBattleDisplay:
 	call HideSprites
 	ld a, CGB_BATTLE_COLORS
 	call GetCGBLayout
-	call SetDefaultBGPAndOBP
+	call SetPalettes
 	xor a
 	ldh [hSCX], a
 	ret
@@ -8670,9 +8638,9 @@ BattleStartMessage:
 
 	ld hl, WantToBattleText
 	call CheckPluralTrainer
-	jr nz, .PrintBattleStartText
+	jr nz, .PlaceBattleStartText
 	ld hl, WantsToBattleText
-	jr .PrintBattleStartText
+	jr .PlaceBattleStartText
 
 .wild
 	call BattleCheckEnemyShininess
@@ -8715,20 +8683,20 @@ BattleStartMessage:
 	cp BATTLETYPE_FISH
 	jr nz, .NotFishing
 	ld hl, HookedPokemonAttackedText
-	jr .PrintBattleStartText
+	jr .PlaceBattleStartText
 
 .NotFishing:
 	ld hl, PokemonFellFromTreeText
 	cp BATTLETYPE_TREE
-	jr z, .PrintBattleStartText
+	jr z, .PlaceBattleStartText
 	ld hl, LegendaryAppearedText
 	cp BATTLETYPE_ROAMING
-	jr z, .PrintBattleStartText
+	jr z, .PlaceBattleStartText
 	cp BATTLETYPE_RED_GYARADOS ; or BATTLETYPE_LEGENDARY
-	jr nc, .PrintBattleStartText
+	jr nc, .PlaceBattleStartText
 	ld hl, WildPokemonAppearedText
 
-.PrintBattleStartText:
+.PlaceBattleStartText:
 	push hl
 	farcall BattleStart_TrainerHuds
 	pop hl

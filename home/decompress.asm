@@ -10,7 +10,7 @@ FarDecompressInB::
 FarDecompress::
 ; Decompress LZ data from a:hl to d000.
 	ld de, wDecompressScratch
-	assert wDecompressScratch == STARTOF(WRAMX)
+	assert wDecompressScratch == WRAM1_Begin
 FarDecompressToDE::
 ; Decompress LZ data from a:hl to de.
 	call StackCallInBankA

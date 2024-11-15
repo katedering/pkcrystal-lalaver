@@ -1935,5 +1935,3 @@ WickedChamber_BlockData:
 SECTION "VioletHauntedHouse_BlockData", ROMX
 VioletHauntedHouse_BlockData:
 	INCBIN "maps/VioletHauntedHouse.ablk.lz"
-
-ENDSECTION

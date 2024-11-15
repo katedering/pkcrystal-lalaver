@@ -58,20 +58,20 @@ GetSpriteVTile::
 	jmp PopBCDEHL
 
 GetPlayerStandingTile::
-	ld a, [wPlayerTileCollision]
+	ld a, [wPlayerTile]
 	; fallthrough
 
-GetTilePermission::
+GetTileCollision::
 ; Get the collision type of tile a.
 	push hl
 
-	add LOW(CollisionPermissionTable)
+	add LOW(TileCollisionTable)
 	ld l, a
-	adc HIGH(CollisionPermissionTable)
+	adc HIGH(TileCollisionTable)
 	sub l
 	ld h, a
 
-	ld a, BANK(CollisionPermissionTable)
+	ld a, BANK(TileCollisionTable)
 	call GetFarByte
 	and $f ; lo nybble only
 
@@ -94,7 +94,7 @@ CheckObjectVisibility::
 	ld hl, MAPOBJECT_OBJECT_STRUCT_ID
 	add hl, bc
 	ld a, [hl]
-	cp UNASSOCIATED_MAPOBJECT
+	cp -1
 	jr z, .not_visible
 	ldh [hObjectStructIndexBuffer], a
 	call GetObjectStruct
@@ -147,9 +147,9 @@ ApplyDeletionToMapObject::
 	ld hl, MAPOBJECT_OBJECT_STRUCT_ID
 	add hl, bc
 	ld a, [hl]
-	cp UNASSOCIATED_MAPOBJECT
+	cp -1
 	ret z ; already hidden
-	ld [hl], UNASSOCIATED_MAPOBJECT
+	ld [hl], -1
 	push af
 	call .CheckStopFollow
 	pop af
@@ -205,8 +205,8 @@ LoadMovementDataPointer::
 	add hl, bc
 	ld [hl], STEP_TYPE_RESET
 
-	ld hl, wStateFlags
-	set SCRIPTED_MOVEMENT_STATE_F, [hl]
+	ld hl, wVramState
+	set 7, [hl]
 	and a
 	ret
 
@@ -336,8 +336,8 @@ FinishVolatileTiles::
 	ld [de], a
 	; fallthrough
 UpdateSprites::
-	ld a, [wStateFlags]
-	bit SPRITE_UPDATES_DISABLED_F, a
+	ld a, [wVramState]
+	bit 0, a
 	ret z
 
 	farjp UpdateMapObjectDataAndSprites

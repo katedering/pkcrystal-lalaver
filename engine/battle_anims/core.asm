@@ -26,9 +26,9 @@ QueueBattleAnimation:
 	; fallthrough
 
 InitBattleAnimation:
-	ld hl, wBattleAnimTemp0
-	ld e, [hl]
-	; d was set to 0 or 1 previously
+	ld a, [wBattleAnimTemp0]
+	ld e, a
+	ld d, 0
 	ld hl, BattleAnimObjects
 rept 6
 	add hl, de
@@ -79,21 +79,17 @@ endr
 BattleAnimOAMUpdate:
 	call InitBattleAnimBuffer
 	call GetBattleAnimFrame
-	ld a, h
-	cp HIGH(battleoamwait_command)
+	cp oamwait_command
 	jmp z, .done
-	cp HIGH(battleoamdelete_command)
+	cp oamdelete_command
 	jmp z, .delete
-
-	push hl
+	push af
 	ld hl, wBattleAnimTempOAMFlags
 	ld a, [wBattleAnimTemp7]
 	xor [hl]
 	and $e0
 	ld [hl], a
-	call .SetDynamicTileData
-	pop hl
-
+	pop af
 	push bc
 	call GetBattleAnimOAMPointer
 	ld a, [wBattleAnimTempTileID]
@@ -117,7 +113,7 @@ BattleAnimOAMUpdate:
 	push hl
 	ld a, [hl]
 	ld hl, wBattleAnimTempOAMFlags
-	bit OAM_Y_FLIP, [hl]
+	bit 6, [hl]
 	jr z, .no_yflip
 	add $8
 	cpl
@@ -137,7 +133,7 @@ BattleAnimOAMUpdate:
 	push hl
 	ld a, [hl]
 	ld hl, wBattleAnimTempOAMFlags
-	bit OAM_X_FLIP, [hl]
+	bit 5, [hl]
 	jr z, .no_xflip
 	add $8
 	cpl
@@ -190,59 +186,6 @@ BattleAnimOAMUpdate:
 	pop bc
 	scf
 	ret
-
-.SetDynamicTileData:
-	; If frameset ID is dynamic, var3 may adjust XY flip.
-	ld hl, BATTLEANIMSTRUCT_FRAMESET_ID
-	add hl, bc
-	ld a, [hl]
-	cp FIRST_DYNAMIC_FRAMESET
-	ret c
-
-	; Graphics are ordered in E S NE order.
-	ld hl, BATTLEANIMSTRUCT_VAR3
-	add hl, bc
-	ld a, [hl]
-
-	; Perhaps set priority
-	bit 3, a
-	push af
-	and $7
-	add a
-	add LOW(.tile_data)
-	ld l, a
-	adc HIGH(.tile_data)
-	sub l
-	ld h, a
-	pop af
-
-	; First, set XY flip.
-	ld a, [hli]
-	jr z, .no_priority
-	or PRIORITY
-.no_priority
-	push hl
-	ld hl, wBattleAnimTempOAMFlags
-	xor [hl]
-	ld [hl], a
-	pop hl
-	ld a, [hl]
-
-	; Then, adjust tile ID
-	ld hl, wBattleAnimTempTileID
-	add [hl]
-	ld [hl], a
-	ret
-
-.tile_data
-	db X_FLIP, $00 ; W
-	db X_FLIP, $08 ; NW
-	db Y_FLIP, $04 ; N
-	db 0, $08 ; NE
-	db Y_FLIP, $00 ; E
-	db Y_FLIP, $08 ; SE
-	db X_FLIP, $04 ; S
-	db X_FLIP | Y_FLIP, $08 ; SW
 
 InitBattleAnimBuffer:
 	ld hl, BATTLEANIMSTRUCT_OAMFLAGS

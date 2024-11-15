@@ -90,8 +90,8 @@ Binoculars3:
 PokeDollVendingMachine:
 	opentext
 	writetext PokeDollVendingMachineText
-	special PlaceMoneyTopRight
 .Start:
+	special PlaceMoneyTopRight
 	loadmenu .MenuData
 	verticalmenu
 	closewindow
@@ -109,7 +109,6 @@ PokeDollVendingMachine:
 	setevent EVENT_DECO_JIGGLYPUFF_DOLL
 	writetext BoughtJigglypuffDollText
 	playsound SFX_TRANSACTION
-	special PlaceMoneyTopRight
 	waitbutton
 	writetext JigglypuffDollSentText
 	waitbutton
@@ -124,7 +123,6 @@ PokeDollVendingMachine:
 	setevent EVENT_DECO_DITTO_DOLL
 	writetext BoughtDittoDollText
 	playsound SFX_TRANSACTION
-	special PlaceMoneyTopRight
 	waitbutton
 	writetext DittoDollSentText
 	waitbutton
@@ -139,7 +137,6 @@ PokeDollVendingMachine:
 	setevent EVENT_DECO_MEOWTH_DOLL
 	writetext BoughtMeowthDollText
 	playsound SFX_TRANSACTION
-	special PlaceMoneyTopRight
 	waitbutton
 	writetext MeowthDollSentText
 	waitbutton

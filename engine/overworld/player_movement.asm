@@ -27,10 +27,6 @@ DoPlayerMovement::
 	ret nz
 
 	ld a, c
-	and B_BUTTON ; holding b will brake
-	ret nz
-
-	ld a, c
 	or D_DOWN
 	ld [wCurInput], a
 	ret
@@ -120,7 +116,7 @@ DoPlayerMovement::
 ; Tiles such as waterfalls and warps move the player
 ; in a given direction, overriding input.
 
-	ld a, [wPlayerTileCollision]
+	ld a, [wPlayerTile]
 	ld c, a
 	cp COLL_WHIRLPOOL
 	jr nz, .not_whirlpool
@@ -241,7 +237,7 @@ DoPlayerMovement::
 	and a
 	jr nz, .spin
 
-	ld a, [wPlayerTileCollision]
+	ld a, [wPlayerTile]
 	cp COLL_ICE
 	jr z, .ice
 
@@ -344,7 +340,7 @@ DoPlayerMovement::
 	ret
 
 .TryJump:
-	ld a, [wPlayerTileCollision]
+	ld a, [wPlayerTile]
 	ld e, a
 	and $f0
 	cp HI_NYBBLE_LEDGES
@@ -373,7 +369,7 @@ DoPlayerMovement::
 	add a
 	add e
 	ld e, a
-	call GetCoordTileCollision
+	call GetCoordTile
 	call .CheckWalkable
 	jr c, .DontJump
 
@@ -400,7 +396,7 @@ DoPlayerMovement::
 	db FACE_UP | FACE_LEFT
 
 .TryStairs:
-	ld a, [wPlayerTileCollision]
+	ld a, [wPlayerTile]
 	ld e, a
 	and $f0
 	cp HI_NYBBLE_SIDEWAYS_STAIRS
@@ -416,7 +412,7 @@ DoPlayerMovement::
 	and [hl]
 	jr z, .DontStairs
 
-	ld a, [wPlayerTileCollision]
+	ld a, [wPlayerTile]
 	cp COLL_STAIRS_RIGHT_UP
 	; a = carry ? FALSE : TRUE
 	sbc a
@@ -448,7 +444,7 @@ DoPlayerMovement::
 	ld d, 0
 	ld hl, .EdgeWarps
 	add hl, de
-	ld a, [wPlayerTileCollision]
+	ld a, [wPlayerTile]
 	cp [hl]
 	jr nz, .not_warp
 
@@ -501,13 +497,6 @@ DoPlayerMovement::
 	add hl, de
 	ld a, [hl]
 	ld [wPlayerTurningDirection], a
-
-	ld a, [wOverworldWeatherCooldown]
-	and a
-	jr z, .no_cooldown
-	dec a
-	ld [wOverworldWeatherCooldown], a
-.no_cooldown
 
 	ld a, 4
 	ret
@@ -685,7 +674,7 @@ if DEF(DEBUG)
 else
 	ld a, [hl]
 endc
-	ld [wWalkingTileCollision], a
+	ld [wWalkingTile], a
 	ret
 
 .table
@@ -697,7 +686,7 @@ endc
 ;	tile collision pointer
 .table1
 	db STANDING, FACE_CURRENT, 0, 0
-	dw wPlayerTileCollision
+	dw wPlayerTile
 .table2
 	db RIGHT, FACE_RIGHT,  1,  0
 	dw wTileRight
@@ -791,7 +780,7 @@ endc
 	and d
 	jr nz, .NotWalkable
 
-	ld a, [wWalkingTileCollision]
+	ld a, [wWalkingTile]
 	call .CheckWalkable
 	jr c, .NotWalkable
 
@@ -812,7 +801,7 @@ endc
 	and d
 	jr nz, .NotSurfable
 
-	ld a, [wWalkingTileCollision]
+	ld a, [wWalkingTile]
 	call .CheckSurfable
 	jr c, .NotSurfable
 
@@ -856,7 +845,7 @@ endc
 .CheckWalkable:
 ; Return 0 if tile a is land. Otherwise, return carry.
 
-	call GetTilePermission
+	call GetTileCollision
 	and a ; cp LAND_TILE
 	ret z
 	scf
@@ -866,7 +855,7 @@ endc
 ; Return 0 if tile a is water, or 1 if land.
 ; Otherwise, return carry.
 
-	call GetTilePermission
+	call GetTileCollision
 ; Can walk back onto land from water.
 	and a ; cp LAND_TILE
 	jr z, .Land
@@ -910,7 +899,7 @@ CheckStandingOnIce::
 	jr z, .not_ice
 	cp $f0
 	jr z, .not_ice
-	ld a, [wPlayerTileCollision]
+	ld a, [wPlayerTile]
 	cp COLL_ICE
 	jr z, .ice
 	ld a, [wPlayerState]
@@ -974,8 +963,7 @@ CheckTrainerRun:
 	ld hl, MAPOBJECT_OBJECT_STRUCT_ID
 	add hl, de
 	ld a, [hl]
-	inc a
-	assert UNASSOCIATED_MAPOBJECT == -1
+	inc a ; cp -1
 	jr z, .next
 
 ; You're within their sight range
@@ -1083,7 +1071,7 @@ AnyFacingPlayerDistance:
 	ret
 
 CheckSpinning::
-	ld a, [wPlayerTileCollision]
+	ld a, [wPlayerTile]
 	cp COLL_STOP_SPIN
 	jr z, .stop_spin
 	call CheckSpinTile

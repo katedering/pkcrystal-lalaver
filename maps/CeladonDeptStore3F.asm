@@ -75,7 +75,6 @@ CeladonDeptStore3FSnesScript:
 	setevent EVENT_DECO_SNES
 	writetext BoughtSnesText
 	playsound SFX_TRANSACTION
-	special PlaceMoneyTopRight
 	waitbutton
 	jumpopenedtext SnesSentText
 
@@ -93,7 +92,6 @@ CeladonDeptStore3FN64Script:
 	setevent EVENT_DECO_N64
 	writetext BoughtN64Text
 	playsound SFX_TRANSACTION
-	special PlaceMoneyTopRight
 	waitbutton
 	jumpopenedtext N64SentText
 
@@ -111,7 +109,6 @@ CeladonDeptStore3FGameCubeScript:
 	setevent EVENT_DECO_GAMECUBE
 	writetext BoughtGameCubeText
 	playsound SFX_TRANSACTION
-	special PlaceMoneyTopRight
 	waitbutton
 	jumpopenedtext GameCubeSentText
 
@@ -129,7 +126,6 @@ CeladonDeptStore3FWiiScript:
 	setevent EVENT_DECO_WII
 	writetext BoughtWiiText
 	playsound SFX_TRANSACTION
-	special PlaceMoneyTopRight
 	waitbutton
 	jumpopenedtext WiiSentText
 

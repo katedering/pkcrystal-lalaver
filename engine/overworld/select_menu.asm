@@ -82,7 +82,7 @@ UseRegisteredItem:
 	ret
 
 .Party:
-	call ReanchorMap
+	call RefreshScreen
 	call FadeToMenu
 	predef DoKeyItemEffect
 	call CloseSubmenu
@@ -91,7 +91,7 @@ UseRegisteredItem:
 	ret
 
 .Overworld:
-	call ReanchorMap
+	call RefreshScreen
 	ld a, 1
 	ld [wUsingItemWithSelect], a
 	predef DoKeyItemEffect
@@ -106,7 +106,7 @@ UseRegisteredItem:
 	ret
 
 .CantUse:
-	call ReanchorMap
+	call RefreshScreen
 
 ._cantuse
 	call CantUseItem
@@ -174,7 +174,7 @@ GetRegisteredItem:
 	ld a, $70
 	ldh [rWY], a
 	ldh [hWY], a
-	call SetDefaultBGPAndOBP
+	call SetPalettes
 	call DelayFrame
 	farcall HDMATransfer_OnlyTopFourRows
 

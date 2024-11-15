@@ -332,7 +332,8 @@ endc
 	ld a, e
 	ld [hld], a
 	ld a, d
-	ld [hl], a
+	ld [hld], a
+	dec hl
 ;;; LiteRGB ~ Spe,SAt,SDfDVs
 	jr .Finish
 

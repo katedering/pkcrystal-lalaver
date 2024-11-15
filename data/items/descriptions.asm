@@ -995,8 +995,8 @@ BerserkGeneDesc:
 	done
 
 LightBallDesc:
-	text "Boost Pikachu's"
-	next "Attack and Sp.Atk."
+	text "An odd, electrical"
+	next "orb. (Hold)"
 	done
 
 LeekDesc:
@@ -1005,8 +1005,8 @@ LeekDesc:
 	done
 
 ThickClubDesc:
-	text "Boost Cubone's and"
-	next "Marowak's Attack."
+	text "A bone of some"
+	next "sort. Sell low."
 	done
 
 LuckyPunchDesc:

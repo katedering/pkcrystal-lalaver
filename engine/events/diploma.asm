@@ -22,7 +22,7 @@ _Diploma:
 	call ApplyTilemapInVBlank
 	ld a, CGB_NEW_DIPLOMA
 	call GetCGBLayout
-	call SetDefaultBGPAndOBP
+	call SetPalettes
 	call DelayFrame
 	call WaitPressAorB_BlinkCursor
 

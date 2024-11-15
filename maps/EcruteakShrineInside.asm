@@ -235,7 +235,7 @@ EcruteakShrineInsideGentlemanScript:
 	end
 
 .NotWorthyText
-	text "I sense a"
+	text "………I sense a"
 	line "strong aura coming"
 	cont "from within you,"
 	cont "trainer."

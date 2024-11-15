@@ -37,8 +37,7 @@ tools := \
 	png_dimensions \
 	pokemon_animation \
 	pokemon_animation_graphics \
-	scan_includes \
-	vwf
+	scan_includes
 
 all: $(tools)
 	@:
@@ -51,7 +50,6 @@ png_dimensions: common.h
 pokemon_animation: common.h
 pokemon_animation_graphics: common.h
 scan_includes: common.h
-vwf: common.h
 
 bpp2png: bpp2png.c lodepng/lodepng.c common.h lodepng/lodepng.h
 	$(CC) $(CFLAGS) -o $@ bpp2png.c lodepng/lodepng.c

@@ -723,14 +723,7 @@ CheckMoveSpeed::
 	call GetTrueUserAbility
 	cp QUICK_DRAW
 	jr nz, .quick_draw_done
-	ld b, a ; for BufferAbility
-
-	; Quick Draw only works on attacking moves
-	ld a, BATTLE_VARS_MOVE_CATEGORY
-	call GetBattleVar
-	cp STATUS
-	jr nz, .quick_draw_done
-
+	ld b, a
 	farcall BufferAbility
 	ld a, 100
 	call BattleRandomRange
@@ -801,13 +794,13 @@ CheckSpeed::
 ; outspeeds, otherwise nz, randomly on tie (which also sets carry)
 	ld a, [wTrickRoom]
 	and a
-	jr z, .CheckSpeed
-	call .CheckSpeed
+	jr z, _CheckSpeed
+	call _CheckSpeed
 	ret c ; was random anyway, and we don't want to unset carry
 	xor 1
 	ret
 
-.CheckSpeed:
+_CheckSpeed::
 	; save battle turn so this can be used without screwing it up
 	; (needed for AI)
 	ldh a, [hBattleTurn]
@@ -886,7 +879,7 @@ GetBattleAnimPointer::
 	ret
 
 GetBattleAnimByte::
-	anonbankpush "Battle Animations"
+	anonbankpush BattleAnimations
 
 .Function:
 	push hl

@@ -52,13 +52,13 @@ RuinsOfAlphAerodactylChamberWallOpenScript:
 	pause 30
 	playsound SFX_STRENGTH
 	changeblock 4, 0, $25
-	refreshmap
+	reloadmappart
 	earthquake 50
 	setscene $1
 	endtext
 
 MapRuinsofAlphAerodactylChamberSignpost2Script:
-	reanchormap
+	refreshscreen
 	setval $2
 	special Special_UnownPuzzle
 	closetext
@@ -74,7 +74,7 @@ MapRuinsofAlphAerodactylChamberSignpost2Script:
 	showemote EMOTE_SHOCK, PLAYER, 15
 	changeblock 2, 2, $14
 	changeblock 4, 2, $15
-	refreshmap
+	reloadmappart
 	playsound SFX_STRENGTH
 	earthquake 80
 	applyonemovement PLAYER, skyfall_top
@@ -85,11 +85,8 @@ MapRuinsofAlphAerodactylChamberSignpost2Script:
 	end
 
 MapRuinsofAlphAerodactylChamberSignpost3Script:
-	opentext
 	unowntypeface
-	writetext RuinsOfAlphAerodactylChamberDescriptionText
-	waitbutton
-	closetext
+	showtext RuinsOfAlphAerodactylChamberDescriptionText
 	restoretypeface
 	special RefreshSprites
 	end

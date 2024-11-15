@@ -20,36 +20,36 @@ OverworldLoop::
 
 DisableEvents:
 	xor a
-	ld [wEnabledPlayerEvents], a
+	ld [wScriptFlags3], a
 	ret
 
 EnableEvents::
 	ld a, $ff
-	ld [wEnabledPlayerEvents], a
+	ld [wScriptFlags3], a
 	ret
 
 EnableWildEncounters:
-	ld hl, wEnabledPlayerEvents
+	ld hl, wScriptFlags3
 	set 4, [hl]
 	ret
 
-CheckWarpConnectionsEnabled:
-	ld hl, wEnabledPlayerEvents
+CheckWarpConnxnScriptFlag:
+	ld hl, wScriptFlags3
 	bit 2, [hl]
 	ret
 
-CheckCoordEventsEnabled:
-	ld hl, wEnabledPlayerEvents
+CheckCoordEventScriptFlag:
+	ld hl, wScriptFlags3
 	bit 1, [hl]
 	ret
 
-CheckStepCountEnabled:
-	ld hl, wEnabledPlayerEvents
+CheckStepCountScriptFlag:
+	ld hl, wScriptFlags3
 	bit 0, [hl]
 	ret
 
-CheckWildEncountersEnabled:
-	ld hl, wEnabledPlayerEvents
+CheckWildEncountersScriptFlag:
+	ld hl, wScriptFlags3
 	bit 4, [hl]
 	ret
 
@@ -99,7 +99,6 @@ HandleMap:
 	call NextOverworldFrame
 	call HandleMapBackground
 	call CheckPlayerState
-	farcall DoOverworldWeather
 	xor a
 	ret
 
@@ -182,8 +181,7 @@ HandleMapObjects:
 HandleMapBackground:
 	farcall _UpdateSprites
 	farcall ScrollScreen
-	farcall PlaceMapNameSign
-	farjp OWFadePalettesStep
+	farjp PlaceMapNameSign
 
 CheckPlayerState:
 	ld a, [wPlayerStepFlags]
@@ -211,7 +209,7 @@ PlayerEvents:
 	and a
 	ret nz
 
-	call CheckTrainerEvent
+	call CheckTrainerBattle_GetPlayerEvent
 	jr c, .ok
 
 	call CheckTileEvent
@@ -252,7 +250,7 @@ PlayerEvents:
 	scf
 	ret
 
-CheckTrainerEvent:
+CheckTrainerBattle_GetPlayerEvent:
 	call CheckTrainerBattle
 	jr nc, .nope
 
@@ -267,7 +265,7 @@ CheckTrainerEvent:
 CheckTileEvent:
 ; Check for warps, coord events, or wild battles.
 
-	call CheckWarpConnectionsEnabled
+	call CheckWarpConnxnScriptFlag
 	jr z, .connections_disabled
 
 	farcall CheckMovingOffEdgeOfMap
@@ -277,7 +275,7 @@ CheckTileEvent:
 	jr c, .warp_tile
 
 .connections_disabled
-	call CheckCoordEventsEnabled
+	call CheckCoordEventScriptFlag
 	jr z, .coord_events_disabled
 
 	call CheckCurrentMapCoordEvents
@@ -288,19 +286,19 @@ CheckTileEvent:
 	bit PLAYERSTEP_STOP_F, [hl]
 	jr z, .no_tile_effects
 
-	ld a, [wPlayerTileCollision]
+	ld a, [wPlayerTile]
 	cp COLL_COAST_SAND
 	call z, RenderShamoutiCoastSand
 
 .no_tile_effects
-	call CheckStepCountEnabled
+	call CheckStepCountScriptFlag
 	jr z, .step_count_disabled
 
 	call CountStep
 	ret c
 
 .step_count_disabled
-	call CheckWildEncountersEnabled
+	call CheckWildEncountersScriptFlag
 	jr z, .ok
 
 	call RandomEncounter
@@ -316,7 +314,7 @@ CheckTileEvent:
 	ret
 
 .warp_tile
-	ld a, [wPlayerTileCollision]
+	ld a, [wPlayerTile]
 	cp COLL_HOLE
 	jr nz, .not_pit
 	ld a, PLAYEREVENT_FALL
@@ -358,7 +356,7 @@ RenderShamoutiCoastSand:
 	inc hl
 	ld a, $5b ; lower horizontal footprint
 	call QueueVolatileTiles
-	jmp FinishVolatileTiles
+	jp FinishVolatileTiles
 
 .vertical
 	inc hl
@@ -368,7 +366,7 @@ RenderShamoutiCoastSand:
 	dec hl
 	ld a, $59 ; lower-left vertical footprint
 	call QueueVolatileTiles
-	jmp FinishVolatileTiles
+	jp FinishVolatileTiles
 
 .bicycle
 	ld a, [wPlayerDirection]
@@ -382,7 +380,7 @@ RenderShamoutiCoastSand:
 	inc hl
 	ld a, $5c ; horizontal bicycle track
 	call QueueVolatileTiles
-	jmp FinishVolatileTiles
+	jp FinishVolatileTiles
 
 .vertical_bicycle
 	ld a, $5d ; vertical bicycle track
@@ -390,7 +388,7 @@ RenderShamoutiCoastSand:
 	add hl, bc
 	ld a, $5d ; vertical bicycle track
 	call QueueVolatileTiles
-	jmp FinishVolatileTiles
+	jp FinishVolatileTiles
 
 CheckWildEncounterCooldown:
 	ld hl, wWildEncounterCooldown
@@ -1121,7 +1119,7 @@ RunMemScript:
 	pop af
 	ret
 
-LoadMemScript::
+LoadScriptBDE::
 ; If there's already a script here, don't overwrite.
 	ld hl, wMapReentryScriptQueueFlag
 	ld a, [hl]
@@ -1159,7 +1157,7 @@ TryTileCollisionEvent:
 	jr nc, .noevent
 .done
 	call PlayClickSFX
-	ld a, PLAYEREVENT_MAPSCRIPT
+	ld a, $ff
 	scf
 	ret
 
@@ -1277,7 +1275,7 @@ CanUseSweetHoney::
 	ld hl, wStatusFlags
 	bit STATUSFLAGS_NO_WILD_ENCOUNTERS_F, [hl]
 	jr nz, .no
-	ld a, [wPlayerTileCollision]
+	ld a, [wPlayerTile]
 	cp COLL_ICE
 	jr z, .no
 	and $f0
@@ -1379,7 +1377,7 @@ _TryWildEncounter_BugContest:
 	farjp CheckRepelEffect
 
 TryWildEncounter_BugContest:
-	ld a, [wPlayerTileCollision]
+	ld a, [wPlayerTile]
 	cp COLL_LONG_GRASS
 	ld b, 40 percent
 	jr z, .ok

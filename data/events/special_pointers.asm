@@ -145,6 +145,7 @@ SpecialsPointers::
 	add_special GiveMystriEgg
 	add_special Special_ReiBlessing
 	add_special BillBoxSwitchCheck
+	add_special HealPartyEvenForNuzlocke
 	add_special SaveMusic
 	add_special RestoreMusic
 	add_special DeleteSavedMusic

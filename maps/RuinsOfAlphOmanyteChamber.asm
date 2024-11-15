@@ -53,13 +53,13 @@ RuinsOfAlphOmanyteChamberWallOpenScript:
 	pause 30
 	playsound SFX_STRENGTH
 	changeblock 4, 0, $25
-	refreshmap
+	reloadmappart
 	earthquake 50
 	setscene $1
 	endtext
 
 MapRuinsofAlphOmanyteChamberSignpost2Script:
-	reanchormap
+	refreshscreen
 	setval $1
 	special Special_UnownPuzzle
 	closetext
@@ -75,7 +75,7 @@ MapRuinsofAlphOmanyteChamberSignpost2Script:
 	showemote EMOTE_SHOCK, PLAYER, 15
 	changeblock 2, 2, $14
 	changeblock 4, 2, $15
-	refreshmap
+	reloadmappart
 	playsound SFX_STRENGTH
 	earthquake 80
 	applyonemovement PLAYER, skyfall_top
@@ -86,11 +86,8 @@ MapRuinsofAlphOmanyteChamberSignpost2Script:
 	end
 
 MapRuinsofAlphOmanyteChamberSignpost3Script:
-	opentext
 	unowntypeface
-	writetext RuinsOfAlphOmanyteChamberDescriptionText
-	waitbutton
-	closetext
+	showtext RuinsOfAlphOmanyteChamberDescriptionText
 	restoretypeface
 	special RefreshSprites
 	end
