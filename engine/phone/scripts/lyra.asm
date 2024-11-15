@@ -110,6 +110,7 @@ LyraPhoneScript_JohtoLandmarksTable:
 	dw .Route36
 	dw .Route37
 	dw .EcruteakCity
+	dw .EcruteakShrine
 	dw .BellchimeTrail
 	dw .TinTower
 	dw .BurnedTower ; no calls
@@ -179,6 +180,7 @@ LyraPhoneScript_JohtoLandmarksTable:
 .Route36:
 .Route37:
 .EcruteakCity:
+.EcruteakShrine:
 .BellchimeTrail:
 .TinTower:
 .BurnedTower:
